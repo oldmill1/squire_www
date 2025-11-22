@@ -1,5 +1,6 @@
 <script lang="ts">
   import styles from './Editor.module.scss';
+  import { onMount } from 'svelte';
   
   interface Props {
     // No props for now - we'll add them as we build out the component
@@ -13,7 +14,14 @@
   // Reference to the editable div
   let editableDiv: HTMLElement;
   
-  // Basic input handler for now
+  // Set initial content after mount
+  onMount(() => {
+    if (editableDiv) {
+      editableDiv.innerText = content;
+    }
+  });
+  
+  // Handle input events - only update state, don't modify DOM
   function handleInput(event: Event) {
     const target = event.target as HTMLElement;
     content = target.innerText || '';
@@ -27,7 +35,6 @@
     oninput={handleInput}
     bind:this={editableDiv}
   >
-    {content}
   </div>
 </div>
 
