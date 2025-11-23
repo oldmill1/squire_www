@@ -6,6 +6,7 @@
   import { DatabaseService } from '$lib/services/DatabaseService';
   import { selectedDocuments } from '$lib/stores/selectedDocuments';
   import Dock from '$lib/components/Dock.svelte';
+  import Button from '$lib/components/Button.svelte';
   import styles from './+page.module.scss';
 
   let dbService: DatabaseService;
@@ -149,14 +150,12 @@
       </div>
       
       <div class={styles['selection-controls']}>
-        <button 
-          class={styles['selection-toggle-btn']} 
+        <Button 
           onclick={toggleSelectionMode}
-          type="button"
-        >
-          <img src="/icons/select-all.png" alt="Select" class={styles['select-icon']} />
-          <span>{isSelectionMode ? 'Cancel' : 'Select'}</span>
-        </button>
+          text={isSelectionMode ? 'Cancel' : 'Select'}
+          icon="/icons/select-all.png"
+          alt="Select"
+        />
       </div>
     </div>
   </main>
