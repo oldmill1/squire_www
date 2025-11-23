@@ -1,162 +1,142 @@
 /* Dock */
 .dock {
-  position: fixed;
-  right: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  z-index: 1000;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.1) 0%,
-    rgba(255, 255, 255, 0.05) 50%,
-    rgba(255, 255, 255, 0.02) 100%
-  );
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  padding: 16px;
-  border-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.12),
-    0 4px 16px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.1),
-    0 0 0 1px rgba(255, 255, 255, 0.05);
-  background-color: rgba(255, 255, 255, 0.08);
+	position: fixed;
+	right: 20px;
+	top: 50%;
+	transform: translateY(-50%);
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	z-index: 1000;
+	background: linear-gradient(
+		135deg,
+		rgba(255, 255, 255, 0.1) 0%,
+		rgba(255, 255, 255, 0.05) 50%,
+		rgba(255, 255, 255, 0.02) 100%
+	);
+	backdrop-filter: blur(20px) saturate(180%);
+	-webkit-backdrop-filter: blur(20px) saturate(180%);
+	padding: 16px;
+	border-radius: 24px;
+	border: 1px solid rgba(255, 255, 255, 0.18);
+	box-shadow:
+		0 8px 32px rgba(0, 0, 0, 0.12),
+		0 4px 16px rgba(0, 0, 0, 0.08),
+		inset 0 1px 0 rgba(255, 255, 255, 0.25),
+		inset 0 -1px 0 rgba(255, 255, 255, 0.1),
+		0 0 0 1px rgba(255, 255, 255, 0.05);
+	background-color: rgba(255, 255, 255, 0.08);
 }
 
 .dock-item {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.15) 0%,
-    rgba(255, 255, 255, 0.05) 100%
-  );
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 16px;
-  padding: 4px;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 
-    0 2px 8px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+	background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	border-radius: 16px;
+	padding: 4px;
+	cursor: pointer;
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	box-shadow:
+		0 2px 8px rgba(0, 0, 0, 0.1),
+		inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .dock-item:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.25) 0%,
-    rgba(255, 255, 255, 0.15) 100%
-  );
-  transform: scale(1.05) translateY(-2px);
-  box-shadow: 
-    0 8px 24px rgba(0, 0, 0, 0.15),
-    0 4px 12px rgba(138, 124, 199, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4);
-  border-color: rgba(255, 255, 255, 0.3);
+	background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 100%);
+	transform: scale(1.05) translateY(-2px);
+	box-shadow:
+		0 8px 24px rgba(0, 0, 0, 0.15),
+		0 4px 12px rgba(138, 124, 199, 0.2),
+		inset 0 1px 0 rgba(255, 255, 255, 0.4);
+	border-color: rgba(255, 255, 255, 0.3);
 }
 
 .dock-item:active {
-  transform: scale(0.98) translateY(0);
-  box-shadow: 
-    0 2px 8px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+	transform: scale(0.98) translateY(0);
+	box-shadow:
+		0 2px 8px rgba(0, 0, 0, 0.1),
+		inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .dock-item.active {
-  background: linear-gradient(
-    135deg,
-    rgba(74, 158, 255, 0.25) 0%,
-    rgba(74, 158, 255, 0.15) 100%
-  );
-  border: 1px solid rgba(74, 158, 255, 0.4);
-  box-shadow: 
-    0 4px 16px rgba(74, 158, 255, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+	background: linear-gradient(135deg, rgba(74, 158, 255, 0.25) 0%, rgba(74, 158, 255, 0.15) 100%);
+	border: 1px solid rgba(74, 158, 255, 0.4);
+	box-shadow:
+		0 4px 16px rgba(74, 158, 255, 0.2),
+		inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .dock-item.active:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(74, 158, 255, 0.35) 0%,
-    rgba(74, 158, 255, 0.25) 100%
-  );
-  border-color: rgba(74, 158, 255, 0.5);
+	background: linear-gradient(135deg, rgba(74, 158, 255, 0.35) 0%, rgba(74, 158, 255, 0.25) 100%);
+	border-color: rgba(74, 158, 255, 0.5);
 }
 
 .dock-item::before {
-  content: attr(title);
-  position: absolute;
-  right: 100%;
-  margin-right: 12px;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.15) 0%,
-    rgba(255, 255, 255, 0.08) 100%
-  );
-  color: #ffffff;
-  padding: 8px 14px;
-  border-radius: 12px;
-  font-size: 0.875rem;
-  font-weight: 500;
-  white-space: nowrap;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 
-    0 8px 24px rgba(0, 0, 0, 0.12),
-    0 4px 12px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  pointer-events: none;
-  margin-right: 25px;
+	content: attr(title);
+	position: absolute;
+	right: 100%;
+	margin-right: 12px;
+	background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 100%);
+	color: #ffffff;
+	padding: 8px 14px;
+	border-radius: 12px;
+	font-size: 0.875rem;
+	font-weight: 500;
+	white-space: nowrap;
+	opacity: 0;
+	visibility: hidden;
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	backdrop-filter: blur(16px) saturate(180%);
+	-webkit-backdrop-filter: blur(16px) saturate(180%);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	box-shadow:
+		0 8px 24px rgba(0, 0, 0, 0.12),
+		0 4px 12px rgba(0, 0, 0, 0.08),
+		inset 0 1px 0 rgba(255, 255, 255, 0.3);
+	pointer-events: none;
+	margin-right: 25px;
 }
 
 .dock-item:hover::before {
-  opacity: 1;
-  visibility: visible;
-  transform: translateX(-4px);
+	opacity: 1;
+	visibility: visible;
+	transform: translateX(-4px);
 }
 
 .dock-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 8px;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-  transition: all 0.2s ease;
+	width: 48px;
+	height: 48px;
+	border-radius: 8px;
+	filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+	transition: all 0.2s ease;
 }
 
 .dock-item:hover .dock-icon {
-  filter: drop-shadow(0 4px 8px rgba(138, 124, 199, 0.4));
+	filter: drop-shadow(0 4px 8px rgba(138, 124, 199, 0.4));
 }
 
 .dock-item.active .dock-icon {
-  filter: drop-shadow(0 4px 8px rgba(74, 158, 255, 0.6));
+	filter: drop-shadow(0 4px 8px rgba(74, 158, 255, 0.6));
 }
 
 .selection-count {
-  position: absolute;
-  top: -4px;
-  right: -4px;
-  background: #2563eb;
-  color: white;
-  border: 2px solid white;
-  font-size: 12px;
-  font-weight: 700;
-  padding: 3px 7px;
-  border-radius: 12px;
-  min-width: 18px;
-  text-align: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
-  line-height: 1;
+	position: absolute;
+	top: -4px;
+	right: -4px;
+	background: #2563eb;
+	color: white;
+	border: 2px solid white;
+	font-size: 12px;
+	font-weight: 700;
+	padding: 3px 7px;
+	border-radius: 12px;
+	min-width: 18px;
+	text-align: center;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+	line-height: 1;
 }

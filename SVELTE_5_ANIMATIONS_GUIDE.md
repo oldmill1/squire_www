@@ -13,19 +13,19 @@
 ```svelte
 <!-- ❌ Doesn't work reliably with Svelte 5 -->
 <div class="fade-transition">
-  {#if show}
-    <div>Content</div>
-  {/if}
+	{#if show}
+		<div>Content</div>
+	{/if}
 </div>
 
 <!-- ✅ Works reliably with Svelte 5 -->
 <!-- From: src/lib/components/display/Display.svelte -->
 <div class={styles.lineNumber}>
-  {#if showLineNumbers}
-    <div transition:fade={{ duration: 300 }}>
-      {lineNum}
-    </div>
-  {/if}
+	{#if showLineNumbers}
+		<div transition:fade={{ duration: 300 }}>
+			{lineNum}
+		</div>
+	{/if}
 </div>
 ```
 
@@ -58,16 +58,16 @@
 
 ```scss
 .lineNumber {
-  color: #9ea8b6;
-  width: 2rem;
-  text-align: right;
-  user-select: none;
-  padding-right: 0.5rem;
-  flex-shrink: 0;
-  min-height: 1.7em; /* Match line height */
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
+	color: #9ea8b6;
+	width: 2rem;
+	text-align: right;
+	user-select: none;
+	padding-right: 0.5rem;
+	flex-shrink: 0;
+	min-height: 1.7em; /* Match line height */
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
 }
 ```
 
@@ -82,13 +82,13 @@
 ```scss
 // ✅ Scales with font size
 .line {
-  display: flex;
-  width: 100%;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  min-height: 1.7em;  // Relative to font size
-  padding: 0.1em 2rem 0.1em 0.5rem;  // All relative units
-  // ...
+	display: flex;
+	width: 100%;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+	min-height: 1.7em; // Relative to font size
+	padding: 0.1em 2rem 0.1em 0.5rem; // All relative units
+	// ...
 }
 ```
 
@@ -102,32 +102,32 @@
 
 ```svelte
 <script>
-  import { onMount } from 'svelte';
-  import { settingsService } from '$lib/services/settingsService';
-  
-  onMount(async () => {
-    // Wait for PouchDB to be ready by checking the global instance
-    const waitForPouchDBGlobal = () => {
-      return new Promise<void>((resolve) => {
-        const check = () => {
-          if (typeof window !== 'undefined' && (window as any).pouchDBInstance) {
-            resolve();
-          } else {
-            setTimeout(check, 50);
-          }
-        };
-        check();
-      });
-    };
+	import { onMount } from 'svelte';
+	import { settingsService } from '$lib/services/settingsService';
 
-    try {
-      await waitForPouchDBGlobal();
-      const lineNumbers = await settingsService.getSetting('lineNumbers', false);
-      lineNumberVisibilityStore.set(lineNumbers);
-    } catch (error) {
-      lineNumberVisibilityStore.set(false);
-    }
-  });
+	onMount(async () => {
+		// Wait for PouchDB to be ready by checking the global instance
+		const waitForPouchDBGlobal = () => {
+			return new Promise<void>((resolve) => {
+				const check = () => {
+					if (typeof window !== 'undefined' && (window as any).pouchDBInstance) {
+						resolve();
+					} else {
+						setTimeout(check, 50);
+					}
+				};
+				check();
+			});
+		};
+
+		try {
+			await waitForPouchDBGlobal();
+			const lineNumbers = await settingsService.getSetting('lineNumbers', false);
+			lineNumberVisibilityStore.set(lineNumbers);
+		} catch (error) {
+			lineNumberVisibilityStore.set(false);
+		}
+	});
 </script>
 ```
 
@@ -142,32 +142,32 @@
 ```svelte
 <!-- From: src/lib/components/PouchDBInitializer.svelte -->
 <script lang="ts">
-  import { onMount } from 'svelte';
+	import { onMount } from 'svelte';
 
-  onMount(async () => {
-    try {
-      // Load PouchDB from CDN as fallback
-      const script = document.createElement('script');
-      script.src = 'https://cdn.jsdelivr.net/npm/pouchdb@9.0.0/dist/pouchdb.min.js';
-      script.onload = () => {
-        try {
-          const PouchDB = (window as any).PouchDB;
-          const db = new PouchDB('squire_db');
-          
-          db.info().then((info: any) => {
-            console.log('✅ PouchDB is ready (CDN):', info);
-            (window as any).pouchDBInstance = db;
-          });
-        } catch (error) {
-          console.error('❌ Failed to initialize PouchDB from CDN:', error);
-        }
-      };
-      
-      document.head.appendChild(script);
-    } catch (error) {
-      console.error('❌ Failed to setup PouchDB:', error);
-    }
-  });
+	onMount(async () => {
+		try {
+			// Load PouchDB from CDN as fallback
+			const script = document.createElement('script');
+			script.src = 'https://cdn.jsdelivr.net/npm/pouchdb@9.0.0/dist/pouchdb.min.js';
+			script.onload = () => {
+				try {
+					const PouchDB = (window as any).PouchDB;
+					const db = new PouchDB('squire_db');
+
+					db.info().then((info: any) => {
+						console.log('✅ PouchDB is ready (CDN):', info);
+						(window as any).pouchDBInstance = db;
+					});
+				} catch (error) {
+					console.error('❌ Failed to initialize PouchDB from CDN:', error);
+				}
+			};
+
+			document.head.appendChild(script);
+		} catch (error) {
+			console.error('❌ Failed to setup PouchDB:', error);
+		}
+	});
 </script>
 ```
 
@@ -179,24 +179,24 @@
 import { pouchdbService } from './pouchdbService';
 
 export const settingsService = {
-  // Get a setting by key
-  async getSetting(key: string, defaultValue: any = null) {
-    try {
-      const setting = await pouchdbService.get(`setting:${key}`);
-      return setting.value;
-    } catch (error: any) {
-      if (error.status === 404 || error.name === 'not_found') {
-        return defaultValue;
-      }
-      console.error(`Error getting setting ${key}:`, error);
-      return defaultValue;
-    }
-  },
+	// Get a setting by key
+	async getSetting(key: string, defaultValue: any = null) {
+		try {
+			const setting = await pouchdbService.get(`setting:${key}`);
+			return setting.value;
+		} catch (error: any) {
+			if (error.status === 404 || error.name === 'not_found') {
+				return defaultValue;
+			}
+			console.error(`Error getting setting ${key}:`, error);
+			return defaultValue;
+		}
+	},
 
-  // Save a setting
-  async setSetting(key: string, value: any) {
-    // Implementation details...
-  }
+	// Save a setting
+	async setSetting(key: string, value: any) {
+		// Implementation details...
+	}
 };
 ```
 
@@ -204,30 +204,30 @@ export const settingsService = {
 
 ```typescript
 if (setting === 'number') {
-  showLineNumbers();
-  // Save setting to PouchDB
-  settingsService.setSetting('lineNumbers', true).catch(error => {
-    console.error('Failed to save lineNumbers setting:', error);
-  });
-  return { success: true, message: 'Line numbers enabled' };
+	showLineNumbers();
+	// Save setting to PouchDB
+	settingsService.setSetting('lineNumbers', true).catch((error) => {
+		console.error('Failed to save lineNumbers setting:', error);
+	});
+	return { success: true, message: 'Line numbers enabled' };
 } else if (setting === 'nonumber') {
-  hideLineNumbers();
-  // Save setting to PouchDB
-  settingsService.setSetting('lineNumbers', false).catch(error => {
-    console.error('Failed to save lineNumbers setting:', error);
-  });
-  return { success: true, message: 'Line numbers disabled' };
+	hideLineNumbers();
+	// Save setting to PouchDB
+	settingsService.setSetting('lineNumbers', false).catch((error) => {
+		console.error('Failed to save lineNumbers setting:', error);
+	});
+	return { success: true, message: 'Line numbers disabled' };
 }
 ```
 
 ## Best Practices Summary
 
-1. **Prefer Svelte transitions over CSS transitions** ✅ *See Display.svelte:287*
-2. **Always reserve space to prevent layout shifts** ✅ *See Display.module.scss:69-80*
-3. **Use relative units for dynamic font sizes** ✅ *See Display.module.scss:53-67*
-4. **Handle SSR timing with proper initialization** ✅ *See +layout.svelte:16-47*
-5. **Use global instances for external libraries** ✅ *See PouchDBInitializer.svelte*
-6. **Keep transition logic simple and stable** ✅ *See Display.svelte:285-291*
+1. **Prefer Svelte transitions over CSS transitions** ✅ _See Display.svelte:287_
+2. **Always reserve space to prevent layout shifts** ✅ _See Display.module.scss:69-80_
+3. **Use relative units for dynamic font sizes** ✅ _See Display.module.scss:53-67_
+4. **Handle SSR timing with proper initialization** ✅ _See +layout.svelte:16-47_
+5. **Use global instances for external libraries** ✅ _See PouchDBInitializer.svelte_
+6. **Keep transition logic simple and stable** ✅ _See Display.svelte:285-291_
 
 ## Common Pitfalls to Avoid
 
@@ -239,14 +239,14 @@ if (setting === 'number') {
 
 ## Quick Reference
 
-| Issue | Solution | Real Example |
-|-------|----------|--------------|
-| CSS transitions not working | Use `transition:fade` | Display.svelte:287 |
-| Layout shifts | Reserve space with containers | Display.module.scss:69-80 |
-| Font size breaks layout | Use `em` units | Display.module.scss:53-67 |
-| SSR conflicts | Dynamic imports + global instances | PouchDBInitializer.svelte |
-| Timing issues | Wait for client initialization | +layout.svelte:16-47 |
-| Reactivity conflicts | Simple, stable state patterns | Display.svelte:285-291 |
+| Issue                       | Solution                           | Real Example              |
+| --------------------------- | ---------------------------------- | ------------------------- |
+| CSS transitions not working | Use `transition:fade`              | Display.svelte:287        |
+| Layout shifts               | Reserve space with containers      | Display.module.scss:69-80 |
+| Font size breaks layout     | Use `em` units                     | Display.module.scss:53-67 |
+| SSR conflicts               | Dynamic imports + global instances | PouchDBInitializer.svelte |
+| Timing issues               | Wait for client initialization     | +layout.svelte:16-47      |
+| Reactivity conflicts        | Simple, stable state patterns      | Display.svelte:285-291    |
 
 ## File References
 

@@ -1,39 +1,39 @@
 <script lang="ts">
 	import styles from './MenuBar.module.scss';
 	import { showWidget } from '$lib/stores/widgetVisibility';
-	
+
 	interface Props {
 		documentTitle?: string;
 		documentId?: string;
 		dbService?: any;
 	}
-	
+
 	let { documentTitle = '', documentId, dbService }: Props = $props();
-	
+
 	let isEditing = $state(false);
 	let editingTitle = $state('');
 	let inputRef = $state<HTMLInputElement>();
 	let isValid = $state(true);
-	
+
 	function startEditing() {
 		isEditing = true;
 		editingTitle = documentTitle;
 		isValid = true;
 		setTimeout(() => inputRef?.focus(), 0);
 	}
-	
+
 	function validateTitle(title: string): boolean {
 		return title.trim().length > 0 && title.trim().length <= 100;
 	}
-	
+
 	async function saveTitle() {
 		if (!validateTitle(editingTitle)) {
 			isValid = false;
 			return;
 		}
-		
+
 		const newTitle = editingTitle.trim();
-		
+
 		if (newTitle !== documentTitle && documentId && dbService) {
 			try {
 				await updateDocumentWithRetry(newTitle);
@@ -57,7 +57,7 @@
 			isValid = true;
 		}
 	}
-	
+
 	async function updateDocumentWithRetry(newTitle: string, maxRetries: number = 3): Promise<void> {
 		for (let attempt = 1; attempt <= maxRetries; attempt++) {
 			try {
@@ -71,7 +71,7 @@
 				if (error.status === 409 && attempt < maxRetries) {
 					// Conflict error, retry after a short delay
 					console.log(`Update conflict, retrying... (attempt ${attempt}/${maxRetries})`);
-					await new Promise(resolve => setTimeout(resolve, 100 * attempt));
+					await new Promise((resolve) => setTimeout(resolve, 100 * attempt));
 				} else {
 					throw error; // Re-throw if not a conflict or max retries reached
 				}
@@ -79,13 +79,13 @@
 		}
 		throw new Error(`Failed to update document after ${maxRetries} attempts`);
 	}
-	
+
 	function cancelEdit() {
 		isEditing = false;
 		isValid = true;
 		editingTitle = documentTitle;
 	}
-	
+
 	function handleKeydown(event: KeyboardEvent) {
 		if (event.key === 'Enter') {
 			event.preventDefault();
@@ -95,7 +95,7 @@
 			cancelEdit();
 		}
 	}
-	
+
 	function handleWidgetClick() {
 		showWidget();
 	}
@@ -105,7 +105,7 @@
 	<div class={styles.leftSection}></div>
 	<div class={styles.centerSection}>
 		{#if isEditing}
-			<input 
+			<input
 				bind:this={inputRef}
 				bind:value={editingTitle}
 				class={`${styles.titleInput} ${!isValid ? styles.invalid : ''}`}
@@ -113,15 +113,21 @@
 				onblur={saveTitle}
 			/>
 		{:else if documentTitle}
-			<span class={styles.documentTitle} onclick={startEditing} onkeydown={(e) => (e.key === 'Enter' || e.key === ' ') && startEditing()} role="button" tabindex="0">
+			<span
+				class={styles.documentTitle}
+				onclick={startEditing}
+				onkeydown={(e) => (e.key === 'Enter' || e.key === ' ') && startEditing()}
+				role="button"
+				tabindex="0"
+			>
 				{documentTitle}
 			</span>
 		{/if}
 	</div>
 	<div class={styles.rightSection}>
 		<div class={styles.taskDrawer}>
-			<button 
-				type="button" 
+			<button
+				type="button"
 				class={styles.widgetButton}
 				onclick={handleWidgetClick}
 				onkeydown={(e) => (e.key === 'Enter' || e.key === ' ') && handleWidgetClick()}
