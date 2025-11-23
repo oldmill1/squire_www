@@ -19,6 +19,7 @@
     hasLoaded?: boolean;
     onDocumentClick?: (doc: Document, event: MouseEvent) => void;
     isSelectionMode?: boolean;
+    onSelectionChange?: () => void;
   }
   
   let { 
@@ -27,7 +28,8 @@
     documents = [], 
     hasLoaded = true, 
     onDocumentClick,
-    isSelectionMode = false
+    isSelectionMode = false,
+    onSelectionChange
   }: Props = $props();
   
   // Simple reactive state for selected document IDs
@@ -42,6 +44,11 @@
     })();
     
     selectedIds = ids;
+    
+    // Notify parent of selection change
+    if (onSelectionChange) {
+      onSelectionChange();
+    }
   }
   
   // Convert documents to file items for display

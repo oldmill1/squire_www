@@ -41,6 +41,9 @@
       recentDocs = docs
         .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
         .slice(0, 10);
+      
+      // Initialize selected count
+      updateSelectedCount();
     } catch (error) {
       console.error('Failed to load recent documents in Explorer:', error);
     } finally {
@@ -63,16 +66,22 @@
 
   function toggleDocumentSelection(doc: Document) {
     selectedDocuments.toggleDocument(doc);
+    updateSelectedCount();
   }
 
   function toggleSelectionMode() {
     isSelectionMode = !isSelectionMode;
     if (!isSelectionMode) {
       selectedDocuments.clearSelection();
+      updateSelectedCount();
     }
   }
 
-  const selectedCount = $derived(selectedDocuments.getSelectedCount());
+  let selectedCount = $state(0);
+  
+  function updateSelectedCount() {
+    selectedCount = selectedDocuments.getSelectedCount();
+  }
 </script>
 
 <div class="explorer-container">
@@ -81,6 +90,7 @@
     {hasLoaded} 
     onDocumentClick={handleDocumentClick}
     {isSelectionMode}
+    onSelectionChange={updateSelectedCount}
   />
   
   {#if recentDocs.length > 0}
