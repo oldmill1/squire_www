@@ -1,5 +1,6 @@
 <script lang="ts">
   import Editor from '$lib/components/Editor.svelte';
+  import StatusBar from '$lib/components/StatusBar.svelte';
   import { onMount } from 'svelte';
   import type { PageProps } from './$types';
   
@@ -23,6 +24,10 @@
       
       if (document) {
         documentContent = document.content;
+console.log(`
+[LOADED] ${document.title}
+         └─ ${document.id.substring(0, 8)} • ${document.createdAt.toRelativeTime?.() || 'just now'}
+`);
       } else {
         documentContent = '';
       }
@@ -36,3 +41,4 @@
 </script>
 
 <Editor content={documentContent} documentId={data.id} {dbService} />
+<StatusBar />

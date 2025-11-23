@@ -83,6 +83,11 @@
             
             // Save to database
             await dbService.update(existingDoc);
+            
+            console.log(`
+[SAVED] ${existingDoc.title}
+        └─ ${existingDoc.id.substring(0, 8)} • ${new Date().toLocaleTimeString()}
+`);
           }
         }
       } catch (error) {
