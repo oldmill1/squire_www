@@ -1,6 +1,7 @@
 <script lang="ts">
   import Editor from '$lib/components/Editor.svelte';
   import StatusBar from '$lib/components/StatusBar.svelte';
+  import MenuBar from '$lib/components/MenuBar.svelte';
   import { onMount } from 'svelte';
   import type { PageProps } from './$types';
   
@@ -40,5 +41,6 @@ console.log(`
   }
 </script>
 
+<MenuBar />
 <Editor content={documentContent} documentId={data.id} {dbService} />
 <StatusBar />
