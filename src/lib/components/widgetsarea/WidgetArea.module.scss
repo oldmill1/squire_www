@@ -71,9 +71,16 @@
 	}
 }
 
+.contentContainer {
+	flex: 1;
+	overflow: hidden;
+	position: relative;
+}
+
 .content {
 	flex: 1;
 	overflow-y: auto;
+	height: 100%;
 }
 
 .placeholder {
@@ -114,9 +121,19 @@
 }
 
 .widgetIcon {
-	width: 14px;
-	height: 14px;
+	width: 18px;
+	height: 18px;
 	opacity: 0.8;
+}
+
+// White circle background for wizard icon in rewriter widget
+.rewriterWidget .widgetIcon {
+	background: rgba(255, 255, 255, 0.9);
+	border-radius: 50%;
+	padding: 3px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .listCount {
@@ -145,7 +162,7 @@
 	color: rgba(255, 255, 255, 0.9);
 	padding: 6px 8px;
 	border-radius: 6px;
-	font-size: 12px;
+	font-size: 14px;
 	outline: none;
 
 	&::placeholder {

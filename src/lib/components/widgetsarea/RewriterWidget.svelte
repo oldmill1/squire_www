@@ -20,11 +20,11 @@
 	}
 </script>
 
-<div class={styles.widget}>
+<div class={`${styles.widget} ${styles.rewriterWidget}`}>
 	<div class={styles.widgetHeader}>
 		<div class={styles.widgetTitle}>
-			<img src="/icons/widget.png" alt="Rewriter" class={styles.widgetIcon} />
-			Rewriter
+			<img src="/icons/ai.png" alt="Rewriter" class={styles.widgetIcon} />
+			Wizard
 		</div>
 	</div>
 
@@ -32,7 +32,7 @@
 		<!-- First row: Rewrite button -->
 		<div class={styles.rewriterRow}>
 			<button class={styles.rewriteButton} onclick={handleRewrite}>
-				<img src="/icons/ai.png" alt="AI" class={styles.rewriteIcon} />
+				<img src="/icons/widget.png" alt="AI" class={styles.rewriteIcon} />
 				Rewrite
 			</button>
 		</div>

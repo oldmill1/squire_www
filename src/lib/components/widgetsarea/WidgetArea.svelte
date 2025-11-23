@@ -4,6 +4,7 @@
 	import { widgetVisibility, hideWidget } from '$lib/stores/widgetVisibility';
 	import AddToListWidget from './AddToListWidget.svelte';
 	import RewriterWidget from './RewriterWidget.svelte';
+	import { fade } from 'svelte/transition';
 
 	interface Props {
 		children?: Snippet;
@@ -17,7 +18,7 @@
 
 	let isVisible = $state(true);
 
-	// Subscribe to the store
+	// Subscribe to the store using Svelte 5 syntax
 	$effect(() => {
 		const unsubscribe = widgetVisibility.subscribe((value) => {
 			isVisible = value;
@@ -26,37 +27,40 @@
 	});
 
 	function toggleVisibility() {
-		hideWidget();
+		isVisible = !isVisible;
+		widgetVisibility.set(isVisible);
 	}
 </script>
 
-<div class={`${styles.widgetArea} ${!isVisible ? styles.hidden : ''}`}>
-	{#if title}
-		<div class={styles.header}>
-			<div class={styles.titleContainer}>
-				<img src="/icons/widget.png" alt="Widget" class={styles.titleIcon} />
-				<h2 class={styles.title}>{title}</h2>
-			</div>
-			<button class={styles.toggleButton} onclick={toggleVisibility}>
-				{isVisible ? 'Hide' : 'Show'}
-			</button>
-		</div>
-	{/if}
-
-	{#if isVisible}
-		<div class={styles.content}>
-			{#if documentId}
-				<AddToListWidget {documentId} />
-				<RewriterWidget {documentId} />
-			{/if}
-
-			{#if children}
-				{@render children()}
-			{:else if !documentId}
-				<div class={styles.placeholder}>
-					<p>Widget area content goes here</p>
+{#if isVisible}
+	<div class={`${styles.widgetArea}`} transition:fade={{ duration: 300 }}>
+		{#if title}
+			<div class={styles.header}>
+				<div class={styles.titleContainer}>
+					<img src="/icons/widget.png" alt="Widget" class={styles.titleIcon} />
+					<h2 class={styles.title}>{title}</h2>
 				</div>
-			{/if}
+				<button class={styles.toggleButton} onclick={toggleVisibility}>
+					{isVisible ? 'Hide' : 'Show'}
+				</button>
+			</div>
+		{/if}
+
+		<div class={styles.contentContainer}>
+			<div class={styles.content}>
+				{#if documentId}
+					<AddToListWidget {documentId} />
+					<RewriterWidget {documentId} />
+				{/if}
+
+				{#if children}
+					{@render children()}
+				{:else if !documentId}
+					<div class={styles.placeholder}>
+						<p>Widget area content goes here</p>
+					</div>
+				{/if}
+			</div>
 		</div>
-	{/if}
-</div>
+	</div>
+{/if}
