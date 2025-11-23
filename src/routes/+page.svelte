@@ -79,8 +79,8 @@
     goto('/explorer');
   }
 
-  function handleLists() {
-    goto('/lists');
+  function handleCabinet() {
+    goto('/cabinet');
   }
 
   async function openDocument(docId: string) {
@@ -179,10 +179,10 @@
         onClick: handleExplorer
       },
       {
-        id: 'lists',
+        id: 'cabinet',
         icon: '/icons/cabinet.png',
-        title: 'Lists',
-        onClick: handleLists
+        title: 'Cabinet',
+        onClick: handleCabinet
       }
     ]}
   />
