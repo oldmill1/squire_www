@@ -24,6 +24,20 @@
   z-index: 10;
 }
 
+.fileCountLabel {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  color: #888;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  pointer-events: none;
+  z-index: 5;
+}
+
 .explorerBg {
   width: 100%;
   max-width: 620px;
@@ -49,25 +63,42 @@
   align-content: start;
   overflow-y: auto;
   overflow-x: hidden;
-  padding-right: 8px; // Space for scrollbar
+  padding-right: 4px; // Reduced space for sleeker scrollbar
   
-  // Custom scrollbar styling
+  // Modern scrollbar styling
   &::-webkit-scrollbar {
-    width: 6px;
+    width: 4px;
   }
   
   &::-webkit-scrollbar-track {
-    background: #333;
-    border-radius: 3px;
+    background: transparent;
   }
   
   &::-webkit-scrollbar-thumb {
-    background: #666;
-    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    transition: background 0.2s ease;
     
     &:hover {
-      background: #888;
+      background: rgba(255, 255, 255, 0.4);
     }
+    
+    &:active {
+      background: rgba(255, 255, 255, 0.6);
+    }
+  }
+  
+  // Firefox scrollbar styling
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+  
+  &:hover {
+    // Make scrollbar more visible on hover
+    &::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+    }
+    
+    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
   }
 }
 

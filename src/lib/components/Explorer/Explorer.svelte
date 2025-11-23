@@ -124,6 +124,10 @@
           />
         </div>
       {/if}
+      
+      <div class={styles.fileCountLabel}>
+        {displayFiles.length} files
+      </div>
     </div>
   {/if}
 </div>

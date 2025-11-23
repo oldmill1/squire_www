@@ -38,16 +38,11 @@
       if (!dbService) return;
       
       const docs = await dbService.list();
-      console.log('Raw documents from database:', docs);
-      console.log('Number of documents retrieved:', docs.length);
       
       // Sort by updatedAt to get the latest documents and take 100
       recentDocs = docs
         .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
         .slice(0, 100);
-      
-      console.log('Recent docs after sorting and slicing:', recentDocs);
-      console.log('Recent doc IDs:', recentDocs.map(d => d.id));
       
       // Initialize selected count
       updateSelectedCount();
@@ -123,18 +118,13 @@
       }
       
       if (selectedDocs.length === 0) {
-        console.log('No documents selected for deletion');
         return;
       }
       
-      console.log(`Deleting ${selectedDocs.length} documents:`, selectedDocs.map(d => d.id));
-      
-      // Delete each selected document with individual error handling
+      // Delete each selected document
       for (const doc of selectedDocs) {
         try {
-          console.log(`Attempting to delete document: ${doc.id}`);
-          const deleteResult = await dbService.delete(doc.id);
-          console.log(`Delete result for ${doc.id}:`, deleteResult);
+          await dbService.delete(doc.id);
         } catch (deleteError) {
           console.error(`Failed to delete document ${doc.id}:`, deleteError);
         }
@@ -148,11 +138,7 @@
       await new Promise(resolve => setTimeout(resolve, 100));
       
       // Refresh the document list
-      console.log('Refreshing document list after deletion...');
       await loadRecentDocs();
-      
-      console.log('Document list refreshed. New count:', recentDocs.length);
-      console.log('Successfully deleted selected documents');
     } catch (error) {
       console.error('Failed to delete selected documents:', error);
     }
