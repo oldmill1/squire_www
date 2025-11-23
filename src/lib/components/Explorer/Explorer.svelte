@@ -119,7 +119,7 @@
           <Button 
             onclick={() => onDeleteSelected?.(selectedDocs)}
             text="Delete"
-            icon="/icons/new.png"
+            icon="/icons/trash-can.png"
             alt="Delete"
           />
         </div>
