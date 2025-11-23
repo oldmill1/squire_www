@@ -108,7 +108,7 @@
 				onblur={saveTitle}
 			/>
 		{:else if documentTitle}
-			<span class={styles.documentTitle} ondblclick={startEditing} role="button" tabindex="0">
+			<span class={styles.documentTitle} onclick={startEditing} role="button" tabindex="0">
 				{documentTitle}
 			</span>
 		{/if}
