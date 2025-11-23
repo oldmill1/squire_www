@@ -75,9 +75,9 @@
       <div class={styles.backButtonPosition}>
         <Button 
           onclick={() => window.history.back()}
-          text="Back"
-          icon="/icons/folder.png"
-          alt="Back"
+          text="Home"
+          icon="/icons/home.png"
+          alt="Home"
         />
       </div>
       <div class={styles.desktop}>
