@@ -5,6 +5,7 @@
   import Button from '../global/Button.svelte';
   import type { Snippet } from 'svelte';
   import { Document } from '$lib/models/Document';
+  import { fade, slide, scale } from 'svelte/transition';
   
   interface FileItem {
     id: string;
@@ -66,38 +67,39 @@
         />
       </div>
       <div class={styles.desktop}>
-        {#if hasLoaded}
-          {#if documents.length > 0}
-            {#each documents as doc (doc.id)}
+        {#if documents.length > 0}
+          {#each documents as doc, index (doc.id)}
+            <div 
+              transition:scale={{ duration: 300, delay: (index * 50) }}
+            >
               <DocumentButton 
                 document={doc}
                 {isSelectionMode}
                 onDocumentClick={onDocumentClick || (() => {})}
                 onSelectionChange={onSelectionChange}
               />
-            {/each}
-          {:else}
-            {#each displayFiles as file (file.id)}
-              <div class={styles.fileItem}>
-                <IconItem 
-                  name={file.name}
-                  icon={file.icon || '/icons/folder.png'}
-                />
-              </div>
-            {/each}
-          {/if}
-        {:else}
-          <div class={styles.loading}>
-            <p>Loading documents...</p>
-          </div>
+            </div>
+          {/each}
+        {:else if files.length > 0}
+          {#each files as file, index (file.id)}
+            <div 
+              class={styles.fileItem}
+              transition:slide={{ duration: 300, delay: (index * 50) }}
+            >
+              <IconItem 
+                name={file.name}
+                icon={file.icon ?? '/icons/folder.png'}
+              />
+            </div>
+          {/each}
         {/if}
       </div>
       
-      {#if hasLoaded && documents.length === 0 && files.length === 0}
-        <div class={styles.empty}>
-          <p>No documents found</p>
-        </div>
-      {/if}
+      <div class={styles.empty}>
+        {#if hasLoaded && documents.length === 0 && files.length === 0}
+          <p transition:fade={{ duration: 300 }}>No documents found</p>
+        {/if}
+      </div>
     </div>
   {/if}
 </div>
