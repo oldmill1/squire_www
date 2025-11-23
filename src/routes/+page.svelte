@@ -107,6 +107,17 @@
       </div>
     </div>
   </main>
+
+  <!-- Dock -->
+  <div class="dock">
+    <button 
+      class="dock-item" 
+      onclick={handleNewDocument}
+      title="New Document"
+    >
+      <img src="/icons/new.png" alt="New Document" class="dock-icon" />
+    </button>
+  </div>
 </div>
 
 <style>
@@ -145,43 +156,14 @@
   .content-header {
     text-align: center;
     margin-bottom: 2rem;
-    position: relative;
   }
 
   .recents-title {
     font-size: 2.5rem;
-    font-weight: 700;
+    font-weight: 500;
     color: #ffffff;
     margin: 0;
-    background: linear-gradient(180deg, #ffffff 0%, #e0e0e0 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-shadow: 
-      0 2px 4px rgba(0, 0, 0, 0.3),
-      0 1px 0 rgba(255, 255, 255, 0.1);
-    position: relative;
-  }
-
-  .recents-title::after {
-    content: 'Recents';
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    font-size: 2.5rem;
-    font-weight: 700;
-    background: linear-gradient(180deg, #ffffff 0%, #e0e0e0 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    transform: rotatex(180deg) translatey(15px);
-    transform-origin: top;
-    mask-image: linear-gradient(transparent 30%, rgba(255, 255, 255, 0.1) 60%, rgba(255, 255, 255, 0.3) 90%);
-    -webkit-mask-image: linear-gradient(transparent 30%, rgba(255, 255, 255, 0.1) 60%, rgba(255, 255, 255, 0.3) 90%);
-    filter: blur(1px) brightness(1.2);
-    opacity: 0.4;
-    z-index: -1;
+    font-family: 'Henny Penny', cursive;
   }
 
   .documents-list {
@@ -283,6 +265,60 @@
 
   .create-first-btn:hover {
     background: #7a6bb7;
+  }
+
+  /* Dock */
+  .dock {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 1000;
+    background: rgba(42, 42, 62, 0.9);
+    backdrop-filter: blur(10px);
+    padding: 12px;
+    border-radius: 16px;
+    border: 1px solid rgba(58, 58, 78, 0.8);
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  .dock-item {
+    background: transparent;
+    border: none;
+    border-radius: 12px;
+    padding: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .dock-item:hover {
+    background: rgba(138, 124, 199, 0.2);
+    transform: scale(1.1);
+  }
+
+  .dock-item:active {
+    transform: scale(0.95);
+  }
+
+  .dock-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    transition: all 0.2s ease;
+  }
+
+  .dock-item:hover .dock-icon {
+    filter: drop-shadow(0 4px 8px rgba(138, 124, 199, 0.4));
   }
 
   @media (max-width: 768px) {
