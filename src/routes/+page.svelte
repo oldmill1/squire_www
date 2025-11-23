@@ -4,6 +4,7 @@
   import { fade } from 'svelte/transition';
   import { Document } from '$lib/models/Document';
   import { DatabaseService } from '$lib/services/DatabaseService';
+  import { selectedDocuments } from '$lib/stores/selectedDocuments';
   import Dock from '$lib/components/Dock.svelte';
   import styles from './+page.module.scss';
 
@@ -12,6 +13,7 @@
   let recentDocs: Document[] = [];
   let selectedCategory = 'Recents';
   let hasLoaded = false;
+  let isSelectionMode = false;
 
   onMount(async () => {
     isBrowser = true;
@@ -65,6 +67,28 @@
   async function openDocument(docId: string) {
     await goto(`/docs/${docId}`);
   }
+
+  function toggleDocumentSelection(doc: Document) {
+    selectedDocuments.toggleDocument(doc);
+  }
+
+  function toggleSelectionMode() {
+    isSelectionMode = !isSelectionMode;
+    if (!isSelectionMode) {
+      selectedDocuments.clearSelection();
+    }
+  }
+
+  function handleDocumentClick(doc: Document, event: MouseEvent) {
+    if (isSelectionMode) {
+      event.preventDefault();
+      toggleDocumentSelection(doc);
+    } else {
+      openDocument(doc.id);
+    }
+  }
+
+  $: selectedCount = selectedDocuments.getSelectedCount();
 </script>
 
 <svelte:head>
@@ -77,23 +101,51 @@
   <main>
     <div class={styles['content-wrapper']}>
       <div class={styles['content-header']}>
-        <h1 class={styles['recents-title']}>Recents</h1>
+        <div class={styles['header-left']}>
+          <h1 class={styles['recents-title']}>
+            {isSelectionMode ? 'Select Documents' : 'Recents'}
+          </h1>
+          {#if isSelectionMode}
+            <span class={styles['selected-count']}>
+              {selectedCount} {selectedCount === 1 ? 'document' : 'documents'} selected
+            </span>
+          {/if}
+        </div>
+        <div class={styles['header-right']}>
+          <button 
+            class={styles['selection-toggle-btn']} 
+            onclick={toggleSelectionMode}
+            type="button"
+          >
+            {isSelectionMode ? 'Cancel' : 'Select'}
+          </button>
+        </div>
       </div>
       
       <div class={styles['documents-list']}>
         {#each recentDocs as doc (doc.id)}
           <button 
-            class={styles['document-item']} 
-            onclick={() => openDocument(doc.id)}
+            class={`${styles['document-item']} ${isSelectionMode ? styles['selection-mode'] : ''} ${selectedDocuments.isSelected(doc.id) ? styles['selected'] : ''}`} 
+            onclick={(e) => handleDocumentClick(doc, e)}
             onkeydown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
-                openDocument(doc.id);
+                handleDocumentClick(doc, e as any);
               }
             }}
             type="button"
             transition:fade={{ duration: 300 }}
           >
+            {#if isSelectionMode}
+              <div class={styles['selection-checkbox']}>
+                <input 
+                  type="checkbox" 
+                  checked={selectedDocuments.isSelected(doc.id)}
+                  onchange={() => toggleDocumentSelection(doc)}
+                  onclick={(e) => e.stopPropagation()}
+                />
+              </div>
+            {/if}
             <div class={styles['document-info']}>
               <h3 class={styles['document-title']}>{doc.title || 'Untitled Document'}</h3>
               <p class={styles['document-preview']}>
