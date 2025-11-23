@@ -30,6 +30,20 @@
     isSelectionMode = false
   }: Props = $props();
   
+  // Simple reactive state for selected document IDs
+  let selectedIds = $state<string[]>([]);
+  
+  // Update selected IDs from store
+  function updateSelectedIds() {
+    // Get all selected document IDs
+    const ids: string[] = [];
+    selectedDocuments.subscribe(state => {
+      state.documents.forEach(doc => ids.push(doc.id));
+    })();
+    
+    selectedIds = ids;
+  }
+  
   // Convert documents to file items for display
   const documentFiles = $derived(documents.map(doc => ({
     id: doc.id,
@@ -50,16 +64,18 @@
 
   function handleFileClick(fileId: string, event: MouseEvent) {
     if (onDocumentClick && documents.length > 0) {
-      const doc = documents.find(d => d.id === fileId);
+      const doc = documents.find((d: Document) => d.id === fileId);
       if (doc) {
-        onDocumentClick(doc, event);
+        if (isSelectionMode) {
+          event.preventDefault();
+          selectedDocuments.toggleDocument(doc);
+          // Update our reactive state
+          updateSelectedIds();
+        } else {
+          onDocumentClick(doc, event);
+        }
       }
     }
-  }
-
-  function handleCheckboxClick(doc: Document, event: MouseEvent) {
-    event.stopPropagation();
-    selectedDocuments.toggleDocument(doc);
   }
 </script>
 
@@ -71,11 +87,12 @@
       <div class={styles.desktop}>
         {#if hasLoaded}
           {#each displayFiles as file (file.id)}
-            {@const doc = documents.find(d => d.id === file.id)}
-            {@const isSelected = doc ? selectedDocuments.isSelected(doc.id) : false}
+            {@const doc = documents.find((d: Document) => d.id === file.id)}
+            {@const isSelected = selectedIds.includes(file.id)}
+            {@const buttonClass = `${styles.documentButton} ${isSelectionMode ? styles.selectionMode : ''} ${isSelected ? styles.selected : ''}`}
             <button 
               type="button"
-              class={`${styles.documentButton} ${isSelectionMode ? styles.selectionMode : ''} ${isSelected ? styles.selected : ''}`}
+              class={buttonClass}
               onclick={(e) => handleFileClick(file.id, e)}
               onkeydown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
@@ -89,8 +106,7 @@
                   <input 
                     type="checkbox" 
                     checked={isSelected}
-                    onchange={() => handleCheckboxClick(doc, event as any)}
-                    onclick={(e) => e.stopPropagation()}
+                    style="pointer-events: none;"
                   />
                 </div>
               {/if}

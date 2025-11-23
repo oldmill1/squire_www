@@ -76,11 +76,13 @@
   top: 5px;
   left: 5px;
   z-index: 1;
+  pointer-events: none;
 
   input[type="checkbox"] {
     width: 16px;
     height: 16px;
     cursor: pointer;
+    pointer-events: none;
   }
 }
 
