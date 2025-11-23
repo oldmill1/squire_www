@@ -56,7 +56,7 @@
   {#if children}
     {@render children()}
   {:else}
-    <div class={styles.center}>
+    <div class={styles.explorerBg}>
       <div class={styles.backButtonPosition}>
         <Button 
           onclick={() => window.history.back()}
