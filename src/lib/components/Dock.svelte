@@ -1,6 +1,4 @@
-<script lang="ts">
-  import styles from './Dock.module.scss';
-
+<script lang="ts" context="module">
   export interface DockItem {
     id: string;
     icon: string;
@@ -9,8 +7,10 @@
     active?: boolean;
     badge?: number;
   }
+</script>
 
-  export type { DockItem };
+<script lang="ts">
+  import styles from './Dock.module.scss';
 
   export let items: DockItem[] = [];
 </script>
