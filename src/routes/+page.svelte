@@ -8,6 +8,7 @@
   import { generateTimeBasedTitle } from '$lib/utils/timeTitle';
   import Dock, { type DockItem } from '$lib/components/Dock.svelte';
   import Button from '$lib/components/global/Button.svelte';
+  import VList from '$lib/components/VList/VList.svelte';
   import styles from './+page.module.scss';
 
   let dbService: DatabaseService;
@@ -120,49 +121,16 @@
         <h1 class={styles['recents-title']}>Recents</h1>
       </div>
       
-      <div class={styles['documents-list']}>
-        {#each recentDocs as doc (doc.id)}
-          <button 
-            class={`${styles['document-item']} ${isSelectionMode ? styles['selection-mode'] : ''} ${selectedDocuments.isSelected(doc.id) ? styles['selected'] : ''}`} 
-            onclick={(e) => handleDocumentClick(doc, e)}
-            onkeydown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                handleDocumentClick(doc, e as any);
-              }
-            }}
-            type="button"
-            transition:fade={{ duration: 300 }}
-          >
-            {#if isSelectionMode}
-              <div class={styles['selection-checkbox']}>
-                <input 
-                  type="checkbox" 
-                  checked={selectedDocuments.isSelected(doc.id)}
-                  onchange={() => toggleDocumentSelection(doc)}
-                  onclick={(e) => e.stopPropagation()}
-                />
-              </div>
-            {/if}
-            <div class={styles['document-info']}>
-              <h3 class={styles['document-title']}>{doc.title || 'Untitled Document'}</h3>
-              <p class={styles['document-preview']}>
-                {doc.content ? doc.content.slice(0, 100) : ''}
-              </p>
-            </div>
-            <div class={styles['document-arrow']}>→</div>
-          </button>
-        {/each}
-        
-        {#if hasLoaded && recentDocs.length === 0}
-          <div class={styles['empty-state']} transition:fade={{ duration: 300 }}>
-            <p>No recent documents</p>
-            <button class={styles['create-first-btn']} onclick={handleNewDocument}>
-              Create your first document
-            </button>
-          </div>
-        {/if}
-      </div>
+      <VList 
+      items={recentDocs}
+      {hasLoaded}
+      {isSelectionMode}
+      emptyMessage="No recent documents"
+      emptyButtonText="Create your first document"
+      onEmptyButtonClick={handleNewDocument}
+      onItemClick={handleDocumentClick}
+      onToggleSelection={toggleDocumentSelection}
+    />
       
       <div class={styles['selection-controls']}>
         <Button 
