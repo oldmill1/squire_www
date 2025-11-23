@@ -101,25 +101,7 @@
   <main>
     <div class={styles['content-wrapper']}>
       <div class={styles['content-header']}>
-        <div class={styles['header-left']}>
-          <h1 class={styles['recents-title']}>
-            {isSelectionMode ? 'Select Documents' : 'Recents'}
-          </h1>
-          {#if isSelectionMode}
-            <span class={styles['selected-count']}>
-              {selectedCount} {selectedCount === 1 ? 'document' : 'documents'} selected
-            </span>
-          {/if}
-        </div>
-        <div class={styles['header-right']}>
-          <button 
-            class={styles['selection-toggle-btn']} 
-            onclick={toggleSelectionMode}
-            type="button"
-          >
-            {isSelectionMode ? 'Cancel' : 'Select'}
-          </button>
-        </div>
+        <h1 class={styles['recents-title']}>Recents</h1>
       </div>
       
       <div class={styles['documents-list']}>
@@ -164,6 +146,16 @@
             </button>
           </div>
         {/if}
+      </div>
+      
+      <div class={styles['selection-controls']}>
+        <button 
+          class={styles['selection-toggle-btn']} 
+          onclick={toggleSelectionMode}
+          type="button"
+        >
+          {isSelectionMode ? 'Cancel' : 'Select'}
+        </button>
       </div>
     </div>
   </main>

@@ -31,22 +31,8 @@ main {
 }
 
 .content-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  text-align: center;
   margin-bottom: 2rem;
-  text-align: left;
-}
-
-.header-left {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.header-right {
-  display: flex;
-  align-items: center;
 }
 
 .recents-title {
@@ -74,19 +60,36 @@ main {
 }
 
 .selection-toggle-btn {
-  background: #8a7cc7;
+  background: linear-gradient(180deg, #8a7cc7 0%, #7a6bb7 100%);
   color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 0.5rem 1rem;
+  border: 1px solid #6a5ba7;
+  border-radius: 4px;
+  padding: 0.25rem 0.75rem;
   cursor: pointer;
-  font-size: 0.9rem;
-  transition: background-color 0.2s ease;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: all 0.1s ease;
   white-space: nowrap;
+  box-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 }
 
 .selection-toggle-btn:hover {
-  background: #7a6bb7;
+  background: linear-gradient(180deg, #9a8cd7 0%, #8a7cc7 100%);
+  border-color: #7a6bb7;
+  transform: translateY(-1px);
+  box-shadow: 
+    0 3px 6px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.selection-toggle-btn:active {
+  transform: translateY(0);
+  box-shadow: 
+    0 1px 2px rgba(0, 0, 0, 0.3),
+    inset 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .selected-count {
@@ -229,4 +232,11 @@ main {
 
 .document-item.selection-mode .document-info {
   margin-left: 0;
+}
+
+.selection-controls {
+  display: flex;
+  justify-content: center;
+  padding: 1rem 0;
+  margin-top: 1rem;
 }
