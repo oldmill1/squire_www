@@ -1,6 +1,7 @@
 <script lang="ts">
 	import favicon from '$lib/assets/favicon.svg';
 	import MenuBar from '$lib/components/MenuBar.svelte';
+	import { page } from '$app/stores';
 
 	let { children } = $props();
 </script>
@@ -9,6 +10,8 @@
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-<MenuBar />
+{#if $page.url.pathname !== '/'}
+	<MenuBar />
+{/if}
 
 {@render children()}

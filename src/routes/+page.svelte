@@ -65,59 +65,46 @@
 </svelte:head>
 
 <div class="app-container">
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    <div class="sidebar-header">
-      <h2>Squire</h2>
-    </div>
-    <nav class="sidebar-nav">
-      <div class="nav-item active">
-        <span class="nav-icon">📄</span>
-        <span>Recents</span>
-      </div>
-    </nav>
-  </aside>
-
   <!-- Main Content -->
   <main class="main-content">
-    <div class="content-header">
-      <h1>Recents</h1>
-    </div>
-    
-    <div class="documents-grid">
-      {#each recentDocs as doc (doc.id)}
-        <button 
-          class="document-card" 
-          onclick={() => openDocument(doc.id)}
-          onkeydown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              openDocument(doc.id);
-            }
-          }}
-          type="button"
-          transition:fade={{ duration: 300 }}
-        >
-          <div class="card-preview">
-            <div class="preview-text">
-              {doc.content.slice(0, 150) || 'Empty document...'}
-            </div>
-          </div>
-          <div class="card-footer">
-            <h3 class="card-title">{doc.title}</h3>
-            <span class="card-category">Document</span>
-          </div>
-        </button>
-      {/each}
+    <div class="content-wrapper">
+      <div class="content-header">
+        <h1 class="recents-title">Recents</h1>
+      </div>
       
-      {#if hasLoaded && recentDocs.length === 0}
-        <div class="empty-state" transition:fade={{ duration: 300 }}>
-          <p>No recent documents</p>
-          <button class="create-first-btn" onclick={handleNewDocument}>
-            Create your first document
+      <div class="documents-list">
+        {#each recentDocs as doc (doc.id)}
+          <button 
+            class="document-item" 
+            onclick={() => openDocument(doc.id)}
+            onkeydown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                openDocument(doc.id);
+              }
+            }}
+            type="button"
+            transition:fade={{ duration: 300 }}
+          >
+            <div class="document-info">
+              <h3 class="document-title">{doc.title || 'Untitled Document'}</h3>
+              <p class="document-preview">
+                {doc.content.slice(0, 100) || 'Empty document...'}
+              </p>
+            </div>
+            <div class="document-arrow">→</div>
           </button>
-        </div>
-      {/if}
+        {/each}
+        
+        {#if hasLoaded && recentDocs.length === 0}
+          <div class="empty-state" transition:fade={{ duration: 300 }}>
+            <p>No recent documents</p>
+            <button class="create-first-btn" onclick={handleNewDocument}>
+              Create your first document
+            </button>
+          </div>
+        {/if}
+      </div>
     </div>
   </main>
 </div>
@@ -131,150 +118,148 @@
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
 
-  /* Sidebar */
-  .sidebar {
-    width: 240px;
-    background: #2a2a3e;
-    border-right: 1px solid #3a3a4e;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .sidebar-header {
-    padding: 1.5rem;
-    border-bottom: 1px solid #3a3a4e;
-  }
-
-  .sidebar-header h2 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #e0e0e0;
-    margin: 0;
-  }
-
-  .sidebar-nav {
-    flex: 1;
-    padding: 1rem 0;
-  }
-
-  .nav-item {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem 1.5rem;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-
-  .nav-item:hover {
-    background: #3a3a4e;
-  }
-
-  .nav-item.active {
-    background: #4a4a6e;
-    border-left: 3px solid #8a7cc7;
-  }
-
-  .nav-icon {
-    font-size: 1.1rem;
-  }
-
   /* Main Content */
   .main-content {
     flex: 1;
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     background: #1a1a1a;
     overflow: hidden;
   }
 
-  .content-header {
-    padding: 2rem 2rem 1rem;
-    border-bottom: 1px solid #2a2a3e;
+  .content-wrapper {
+    width: 100%;
+    max-width: 600px;
+    padding: 2rem;
+    max-height: 100vh;
+    overflow-y: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
   }
 
-  .content-header h1 {
-    font-size: 1.8rem;
+  .content-wrapper::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+
+  .content-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    position: relative;
+  }
+
+  .recents-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+    background: linear-gradient(180deg, #ffffff 0%, #e0e0e0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 
+      0 2px 4px rgba(0, 0, 0, 0.3),
+      0 1px 0 rgba(255, 255, 255, 0.1);
+    position: relative;
+  }
+
+  .recents-title::after {
+    content: 'Recents';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(180deg, #ffffff 0%, #e0e0e0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    transform: rotatex(180deg) translatey(15px);
+    transform-origin: top;
+    mask-image: linear-gradient(transparent 30%, rgba(255, 255, 255, 0.1) 60%, rgba(255, 255, 255, 0.3) 90%);
+    -webkit-mask-image: linear-gradient(transparent 30%, rgba(255, 255, 255, 0.1) 60%, rgba(255, 255, 255, 0.3) 90%);
+    filter: blur(1px) brightness(1.2);
+    opacity: 0.4;
+    z-index: -1;
+  }
+
+  .documents-list {
+    flex: 1;
+    padding: 1rem;
+  }
+
+  .document-item {
+    width: 100%;
+    background: linear-gradient(180deg, #2a2a3e 0%, #1f1f2e 100%);
+    border: 1px solid #3a3a4e;
+    border-radius: 8px;
+    padding: 0.375rem;
+    margin-bottom: 0.25rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 
+      0 1px 3px rgba(0, 0, 0, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  .document-item:hover {
+    background: linear-gradient(180deg, #323347 0%, #2a2a3e 100%);
+    border-color: #8a7cc7;
+    transform: translateX(4px);
+    box-shadow: 
+      0 2px 8px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  }
+
+  .document-info {
+    flex: 1;
+    text-align: left;
+  }
+
+  .document-title {
+    font-size: 0.85rem;
     font-weight: 600;
     color: #e0e0e0;
-    margin: 0;
+    margin: 0 0 0.125rem 0;
+    line-height: 1.2;
   }
 
-  .documents-grid {
-    flex: 1;
-    padding: 2rem;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
-    overflow-y: auto;
-  }
-
-  .document-card {
-    background: #2a2a3e;
-    border-radius: 8px;
-    overflow: hidden;
-    cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    border: 1px solid #3a3a4e;
-  }
-
-  .document-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    border-color: #4a4a6e;
-  }
-
-  .card-preview {
-    height: 200px;
-    padding: 1rem;
-    background: #323347;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-  }
-
-  .preview-text {
-    color: #a0a0a0;
-    font-size: 0.9rem;
-    line-height: 1.5;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 6;
-    line-clamp: 6;
-    -webkit-box-orient: vertical;
-  }
-
-  .card-footer {
-    padding: 1rem;
-    background: #2a2a3e;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .card-title {
-    font-size: 1rem;
-    font-weight: 500;
-    color: #e0e0e0;
-    margin: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 150px;
-  }
-
-  .card-category {
+  .document-preview {
     font-size: 0.75rem;
+    color: #a0a0a0;
+    line-height: 1.3;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .document-arrow {
+    color: #6a6a7e;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+    margin-left: 0.5rem;
+    font-weight: 300;
+    text-shadow: 
+      0 1px 0 rgba(255, 255, 255, 0.1),
+      0 -1px 0 rgba(0, 0, 0, 0.3);
+  }
+
+  .document-item:hover .document-arrow {
     color: #8a7cc7;
-    background: rgba(138, 124, 199, 0.2);
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    text-transform: uppercase;
-    font-weight: 500;
+    transform: translateX(4px);
+    text-shadow: 
+      0 1px 0 rgba(255, 255, 255, 0.2),
+      0 -1px 0 rgba(0, 0, 0, 0.4);
   }
 
   .empty-state {
-    grid-column: 1 / -1;
     text-align: center;
     padding: 4rem 2rem;
     color: #a0a0a0;
@@ -301,13 +286,12 @@
   }
 
   @media (max-width: 768px) {
-    .sidebar {
-      width: 200px;
+    .content-wrapper {
+      padding: 1rem;
     }
     
-    .documents-grid {
-      grid-template-columns: 1fr;
-      padding: 1rem;
+    .recents-title {
+      font-size: 2rem;
     }
   }
 </style>
