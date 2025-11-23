@@ -1,5 +1,6 @@
 <script lang="ts">
 	import styles from './MenuBar.module.scss';
+	import { showWidget } from '$lib/stores/widgetVisibility';
 	
 	interface Props {
 		documentTitle?: string;
@@ -94,6 +95,10 @@
 			cancelEdit();
 		}
 	}
+	
+	function handleWidgetClick() {
+		showWidget();
+	}
 </script>
 
 <div class={styles.menubar}>
@@ -108,10 +113,22 @@
 				onblur={saveTitle}
 			/>
 		{:else if documentTitle}
-			<span class={styles.documentTitle} onclick={startEditing} role="button" tabindex="0">
+			<span class={styles.documentTitle} onclick={startEditing} onkeydown={(e) => (e.key === 'Enter' || e.key === ' ') && startEditing()} role="button" tabindex="0">
 				{documentTitle}
 			</span>
 		{/if}
 	</div>
-	<div class={styles.rightSection}></div>
+	<div class={styles.rightSection}>
+		<div class={styles.taskDrawer}>
+			<button 
+				type="button" 
+				class={styles.widgetButton}
+				onclick={handleWidgetClick}
+				onkeydown={(e) => (e.key === 'Enter' || e.key === ' ') && handleWidgetClick()}
+				aria-label="Toggle widgets"
+			>
+				<img src="/icons/widget.png" alt="Widgets" class={styles.widgetIcon} />
+			</button>
+		</div>
+	</div>
 </div>

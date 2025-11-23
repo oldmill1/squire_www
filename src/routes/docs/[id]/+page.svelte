@@ -2,6 +2,7 @@
   import Editor from '$lib/components/Editor.svelte';
   import StatusBar from '$lib/components/StatusBar.svelte';
   import MenuBar from '$lib/components/MenuBar.svelte';
+  import WidgetArea from '$lib/components/widgetsarea/WidgetArea.svelte';
   import { onMount } from 'svelte';
   import type { PageProps } from './$types';
   
@@ -48,3 +49,4 @@ console.log(`
 <MenuBar {documentTitle} documentId={data.id} {dbService} />
 <Editor content={documentContent} documentId={data.id} {dbService} />
 <StatusBar />
+<WidgetArea title="Widgets" />
