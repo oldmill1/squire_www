@@ -5,7 +5,7 @@
   import { Document } from '$lib/models/Document';
   import { DatabaseService } from '$lib/services/DatabaseService';
   import { selectedDocuments } from '$lib/stores/selectedDocuments';
-  import Explorer from '$lib/components/Explorer.svelte';
+  import Explorer from '$lib/components/Explorer/Explorer.svelte';
   import ExplorerDock from '$lib/components/ExplorerDock.svelte';
   import type { PageProps } from './$types';
   
@@ -82,6 +82,27 @@
   function updateSelectedCount() {
     selectedCount = selectedDocuments.getSelectedCount();
   }
+
+  async function handleNewDocument() {
+    try {
+      if (!isBrowser || !dbService) {
+        throw new Error('Database not initialized');
+      }
+      
+      const newDoc = new Document('Untitled Document', '');
+      const savedDoc = await dbService.create(newDoc);
+      
+      console.log('New document created:', savedDoc.id);
+      await goto(`/docs/${savedDoc.id}`);
+    } catch (error) {
+      console.error('Failed to create new document:', error);
+    }
+  }
+
+  function handleFavorites() {
+    // TODO: Implement favorites functionality
+    console.log('Favorites clicked');
+  }
 </script>
 
 <div class="explorer-container">
@@ -98,6 +119,8 @@
       onToggleSelectionMode={toggleSelectionMode}
       {isSelectionMode}
       {selectedCount}
+      onNewDocument={handleNewDocument}
+      onFavorites={handleFavorites}
     />
   {/if}
 </div>

@@ -6,7 +6,7 @@
   import { DatabaseService } from '$lib/services/DatabaseService';
   import { selectedDocuments } from '$lib/stores/selectedDocuments';
   import Dock from '$lib/components/Dock.svelte';
-  import Button from '$lib/components/Button.svelte';
+  import Button from '$lib/components/global/Button.svelte';
   import styles from './+page.module.scss';
 
   let dbService: DatabaseService;
@@ -63,6 +63,10 @@
   function handleFavorites() {
     // TODO: Implement favorites functionality
     console.log('Favorites clicked');
+  }
+
+  function handleExplorer() {
+    goto('/explorer');
   }
 
   async function openDocument(docId: string) {
@@ -164,5 +168,6 @@
   <Dock 
     onNewDocument={handleNewDocument}
     onFavorites={handleFavorites}
+    onExplorer={handleExplorer}
   />
 </div>

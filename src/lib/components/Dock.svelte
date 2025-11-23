@@ -3,6 +3,7 @@
 
   export let onNewDocument: () => void;
   export let onFavorites: () => void;
+  export let onExplorer: () => void;
 </script>
 
 <div class={styles['dock']}>
@@ -19,5 +20,12 @@
     title="Favorites"
   >
     <img src="/icons/heart.png" alt="Favorites" class={styles['dock-icon']} />
+  </button>
+  <button 
+    class={styles['dock-item']} 
+    onclick={onExplorer}
+    title="Explorer"
+  >
+    <img src="/icons/folder.png" alt="Explorer" class={styles['dock-icon']} />
   </button>
 </div>
