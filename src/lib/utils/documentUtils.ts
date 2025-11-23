@@ -1,6 +1,7 @@
 import { goto } from '$app/navigation';
 import { Document } from '$lib/models/Document';
 import { browser } from '$app/environment';
+import { generateTimeBasedTitle } from './timeTitle';
 
 /**
  * Creates a new document and navigates to it
@@ -17,8 +18,8 @@ export async function createNewDocument(): Promise<void> {
     const { DocumentService } = await import('$lib/services/DocumentService');
     const documentService = new DocumentService();
     
-    // Create a new document with default title
-    const newDoc = new Document('Untitled Document', '');
+    // Create a new document with time-based title
+    const newDoc = new Document(generateTimeBasedTitle(), '');
     
     // Save to database
     const savedDoc = await documentService.create(newDoc);

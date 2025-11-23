@@ -5,6 +5,7 @@
   import { Document } from '$lib/models/Document';
   import { DatabaseService } from '$lib/services/DatabaseService';
   import { selectedDocuments } from '$lib/stores/selectedDocuments';
+  import { generateTimeBasedTitle } from '$lib/utils/timeTitle';
   import Dock from '$lib/components/Dock.svelte';
   import Button from '$lib/components/global/Button.svelte';
   import styles from './+page.module.scss';
@@ -36,7 +37,12 @@
       if (!dbService) return;
       
       const docs = await dbService.list();
-      recentDocs = docs.slice(0, 6); // Show last 6 documents
+      console.log('Documents loaded:', docs);
+      
+      // Sort by updatedAt to get the latest documents and take 6
+      recentDocs = docs
+        .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
+        .slice(0, 6);
     } catch (error) {
       console.error('Failed to load recent documents:', error);
     } finally {
@@ -50,10 +56,15 @@
         throw new Error('Database not initialized');
       }
       
-      const newDoc = new Document('Untitled Document', '');
+      const newDoc = new Document(generateTimeBasedTitle(), '');
       const savedDoc = await dbService.create(newDoc);
       
       console.log('New document created:', savedDoc.id);
+      console.log('New document title:', savedDoc.title);
+      
+      // Refresh recent docs before navigating
+      await loadRecentDocs();
+      
       await goto(`/docs/${savedDoc.id}`);
     } catch (error) {
       console.error('Failed to create new document:', error);

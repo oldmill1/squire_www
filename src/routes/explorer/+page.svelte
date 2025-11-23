@@ -5,6 +5,7 @@
   import { Document } from '$lib/models/Document';
   import { DatabaseService } from '$lib/services/DatabaseService';
   import { selectedDocuments } from '$lib/stores/selectedDocuments';
+  import { generateTimeBasedTitle } from '$lib/utils/timeTitle';
   import Explorer from '$lib/components/Explorer/Explorer.svelte';
   import ExplorerDock from '$lib/components/ExplorerDock.svelte';
   import type { PageProps } from './$types';
@@ -89,10 +90,15 @@
         throw new Error('Database not initialized');
       }
       
-      const newDoc = new Document('Untitled Document', '');
+      const newDoc = new Document(generateTimeBasedTitle(), '');
       const savedDoc = await dbService.create(newDoc);
       
       console.log('New document created:', savedDoc.id);
+      console.log('New document title:', savedDoc.title);
+      
+      // Refresh recent docs before navigating
+      await loadRecentDocs();
+      
       await goto(`/docs/${savedDoc.id}`);
     } catch (error) {
       console.error('Failed to create new document:', error);
