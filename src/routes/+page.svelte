@@ -4,6 +4,8 @@
   import { fade } from 'svelte/transition';
   import { Document } from '$lib/models/Document';
   import { DatabaseService } from '$lib/services/DatabaseService';
+  import Page from '$lib/components/Page.svelte';
+  import Dock from '$lib/components/Dock.svelte';
   import styles from './+page.module.scss';
 
   let dbService: DatabaseService;
@@ -56,18 +58,22 @@
     }
   }
 
+  function handleFavorites() {
+    // TODO: Implement favorites functionality
+    console.log('Favorites clicked');
+  }
+
   async function openDocument(docId: string) {
     await goto(`/docs/${docId}`);
   }
 </script>
 
-<svelte:head>
-  <title>Squire</title>
-</svelte:head>
-
-<div class={styles['app-container']}>
+<Page 
+  title="Squire" 
+  description="Welcome to Squire - Your personal writing companion"
+>
   <!-- Main Content -->
-  <main class={styles['main-content']}>
+  <main>
     <div class={styles['content-wrapper']}>
       <div class={styles['content-header']}>
         <h1 class={styles['recents-title']}>Recents</h1>
@@ -110,19 +116,8 @@
   </main>
 
   <!-- Dock -->
-  <div class={styles['dock']}>
-    <button 
-      class={styles['dock-item']} 
-      onclick={handleNewDocument}
-      title="New Document"
-    >
-      <img src="/icons/new.png" alt="New Document" class={styles['dock-icon']} />
-    </button>
-    <button 
-      class={styles['dock-item']} 
-      title="Favorites"
-    >
-      <img src="/icons/heart.png" alt="Favorites" class={styles['dock-icon']} />
-    </button>
-  </div>
-</div>
+  <Dock 
+    onNewDocument={handleNewDocument}
+    onFavorites={handleFavorites}
+  />
+</Page>
