@@ -7,6 +7,7 @@
   
   let { data }: PageProps = $props();
   let documentContent = $state<string | undefined>(undefined);
+  let documentTitle = $state<string>('');
   let dbService = $state<any>();
   let isLoading = $state(true);
 
@@ -25,22 +26,25 @@
       
       if (document) {
         documentContent = document.content;
+        documentTitle = document.title;
 console.log(`
 [LOADED] ${document.title}
          └─ ${document.id.substring(0, 8)} • ${document.createdAt.toRelativeTime?.() || 'just now'}
 `);
       } else {
         documentContent = '';
+        documentTitle = 'Untitled Document';
       }
     } catch (error) {
       console.error('Failed to load document:', error);
       documentContent = '';
+      documentTitle = 'Untitled Document';
     } finally {
       isLoading = false;
     }
   }
 </script>
 
-<MenuBar />
+<MenuBar {documentTitle} documentId={data.id} {dbService} />
 <Editor content={documentContent} documentId={data.id} {dbService} />
 <StatusBar />
