@@ -37,7 +37,7 @@
 			</button>
 			<button class={styles.rewriteButton} onclick={handleRewrite}>
 				<img src="/icons/sparkle.png" alt="AI" class={styles.rewriteIcon} />
-				Clean-up 
+				Grammar
 			</button>
 		</div>
 
