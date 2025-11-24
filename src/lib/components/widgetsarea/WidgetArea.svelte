@@ -4,7 +4,7 @@
 	import { widgetVisibility, hideWidget } from '$lib/stores/widgetVisibility';
 	import AddToListWidget from './AddToListWidget.svelte';
 	import RewriterWidget from './RewriterWidget.svelte';
-	import { fade } from 'svelte/transition';
+	import { slide } from 'svelte/transition';
 
 	interface Props {
 		children?: Snippet;
@@ -18,10 +18,24 @@
 	let { children, title, variant = 'default', class: className = '', documentId, dbService }: Props = $props();
 
 	let isVisible = $state(true);
+	let isAnimating = $state(false);
 
 	// Subscribe to the store using Svelte 5 syntax
 	$effect(() => {
 		const unsubscribe = widgetVisibility.subscribe((value) => {
+			const wasVisible = isVisible;
+			// Set animating state synchronously BEFORE updating visibility
+			if (!value && wasVisible) {
+				// Force immediate update
+				isAnimating = true;
+				// Use microtask to ensure it's set before transition
+				queueMicrotask(() => {
+					isAnimating = true;
+				});
+			} else if (value && !wasVisible) {
+				// Reset when showing
+				isAnimating = false;
+			}
 			isVisible = value;
 		});
 		return unsubscribe;
@@ -31,12 +45,37 @@
 		isVisible = !isVisible;
 		widgetVisibility.set(isVisible);
 	}
+
+	function handleIntroStart() {
+		isAnimating = true;
+	}
+
+	function handleIntroEnd() {
+		isAnimating = false;
+	}
+
+	function handleOutroStart() {
+		// Ensure animating is set immediately when outro starts
+		isAnimating = true;
+	}
+
+	function handleOutroEnd() {
+		// Keep animating true until element is fully removed
+		isAnimating = true;
+	}
 </script>
 
 {#if isVisible}
-	<div class={`${styles.widgetArea}`} transition:fade={{ duration: 300 }}>
-		<div class={styles.contentContainer}>
-			<div class={styles.content}>
+	<div 
+		class={`${styles.widgetArea} ${isAnimating ? styles.animating : ''}`} 
+		transition:slide={{ duration: 300 }}
+		onintrostart={handleIntroStart}
+		onintroend={handleIntroEnd}
+		onoutrostart={handleOutroStart}
+		onoutroend={handleOutroEnd}
+	>
+		<div class={`${styles.contentContainer} ${isAnimating ? styles.animating : ''}`}>
+			<div class={`${styles.content} ${isAnimating ? styles.animating : ''}`}>
 				{#if documentId}
 					<AddToListWidget {documentId} {dbService} />
 					<RewriterWidget {documentId} {dbService} />

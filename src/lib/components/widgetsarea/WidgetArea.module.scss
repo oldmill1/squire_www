@@ -9,6 +9,26 @@
 	border-radius: 24px;
 	display: flex;
 	flex-direction: column;
+	overflow: hidden;
+	padding: 16px;
+	box-sizing: border-box;
+
+	&.animating {
+		overflow: hidden;
+	}
+
+	// Hide scrollbars during any transition (intro/outro)
+	&[style*="transform"] .content,
+	&[style*="opacity"] .content {
+		overflow: hidden !important;
+		scrollbar-width: none !important;
+		-ms-overflow-style: none !important;
+
+		&::-webkit-scrollbar {
+			display: none !important;
+			width: 0 !important;
+		}
+	}
 }
 
 .header {
@@ -60,10 +80,51 @@
 	position: relative;
 }
 
+.widgetArea.animating .contentContainer {
+	overflow: hidden !important;
+}
+
+.widgetArea.animating .content {
+	overflow: hidden !important;
+	scrollbar-width: none !important; /* Firefox */
+	-ms-overflow-style: none !important; /* IE and Edge */
+
+	&::-webkit-scrollbar {
+		display: none !important; /* Chrome, Safari, Opera */
+		width: 0 !important;
+	}
+}
+
 .content {
 	flex: 1;
 	overflow-y: auto;
 	height: 100%;
+	scrollbar-width: thin;
+	scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+
+	&::-webkit-scrollbar {
+		width: 8px;
+	}
+
+	&::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background-color: rgba(255, 255, 255, 0.2);
+		border-radius: 4px;
+	}
+
+	&.animating {
+		overflow: hidden !important;
+		scrollbar-width: none !important; /* Firefox */
+		-ms-overflow-style: none !important; /* IE and Edge */
+
+		&::-webkit-scrollbar {
+			display: none !important; /* Chrome, Safari, Opera */
+			width: 0 !important;
+		}
+	}
 }
 
 .placeholder {
