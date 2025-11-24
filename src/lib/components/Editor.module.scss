@@ -24,32 +24,6 @@
 	white-space: pre-wrap;
 	word-wrap: break-word;
 	overflow-y: auto;
-	background: #2a2a3e;
+	background: rgb(16, 20, 23);
 	color: #e0e0e0;
-
-	&:focus {
-		background: #323347;
-	}
-
-	&::selection {
-		background: #7a7a8a;
-		color: #ffffff;
-	}
-
-	&::-webkit-scrollbar {
-		width: 8px;
-	}
-
-	&::-webkit-scrollbar-track {
-		background: #2a2a3e;
-	}
-
-	&::-webkit-scrollbar-thumb {
-		background: #5a5a6a;
-		border-radius: 4px;
-
-		&:hover {
-			background: #6a6a7a;
-		}
-	}
 }
