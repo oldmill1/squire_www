@@ -35,15 +35,6 @@
 
 {#if isVisible}
 	<div class={`${styles.widgetArea}`} transition:fade={{ duration: 300 }}>
-		{#if title}
-			<div class={styles.header}>
-				<div class={styles.titleContainer}>
-					<img src="/icons/widget.png" alt="Widget" class={styles.titleIcon} />
-					<h2 class={styles.title}>{title}</h2>
-				</div>
-			</div>
-		{/if}
-
 		<div class={styles.contentContainer}>
 			<div class={styles.content}>
 				{#if documentId}

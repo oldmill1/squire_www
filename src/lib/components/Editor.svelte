@@ -2,6 +2,7 @@
 	import styles from './Editor.module.scss';
 	import { onMount } from 'svelte';
 	import { Document } from '$lib/models/Document';
+	import { editorFontSize } from '$lib/stores/editorFontSize';
 
 	interface Props {
 		content?: string | undefined;
@@ -18,6 +19,16 @@
 
 	// Reference to the editable div
 	let editableDiv: HTMLElement;
+	
+	// Subscribe to font size changes and apply to editor
+	$effect(() => {
+		const unsubscribe = editorFontSize.subscribe((size) => {
+			if (editableDiv) {
+				editableDiv.style.fontSize = `${size}px`;
+			}
+		});
+		return unsubscribe;
+	});
 
 	// Debounce variables
 	let debounceTimer: number;
@@ -34,6 +45,9 @@
 			editableDiv.innerText = contentToSet;
 			editorContent = contentToSet;
 			previousContent = contentToSet;
+			// Set initial font size from store
+			const currentSize = editorFontSize.get();
+			editableDiv.style.fontSize = `${currentSize}px`;
 		}
 	});
 
