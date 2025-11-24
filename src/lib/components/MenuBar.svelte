@@ -1,6 +1,6 @@
 <script lang="ts">
 	import styles from './MenuBar.module.scss';
-	import { showWidget } from '$lib/stores/widgetVisibility';
+	import { toggleWidgetVisibility } from '$lib/stores/widgetVisibility';
 
 	interface Props {
 		documentTitle?: string;
@@ -97,7 +97,7 @@
 	}
 
 	function handleWidgetClick() {
-		showWidget();
+		toggleWidgetVisibility();
 	}
 </script>
 

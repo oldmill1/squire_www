@@ -41,9 +41,6 @@
 					<img src="/icons/widget.png" alt="Widget" class={styles.titleIcon} />
 					<h2 class={styles.title}>{title}</h2>
 				</div>
-				<button class={styles.toggleButton} onclick={toggleVisibility}>
-					{isVisible ? 'Hide' : 'Show'}
-				</button>
 			</div>
 		{/if}
 
