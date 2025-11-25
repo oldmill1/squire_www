@@ -188,5 +188,3 @@
 		/>
 	{/if}
 </div>
-
-<StatusBar />
