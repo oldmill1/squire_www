@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte';
 	import { Document } from '$lib/models/Document';
 	import { editorFontSize } from '$lib/stores/editorFontSize';
+	import { savedNotification } from '$lib/stores/savedNotificationStore';
 
 	interface Props {
 		content?: string | undefined;
@@ -98,6 +99,9 @@
 
 						// Save to database
 						await dbService.update(existingDoc);
+
+						// Show saved notification
+						savedNotification.show();
 
 						console.log(`
 [SAVED] ${existingDoc.title}

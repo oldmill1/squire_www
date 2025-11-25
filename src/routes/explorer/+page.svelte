@@ -5,9 +5,11 @@
 	import { Document } from '$lib/models/Document';
 	import { DatabaseService } from '$lib/services/DatabaseService';
 	import { selectedDocuments } from '$lib/stores/selectedDocuments';
+	import { savedNotification } from '$lib/stores/savedNotificationStore';
 	import { generateTimeBasedTitle } from '$lib/utils/timeTitle';
 	import Explorer from '$lib/components/Explorer/Explorer.svelte';
 	import Dock, { type DockItem } from '$lib/components/Dock.svelte';
+	import StatusBar from '$lib/components/StatusBar.svelte';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
@@ -91,6 +93,9 @@
 
 			const newDoc = new Document();
 			const savedDoc = await dbService.create(newDoc);
+
+			// Show saved notification
+			savedNotification.show();
 
 			console.log('New document created:', savedDoc.id);
 			console.log('New document title:', savedDoc.title);
@@ -180,3 +185,5 @@
 		/>
 	{/if}
 </div>
+
+<StatusBar />

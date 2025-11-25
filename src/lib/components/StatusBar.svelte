@@ -1,6 +1,8 @@
 <script lang="ts">
 	import styles from './StatusBar.module.scss';
 	import type { Snippet } from 'svelte';
+	import { savedNotification } from '$lib/stores/savedNotificationStore';
+	import { onMount } from 'svelte';
 
 	interface Props {
 		leftContent?: Snippet;
@@ -9,6 +11,16 @@
 	}
 
 	let { leftContent, middleContent, rightContent }: Props = $props();
+
+	let showSavedNotification = $state(false);
+
+	// Subscribe to saved notification store
+	$effect(() => {
+		const unsubscribe = savedNotification.subscribe((notification) => {
+			showSavedNotification = notification.show;
+		});
+		return unsubscribe;
+	});
 </script>
 
 <div class={styles.statusBar}>
@@ -21,7 +33,12 @@
 	</div>
 
 	<div class={styles.middleSection}>
-		{#if middleContent}
+		{#if showSavedNotification}
+			<div class={styles.savedNotification}>
+				<div class={styles.savedDot}></div>
+				<span class={styles.savedText}>Saved</span>
+			</div>
+		{:else if middleContent}
 			{@render middleContent()}
 		{:else}
 			<!-- Middle section placeholder -->

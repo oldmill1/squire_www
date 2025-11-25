@@ -1,0 +1,72 @@
+# Keyboard Shortcuts Documentation
+
+## Overview
+The application uses a global shortcuts system that allows users to trigger actions using keyboard combinations. All shortcuts are activated using the **Option** key (Alt key) plus another key.
+
+## Current Shortcuts
+
+### Font Size Controls
+- **Option + =** (Option + Plus key): Increase editor font size
+  - Physical key code: `Equal`
+  - Action: Increases font size by 2px (max: 48px)
+  - Default size: 18px
+
+- **Option + -** (Option + Minus key): Decrease editor font size  
+  - Physical key code: `Minus`
+  - Action: Decreases font size by 2px (min: 10px)
+  - Default size: 18px
+
+### Widget Area Controls
+- **Option + L**: Toggle widget area visibility
+  - Physical key code: `KeyL`
+  - Action: Shows/hides the widget area on document pages
+  - Available on: Document pages (e.g., `/docs/[id]`)
+  - Default state: Hidden
+
+## Implementation Details
+
+### Service Location
+The shortcuts system is implemented in:
+- `src/lib/services/ShortcutsService.ts` - Core shortcuts service
+- `src/routes/+layout.svelte` - Shortcut registration and initialization
+- `src/lib/stores/editorFontSize.ts` - Font size state management
+- `src/lib/stores/widgetVisibility.ts` - Widget visibility state management
+
+### Technical Notes
+- Uses physical key codes (`code`) instead of character keys (`key`) for better Mac compatibility
+- The Option + = combination produces "≠" character on Mac, so we use the physical key code "Equal"
+- Shortcuts are registered globally and work throughout the application
+- Font size changes are persisted in the editorFontSize store and applied to the editor component
+- Widget visibility is managed through the widgetVisibility store with smooth transitions
+
+### Adding New Shortcuts
+To add new shortcuts, register them in the `onMount` function in `src/routes/+layout.svelte`:
+
+```typescript
+shortcutsService.register({
+    code: 'KeyA', // Physical key code
+    modifiers: ['Alt'], // Option key
+    handler: () => {
+        // Your action here
+    },
+    description: 'Description of shortcut'
+});
+```
+
+### Available Modifiers
+- `Alt` - Option key (used for all current shortcuts)
+- `Control` - Control key
+- `Shift` - Shift key  
+- `Meta` - Command key (⌘)
+
+## Font Size Range
+- Minimum: 10px
+- Maximum: 48px
+- Default: 18px
+- Step increment: 2px
+
+## Widget Area
+- Located on the right side of document pages
+- Contains Add to List and Rewriter widgets
+- Supports smooth fade transitions when toggling
+- State is managed through Svelte store for consistency

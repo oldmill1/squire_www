@@ -19,6 +19,8 @@
 .leftSection {
 	flex: 0 0 auto;
 	min-width: 0;
+	display: flex;
+	align-items: center;
 }
 
 .middleSection {
@@ -33,4 +35,47 @@
 	display: flex;
 	justify-content: flex-end;
 	min-width: 0;
+}
+
+.savedNotification {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	animation: fadeIn 0.3s ease-in-out;
+}
+
+.savedDot {
+	width: 6px;
+	height: 6px;
+	background-color: #00ff00;
+	border-radius: 50%;
+	box-shadow: 0 0 8px #00ff00, 0 0 12px #00ff00;
+	animation: glow 2s ease-in-out infinite alternate;
+}
+
+.savedText {
+	font-size: 12px;
+	font-weight: 600;
+	color: #2d5a2d;
+	text-shadow: 0 0 4px rgba(0, 255, 0, 0.3);
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateX(-10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+@keyframes glow {
+	from {
+		box-shadow: 0 0 8px #00ff00, 0 0 12px #00ff00;
+	}
+	to {
+		box-shadow: 0 0 12px #00ff00, 0 0 16px #00ff00, 0 0 20px #00ff00;
+	}
 }

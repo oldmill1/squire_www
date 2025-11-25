@@ -9,7 +9,7 @@
 
 	// Initialize global shortcuts
 	onMount(() => {
-		// Register Option + "+" to increase font size
+		// Register Option + "=" to increase font size
 		// Using 'code' instead of 'key' for Mac compatibility (Option + "+" produces "≠" character)
 		shortcutsService.register({
 			code: 'Equal', // Physical key code for =/+ key
@@ -28,6 +28,19 @@
 				editorFontSize.decrease();
 			},
 			description: 'Decrease editor font size'
+		});
+
+		// Register Option + "L" to toggle widget area visibility
+		shortcutsService.register({
+			code: 'KeyL', // Physical key code for L key
+			modifiers: ['Alt'],
+			handler: () => {
+				// Import and use the toggle function from widgetVisibility store
+				import('$lib/stores/widgetVisibility').then(({ toggleWidgetVisibility }) => {
+					toggleWidgetVisibility();
+				});
+			},
+			description: 'Toggle widget area visibility'
 		});
 
 		// Start listening for shortcuts

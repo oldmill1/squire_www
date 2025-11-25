@@ -17,7 +17,7 @@
 
 	let { children, title, variant = 'default', class: className = '', documentId, dbService }: Props = $props();
 
-	let isVisible = $state(true);
+	let isVisible = $state(false);
 	let isAnimating = $state(false);
 
 	// Subscribe to the store using Svelte 5 syntax

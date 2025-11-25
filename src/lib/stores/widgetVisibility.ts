@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 
-export const widgetVisibility = writable(true);
+export const widgetVisibility = writable(false);
 
 export function toggleWidgetVisibility() {
 	widgetVisibility.update((visible) => !visible);

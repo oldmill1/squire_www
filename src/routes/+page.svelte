@@ -3,9 +3,11 @@
 	import Dock from '$lib/components/Dock.svelte';
 	import Button from '$lib/components/global/Button.svelte';
 	import VList from '$lib/components/VList/VList.svelte';
+	import StatusBar from '$lib/components/StatusBar.svelte';
 	import { Document } from '$lib/models/Document';
 	import { DatabaseService } from '$lib/services/DatabaseService';
 	import { selectedDocuments } from '$lib/stores/selectedDocuments';
+	import { savedNotification } from '$lib/stores/savedNotificationStore';
 	import { onMount } from 'svelte';
 	import styles from './+page.module.scss';
 
@@ -55,6 +57,9 @@
 
 			const newDoc = new Document();
 			const savedDoc = await dbService.create(newDoc);
+
+			// Show saved notification
+			savedNotification.show();
 
 			console.log('New document created:', savedDoc.id);
 			console.log('New document title:', savedDoc.title);
@@ -185,3 +190,5 @@
 		]}
 	/>
 </div>
+
+<StatusBar />

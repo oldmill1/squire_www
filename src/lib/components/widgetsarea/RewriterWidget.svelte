@@ -1,5 +1,6 @@
 <script lang="ts">
 	import styles from './WidgetArea.module.scss';
+	import { savedNotification } from '$lib/stores/savedNotificationStore';
 
 	interface Props {
 		documentId?: string;
@@ -63,6 +64,9 @@
 			// Update document with rewritten content
 			document.updateContent(rewrittenText);
 			await dbService.update(document);
+
+			// Show saved notification
+			savedNotification.show();
 
 			console.log('[REWRITTEN] Document content updated successfully');
 			
