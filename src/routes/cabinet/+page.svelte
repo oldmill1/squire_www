@@ -131,13 +131,20 @@
 				<VList
 					items={lists}
 					{hasLoaded}
+					isSelectionMode={false}
 					emptyMessage="No lists found"
 					buttonText="Create your first list"
+					emptyButtonTopDrawerText="get started..."
+					emptyButtonBottomDrawerText="...it's easy!"
 					onEmptyButtonClick={handleNewList}
 					onItemClick={handleListClick}
+					onToggleSelection={() => {}}
+					onToggleSelectionMode={() => {}}
+					onDeleteClick={() => {}}
 					getItemId={(list) => list.id}
 					isItemSelected={() => false}
 					renderItemContent={listContentSnippet}
+					enableDocumentDeletion={false}
 				/>
 			</div>
 
