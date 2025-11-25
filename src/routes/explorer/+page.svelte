@@ -3,7 +3,7 @@
 	import { List } from '$lib/models/List';
 	import { ListService } from '$lib/services/ListService';
 	import Explorer from '$lib/components/Explorer/Explorer.svelte';
-	import Dock, { type DockItem } from '$lib/components/Dock.svelte';
+	import Dock, { type DockItem } from '$lib/components/Dock/Dock.svelte';
 	import StatusBar from '$lib/components/StatusBar.svelte';
 	import MenuBar from '$lib/components/MenuBar/MenuBar.svelte';
 	import type { PageProps } from './$types';

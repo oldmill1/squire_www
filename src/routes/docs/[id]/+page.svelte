@@ -3,13 +3,13 @@
 	import StatusBar from '$lib/components/StatusBar.svelte';
 	import MenuBar from '$lib/components/MenuBar/MenuBar.svelte';
 	import WidgetArea from '$lib/components/widgetsarea/WidgetArea.svelte';
-	import Dock from '$lib/components/Dock.svelte';
+	import Dock from '$lib/components/Dock/Dock.svelte';
 	import RangeSlider from '$lib/components/RangeSlider/RangeSlider.svelte';
 	import { onMount } from 'svelte';
 	import type { PageProps } from './$types';
 	import { editorFontSize } from '$lib/stores/editorFontSize';
 	import { marginWidth } from '$lib/stores/marginWidth';
-	import type { DockItem } from '$lib/components/Dock.svelte';
+	import type { DockItem } from '$lib/components/Dock/Dock.svelte';
 
 	let { data }: PageProps = $props();
 	let documentContent = $state<string | undefined>(undefined);

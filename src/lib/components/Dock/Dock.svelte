@@ -13,6 +13,7 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { fade, fly } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
+	import { Motion } from 'svelte-motion';
 	import styles from './Dock.module.scss';
 
 	// Custom slide-in transition without fade
@@ -107,16 +108,35 @@
 	out:fly={{ y: 0, x: 100, duration: 400, easing: cubicInOut }}
 >
 	{#each items as item (item.id)}
-		<button
-			class={`${styles['dock-item']} ${item.active ? styles['active'] : ''}`}
-			onclick={item.onClick}
-			title={item.title}
+		<Motion 
+			let:motion
+			whileHover={{ 
+				scale: 1.2,
+				y: -6,
+				rotateZ: item.active ? 0 : 2
+			}}
+			whileTap={{ 
+				scale: 0.9,
+				y: -2,
+				rotateZ: 0
+			}}
+			transition={{ 
+				duration: 0.15, 
+				ease: [0.25, 0.46, 0.45, 0.94] 
+			}}
 		>
-			<img src={item.icon} alt={item.title} class={styles['dock-icon']} />
-			{#if item.badge && item.badge > 0}
-				<span class={styles['selection-count']}>{item.badge}</span>
-			{/if}
-		</button>
+			<button
+				class={`${styles['dock-item']} ${item.active ? styles['active'] : ''}`}
+				onclick={item.onClick}
+				title={item.title}
+				use:motion
+			>
+				<img src={item.icon} alt={item.title} class={styles['dock-icon']} />
+				{#if item.badge && item.badge > 0}
+					<span class={styles['selection-count']}>{item.badge}</span>
+				{/if}
+			</button>
+		</Motion>
 	{/each}
 </div>
 {/if}

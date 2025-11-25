@@ -34,7 +34,6 @@
 	border-radius: 16px;
 	padding: 4px;
 	cursor: pointer;
-	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -44,23 +43,6 @@
 	box-shadow:
 		0 2px 8px rgba(0, 0, 0, 0.1),
 		inset 0 1px 0 rgba(255, 255, 255, 0.3);
-}
-
-.dock-item:hover {
-	background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 100%);
-	transform: scale(1.05) translateY(-2px);
-	box-shadow:
-		0 8px 24px rgba(0, 0, 0, 0.15),
-		0 4px 12px rgba(138, 124, 199, 0.2),
-		inset 0 1px 0 rgba(255, 255, 255, 0.4);
-	border-color: rgba(255, 255, 255, 0.3);
-}
-
-.dock-item:active {
-	transform: scale(0.98) translateY(0);
-	box-shadow:
-		0 2px 8px rgba(0, 0, 0, 0.1),
-		inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .dock-item.active {
@@ -113,7 +95,6 @@
 	height: 48px;
 	border-radius: 8px;
 	filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-	transition: all 0.2s ease;
 }
 
 .dock-item:hover .dock-icon {

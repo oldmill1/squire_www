@@ -4,7 +4,7 @@
 	import { fade } from 'svelte/transition';
 	import { List } from '$lib/models/List';
 	import { ListService } from '$lib/services/ListService';
-	import Dock, { type DockItem } from '$lib/components/Dock.svelte';
+	import Dock, { type DockItem } from '$lib/components/Dock/Dock.svelte';
 	import Button from '$lib/components/global/Button.svelte';
 	import Modal from '$lib/components/Modal/Modal.svelte';
 	import VList from '$lib/components/VList/VList.svelte';

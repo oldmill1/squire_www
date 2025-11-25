@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import Dock from '$lib/components/Dock.svelte';
+	import Dock from '$lib/components/Dock/Dock.svelte';
 	import VList from '$lib/components/VList/VList.svelte';
 	import WolverineButton from '$lib/components/Buttons/WolverineButton/WolverineButton.svelte';
 		import { Document } from '$lib/models/Document';
