@@ -7,9 +7,11 @@
 		titleEditable?: boolean;
 		documentId?: string;
 		dbService?: any;
+		backButton?: boolean;
+		onBackClick?: () => void;
 	}
 
-	let { title = '', titleEditable = false, documentId, dbService }: Props = $props();
+	let { title = '', titleEditable = false, documentId, dbService, backButton = false, onBackClick }: Props = $props();
 
 	let isEditing = $state(false);
 	let editingTitle = $state('');
@@ -109,15 +111,27 @@
 
 <div class={styles.menubar}>
 	<div class={styles.leftSection}>
-		<button
-			type="button"
-			class={styles.homeButton}
-			onclick={goHome}
-			onkeydown={(e) => (e.key === 'Enter' || e.key === ' ') && goHome()}
-			aria-label="Go home"
-		>
-			<img src="/icons/home-flat.png" alt="Home" class={styles.homeIcon} />
-		</button>
+		{#if backButton}
+			<button
+				type="button"
+				class={styles.backButton}
+				onclick={onBackClick}
+				onkeydown={(e) => (e.key === 'Enter' || e.key === ' ') && onBackClick?.()}
+				aria-label="Go back"
+			>
+				<img src="/icons/home-flat.png" alt="Back" class={styles.backIcon} />
+			</button>
+		{:else}
+			<button
+				type="button"
+				class={styles.homeButton}
+				onclick={goHome}
+				onkeydown={(e) => (e.key === 'Enter' || e.key === ' ') && goHome()}
+				aria-label="Go home"
+			>
+				<img src="/icons/home-flat.png" alt="Home" class={styles.homeIcon} />
+			</button>
+		{/if}
 	</div>
 	<div class={styles.centerSection}>
 		{#if isEditing}

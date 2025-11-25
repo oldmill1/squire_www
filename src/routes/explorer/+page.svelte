@@ -53,7 +53,8 @@
 
 	function handleListClick(list: List, event: MouseEvent) {
 		console.log('List clicked:', list.id, list.name);
-		// TODO: Navigate to /explorer/[list-id]
+		// Navigate to the list view
+		window.location.href = `/explorer/${list.id}`;
 	}
 
 	// Create standardized data for Explorer
