@@ -149,14 +149,16 @@
 				renderItemContent={documentContentSnippet}
 			/>
 
-			<div class={styles['selection-controls']}>
-				<Button
-					onclick={toggleSelectionMode}
-					text={isSelectionMode ? 'Cancel' : 'Select'}
-					icon="/icons/select-all.png"
-					alt="Select"
-				/>
-			</div>
+			{#if recentDocs.length > 0}
+				<div class={styles['selection-controls']}>
+					<Button
+						onclick={toggleSelectionMode}
+						text={isSelectionMode ? 'Cancel' : 'Select'}
+						icon="/icons/select-all.png"
+						alt="Select"
+					/>
+				</div>
+			{/if}
 		</div>
 	</main>
 
