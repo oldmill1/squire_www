@@ -3,6 +3,7 @@
 	import type { Snippet } from 'svelte';
 	import { savedNotification } from '$lib/stores/savedNotificationStore';
 	import { onMount } from 'svelte';
+	import { fade } from 'svelte/transition';
 
 	interface Props {
 		leftContent?: Snippet;
@@ -34,8 +35,7 @@
 
 	<div class={styles.middleSection}>
 		{#if showSavedNotification}
-			<div class={styles.savedNotification}>
-				<div class={styles.savedDot}></div>
+			<div class={styles.savedNotification} transition:fade={{ duration: 300 }}>
 				<span class={styles.savedText}>Saved</span>
 			</div>
 		{:else if middleContent}
