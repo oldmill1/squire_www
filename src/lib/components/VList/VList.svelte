@@ -189,13 +189,6 @@
 	{#if hasLoaded && items.length === 0}
 		<div class={styles['empty-state']} transition:fade={{ duration: 300 }}>
 			<p>{emptyMessage}</p>
-			<WolverineButton 
-				text={buttonText}
-				topDrawerText={emptyButtonTopDrawerText}
-				bottomDrawerText={emptyButtonBottomDrawerText}
-				onclick={onEmptyButtonClick} 
-				width="250px" 
-			/>
 		</div>
 	{/if}
 </div>

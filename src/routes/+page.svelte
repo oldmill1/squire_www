@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import Dock from '$lib/components/Dock.svelte';
 	import VList from '$lib/components/VList/VList.svelte';
+	import WolverineButton from '$lib/components/Buttons/WolverineButton/WolverineButton.svelte';
 		import { Document } from '$lib/models/Document';
 	import { DatabaseService } from '$lib/services/DatabaseService';
 	import { selectedDocuments } from '$lib/stores/selectedDocuments';
@@ -169,6 +170,18 @@
 				renderItemContent={documentContentSnippet}
 				enableDocumentDeletion={true}
 			/>
+
+			{#if hasLoaded}
+				<div class={styles['create-new-section']}>
+					<WolverineButton 
+						text="Create new document"
+						topDrawerText="start writing..."
+						bottomDrawerText="...your story awaits"
+						onclick={handleNewDocument} 
+						width="250px" 
+					/>
+				</div>
+			{/if}
 		</div>
 	</main>
 
