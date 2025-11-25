@@ -58,16 +58,16 @@
 			type="button"
 			transition:fade={{ duration: 300 }}
 		>
-			{#if isSelectionMode}
-				<div class={styles['selection-checkbox']}>
-					<input
-						type="checkbox"
-						checked={isItemSelected(item)}
-						onchange={() => toggleItemSelection(item)}
-						onclick={(e) => e.stopPropagation()}
-					/>
-				</div>
-			{/if}
+			<div class={styles['selection-checkbox']}>
+	{#if isSelectionMode}
+		<input
+			type="checkbox"
+			checked={isItemSelected(item)}
+			onchange={() => toggleItemSelection(item)}
+			onclick={(e) => e.stopPropagation()}
+		/>
+	{/if}
+</div>
 			{@render renderItemContent(item)}
 			<div class={styles['item-arrow']}>→</div>
 		</button>

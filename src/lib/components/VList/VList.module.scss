@@ -10,7 +10,6 @@
 	padding: 0.375rem;
 	margin-bottom: 0.25rem;
 	cursor: pointer;
-	transition: all 0.2s ease;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -90,7 +89,6 @@
 
 .item.selection-mode {
 	cursor: pointer;
-	padding-left: 0.75rem;
 }
 
 .item.selected {
@@ -110,6 +108,12 @@
 	display: flex;
 	align-items: center;
 	margin-right: 0.75rem;
+	width: 1.25rem;
+	visibility: hidden;
+}
+
+.item.selection-mode .selection-checkbox {
+	visibility: visible;
 }
 
 .selection-checkbox input[type='checkbox'] {
@@ -117,10 +121,6 @@
 	height: 1.25rem;
 	accent-color: #8a7cc7;
 	cursor: pointer;
-}
-
-.item.selection-mode .item-info {
-	margin-left: 0;
 }
 
 .selection-controls {
