@@ -13,8 +13,16 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	justify-content: center;
 	padding: 2rem 0;
 	margin: 0;
+}
+
+.button-stack {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 8rem;
 }
 
 .practiceButton {
@@ -22,6 +30,18 @@
 	height: 80px;
 	background: white !important;
 	color: black !important;
+	border: none !important;
+	border-radius: 8px;
+	font-size: 24px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.catfish {
+	width: 200px;
+	height: 80px;
+	background: #ff6b6b !important;
+	color: white !important;
 	border: none !important;
 	border-radius: 8px;
 	font-size: 24px;

@@ -11,19 +11,24 @@
 </svelte:head>
 
 <div class={styles['practice-page']}>
-    <Motion 
-        let:motion
-        whileHover={{ 
-            scale: 1.2
-        }}
-        transition={{ 
-            type: "spring",
-            stiffness: 400,
-            damping: 10
-        }}
-    >
-        <button class={styles.practiceButton} use:motion>
-            BUTTON
+    <div class={styles['button-stack']}>
+        <Motion 
+            let:motion
+            whileHover={{ 
+                scale: 1.2
+            }}
+            transition={{ 
+                type: "spring",
+                stiffness: 400,
+                damping: 10
+            }}
+        >
+            <button class={styles.practiceButton} use:motion>
+                BUTTON
+            </button>
+        </Motion>
+        <button class={styles.catfish}>
+            Catfish
         </button>
-    </Motion>
+    </div>
 </div>
