@@ -5,6 +5,8 @@
 	export let text: string = 'Get Offer';
 	export let onclick: () => void = () => {};
 	export let width: string = '190px';
+	export let topDrawerText: string = 'expires in...';
+	export let bottomDrawerText: string = '...8 hours';
 	
 	let isHovered = false;
 	let isActive = false;
@@ -73,7 +75,7 @@
 			}}
 		>
 			<div class={`${styles['btn-drawer']} ${styles['transition-top']}`} use:motion>
-				expires in...
+				{topDrawerText}
 			</div>
 		</Motion>
 
@@ -99,7 +101,7 @@
 			}}
 		>
 			<div class={`${styles['btn-drawer']} ${styles['transition-bottom']}`} use:motion>
-				...8 hours
+				{bottomDrawerText}
 			</div>
 		</Motion>
 

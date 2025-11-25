@@ -8,7 +8,9 @@
 	export let hasLoaded: boolean = false;
 	export let isSelectionMode: boolean = false;
 	export let emptyMessage: string = 'No items found';
-	export let emptyButtonText: string = 'Create your first item';
+	export let emptyButtonText: string = 'Create your first';
+	export let emptyButtonTopDrawerText: string = 'get started...';
+	export let emptyButtonBottomDrawerText: string = '...it\'s easy!';
 	export let onEmptyButtonClick: () => void = () => {};
 	export let onItemClick: (item: T, event: MouseEvent) => void = () => {};
 	export let onToggleSelection: (item: T) => void = () => {};
@@ -67,7 +69,13 @@
 	{#if hasLoaded && items.length === 0}
 		<div class={styles['empty-state']} transition:fade={{ duration: 300 }}>
 			<p>{emptyMessage}</p>
-			<WolverineButton text={emptyButtonText} onclick={onEmptyButtonClick} width="250px" />
+			<WolverineButton 
+				text={emptyButtonText} 
+				topDrawerText={emptyButtonTopDrawerText}
+				bottomDrawerText={emptyButtonBottomDrawerText}
+				onclick={onEmptyButtonClick} 
+				width="250px" 
+			/>
 		</div>
 	{/if}
 </div>

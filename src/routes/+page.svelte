@@ -139,8 +139,8 @@
 				items={recentDocs}
 				{hasLoaded}
 				{isSelectionMode}
-				emptyMessage="No recent documents"
-				emptyButtonText="Create your first document"
+				emptyMessage=""
+				emptyButtonText="Create your first"
 				onEmptyButtonClick={handleNewDocument}
 				onItemClick={handleDocumentClick}
 				onToggleSelection={toggleDocumentSelection}
