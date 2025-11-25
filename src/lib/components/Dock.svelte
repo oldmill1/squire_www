@@ -15,6 +15,22 @@
 	import { cubicInOut } from 'svelte/easing';
 	import styles from './Dock.module.scss';
 
+	// Custom slide-in transition without fade
+	function slideFn(node: Element, isShowing: boolean) {
+		return {
+			duration: 400,
+			easing: cubicInOut,
+			css: (t: number) => {
+				// When showing from hidden, slide from right (100 to 0)
+				// When initial load, slide from left (-100 to 0)
+				const startX = isShowing ? 100 : -100;
+				const x = startX + (0 - startX) * t;
+				// Preserve vertical centering (translateY(-50%)) while sliding horizontally
+				return `transform: translateX(${x}px) translateY(-50%);`;
+			}
+		};
+	}
+
 	let { items = [] }: { items: DockItem[] } = $props();
 
 	let isVisible = $state(true);
@@ -86,7 +102,7 @@
 	tabindex="0"
 	onmouseenter={handleMouseEnter}
 	onmouseleave={handleMouseLeave}
-	in:fly={{ y: 0, x: isShowing ? 100 : -100, duration: 400, easing: cubicInOut }}
+	in:slideFn={isShowing}
 	out:fly={{ y: 0, x: 100, duration: 400, easing: cubicInOut }}
 >
 	{#each items as item (item.id)}
