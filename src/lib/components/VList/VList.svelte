@@ -1,6 +1,7 @@
 <script lang="ts" generics="T">
 	import { fade } from 'svelte/transition';
 	import { selectedDocuments } from '$lib/stores/selectedDocuments';
+	import CreateFirstButton from '$lib/components/Buttons/CreateFirstButton/CreateFirstButton.svelte';
 	import styles from './VList.module.scss';
 
 	export let items: T[] = [];
@@ -66,9 +67,7 @@
 	{#if hasLoaded && items.length === 0}
 		<div class={styles['empty-state']} transition:fade={{ duration: 300 }}>
 			<p>{emptyMessage}</p>
-			<button class={styles['create-first-btn']} onclick={onEmptyButtonClick}>
-				{emptyButtonText}
-			</button>
+			<CreateFirstButton text={emptyButtonText} onclick={onEmptyButtonClick} />
 		</div>
 	{/if}
 </div>
