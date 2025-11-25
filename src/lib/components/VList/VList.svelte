@@ -4,6 +4,7 @@
 	import WolverineButton from '$lib/components/Buttons/WolverineButton/WolverineButton.svelte';
 	import Button from '$lib/components/global/Button.svelte';
 	import Switch from '$lib/components/Buttons/Switch/Switch.svelte';
+	import { Motion } from 'svelte-motion';
 	import styles from './VList.module.scss';
 
 	export let items: T[] = [];
@@ -17,6 +18,7 @@
 	export let onItemClick: (item: T, event: MouseEvent) => void = () => {};
 	export let onToggleSelection: (item: T) => void = () => {};
 	export let onToggleSelectionMode: () => void = () => {};
+	export let onDeleteClick: () => void = () => {};
 	export let getItemId: (item: T) => string = (item) => (item as any).id;
 	export let isItemSelected: (item: T) => boolean = (item) =>
 		selectedDocuments.isSelected(getItemId(item));
@@ -32,6 +34,20 @@
 
 	function handleSwitchChange() {
 		onToggleSelectionMode();
+	}
+
+	function handleDeleteClick() {
+		if (!isDeleteButtonDisabled) {
+			onDeleteClick();
+		}
+	}
+
+	// Calculate if delete should be disabled based on selection mode and selected items
+	$: selectedCount = $selectedDocuments.documents.length;
+	$: isDeleteButtonDisabled = !isSelectionMode || selectedCount === 0;
+
+	function applyMotion(node: any, motionAction: any) {
+		return motionAction(node);
 	}
 </script>
 
@@ -89,8 +105,35 @@
 
 {#if hasLoaded && items.length > 0}
 	<div class={styles['selection-controls']}>
+		<Motion 
+			let:motion
+			whileHover={!isDeleteButtonDisabled ? { y: -2 } : {}}
+			whileTap={!isDeleteButtonDisabled ? { scale: 0.9 } : {}}
+			transition={{ duration: 0.1, ease: [0.4, 0, 0.2, 1] }}
+		>
+			<div 
+				class={`${styles['recycle-button']} ${isDeleteButtonDisabled ? styles['disabled'] : ''}`} 
+				use:motion
+				onclick={handleDeleteClick}
+				onkeydown={(e) => {
+					if (!isDeleteButtonDisabled && (e.key === 'Enter' || e.key === ' ')) {
+						e.preventDefault();
+						onDeleteClick();
+					}
+				}}
+				role="button"
+				tabindex={isDeleteButtonDisabled ? -1 : 0}
+			>
+				<Motion 
+					let:motion
+					whileHover={!isDeleteButtonDisabled ? { y: -2 } : {}}
+					transition={{ duration: 0.1, ease: [0.4, 0, 0.2, 1] }}
+				>
+					<span use:applyMotion={motion}>🗑️</span>
+				</Motion>
+			</div>
+		</Motion>
 		<div class={styles['switch-container']}>
-			<span class={styles['switch-label']}>Select Mode</span>
 			<Switch checked={isSelectionMode} onchange={handleSwitchChange} />
 		</div>
 	</div>

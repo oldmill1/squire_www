@@ -126,8 +126,10 @@
 .selection-controls {
 	display: flex;
 	justify-content: flex-end;
+	align-items: center;
 	padding: 0 0 1rem 0;
 	margin-top: 0;
+	gap: 0.75rem;
 }
 
 .switch-container {
@@ -140,4 +142,36 @@
 	font-size: 0.875rem;
 	color: #e0e0e0;
 	font-weight: 500;
+}
+
+.recycle-button {
+	position: relative;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.15);
+	box-shadow: 0 4px 16px 0 #0d2626;
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+	border: 1px solid rgba(255, 255, 255, 0.18);
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.recycle-button span {
+	font-size: 1.25rem;
+	opacity: 0.8;
+}
+
+.recycle-button.disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+	background: rgba(255, 255, 255, 0.05);
+	box-shadow: 0 2px 8px 0 #0d2626;
+}
+
+.recycle-button.disabled span {
+	opacity: 0.5;
 }
