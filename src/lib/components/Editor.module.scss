@@ -4,6 +4,7 @@
 	display: flex;
 	flex-direction: column;
 	background: #2a2a3e;
+	position: relative;
 }
 
 .contentEditable {
@@ -26,4 +27,34 @@
 	overflow-y: auto;
 	background: rgb(16, 20, 23);
 	color: #e0e0e0;
+}
+
+.emptyTips {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	pointer-events: none;
+	z-index: 1;
+}
+
+.tipText {
+	color: rgba(148, 163, 184, 0.6);
+	font-size: 1.5rem;
+	font-weight: 400;
+	font-family:
+		'Inter',
+		-apple-system,
+		BlinkMacSystemFont,
+		'Segoe UI',
+		Roboto,
+		sans-serif;
+	text-align: center;
+	line-height: 1.5;
+	letter-spacing: -0.005em;
+	transition: opacity 0.2s ease;
 }

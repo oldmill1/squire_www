@@ -17,6 +17,9 @@
 
 	// Reactive state for editor content
 	let editorContent = $state(content || '');
+	
+	// Check if editor is empty
+	let isEmpty = $derived(!editorContent.trim());
 
 	// Reference to the editable div
 	let editableDiv: HTMLElement;
@@ -123,4 +126,11 @@
 		oninput={handleInput}
 		bind:this={editableDiv}
 	></div>
+	{#if isEmpty}
+		<div class={styles.emptyTips}>
+			<div class={styles.tipText}>
+				To create a new document, press Option + N
+			</div>
+		</div>
+	{/if}
 </div>

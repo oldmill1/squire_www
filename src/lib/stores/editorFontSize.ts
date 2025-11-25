@@ -4,7 +4,7 @@ import { writable } from 'svelte/store';
  * Store for managing editor font size
  * Default font size: 1rem (16px)
  */
-const DEFAULT_FONT_SIZE = 1;
+const DEFAULT_FONT_SIZE = 1.25;
 const MIN_FONT_SIZE = 0.625; // 10px
 const MAX_FONT_SIZE = 3; // 48px
 const FONT_SIZE_STEP = 0.25;
