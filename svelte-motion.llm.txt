@@ -168,6 +168,105 @@ SVG elements support all transform properties:
 </Motion>
 ```
 
+## Real-World Example: Switch Component Patterns
+
+### 1. Toggle Switch with State-Driven Animations
+```svelte
+<script lang="ts">
+    import { Motion } from 'svelte-motion';
+    
+    let checked: boolean = false;
+    let isHovered: boolean = false;
+</script>
+
+<!-- Container with hover/tap effects -->
+<Motion 
+    let:motion
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+>
+    <label class="switch" use:motion>
+        <input type="checkbox" {checked} onchange={handleChange}>
+        
+        <!-- Background with dynamic box-shadow -->
+        <Motion 
+            let:motion
+            animate={checked ? {
+                boxShadow: "rgba(0, 0, 0, 0.62) 0px 0px 5px inset, #22cc3f 0px 0px 0px 2px inset, #22cc3f 0px 0px 0px 24px inset, rgba(224, 224, 224, 0.45) 0px 1px 0px 0px"
+            } : {
+                boxShadow: "rgba(0, 0, 0, 0.62) 0px 0px 5px inset, rgba(0, 0, 0, 0.21) 0px 0px 0px 24px inset, #22cc3f 0px 0px 0px 0px inset, rgba(224, 224, 224, 0.45) 0px 1px 0px 0px"
+            }}
+            transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+        >
+            <span class="slider" use:motion>
+                <!-- Thumb with position and color animation -->
+                <Motion 
+                    let:motion
+                    animate={checked ? {
+                        x: 22,
+                        backgroundColor: "white"
+                    } : {
+                        x: 0,
+                        backgroundColor: "#e3e3e3"
+                    }}
+                    whileHover={{
+                        backgroundColor: checked ? "white" : "#f0f0f0"
+                    }}
+                    transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+                >
+                    <span class="slider-thumb" use:motion></span>
+                </Motion>
+            </span>
+        </Motion>
+    </label>
+</Motion>
+```
+
+### 2. Key Learnings from Switch Implementation
+
+#### Converting CSS Transitions to Motion
+- **CSS `transform: translateX()` → Motion `x` property**: Use `x` for horizontal movement instead of CSS transforms
+- **CSS `transition` → Motion `transition`**: Replace CSS transitions with Motion's transition object
+- **CSS `box-shadow` → Motion `boxShadow`**: Animate complex box-shadow strings directly in Motion
+- **CSS pseudo-classes → Motion `whileHover`**: Replace `:hover` with Motion's `whileHover` prop
+
+#### State-Driven Animation Pattern
+```typescript
+// Use boolean state to drive animations
+let checked: boolean = false;
+
+// Animate based on state in Motion component
+animate={checked ? {
+    x: 22,           // Move thumb right when checked
+    backgroundColor: "white"  // Change thumb color
+} : {
+    x: 0,            // Reset thumb position
+    backgroundColor: "#e3e3e3"  // Default thumb color
+}}
+```
+
+#### Nested Motion for Complex Components
+- **Outer Motion**: Container hover/tap effects
+- **Middle Motion**: Background state changes (box-shadow)
+- **Inner Motion**: Thumb movement and color changes
+- Each layer can have independent transitions and properties
+
+#### Timing and Easing Consistency
+```typescript
+// Match original CSS timing: cubic-bezier(0.4, 0, 0.2, 1)
+transition={{ 
+    duration: 0.3, 
+    ease: [0.4, 0, 0.2, 1] 
+}}
+```
+
+#### Svelte 5 Event Handler Syntax
+```svelte
+<!-- Use modern syntax, not on:change -->
+<input type="checkbox" {checked} onchange={handleChange}>
+```
+
 ## Best Practices
 
 ### 1. Performance
@@ -246,4 +345,4 @@ function applyMotion(node: any, motionAction: any) {
 }
 ```
 
-This guide covers all practical patterns learned from implementing the WolverineButton with svelte-motion.
+This guide covers all practical patterns learned from implementing the WolverineButton and Switch components with svelte-motion, including state-driven animations, CSS-to-Motion conversion techniques, and complex nested motion patterns.
