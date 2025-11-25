@@ -3,12 +3,13 @@
 	import { toggleWidgetVisibility } from '$lib/stores/widgetVisibility';
 
 	interface Props {
-		documentTitle?: string;
+		title?: string;
+		titleEditable?: boolean;
 		documentId?: string;
 		dbService?: any;
 	}
 
-	let { documentTitle = '', documentId, dbService }: Props = $props();
+	let { title = '', titleEditable = false, documentId, dbService }: Props = $props();
 
 	let isEditing = $state(false);
 	let editingTitle = $state('');
@@ -17,7 +18,7 @@
 
 	function startEditing() {
 		isEditing = true;
-		editingTitle = documentTitle;
+		editingTitle = title;
 		isValid = true;
 		setTimeout(() => inputRef?.focus(), 0);
 	}
@@ -34,11 +35,11 @@
 
 		const newTitle = editingTitle.trim();
 
-		if (newTitle !== documentTitle && documentId && dbService) {
+		if (newTitle !== title && documentId && dbService) {
 			try {
 				await updateDocumentWithRetry(newTitle);
 				// Only update UI state after successful database update
-				documentTitle = newTitle;
+				title = newTitle;
 				isEditing = false;
 				isValid = true;
 				console.log(`
@@ -83,7 +84,7 @@
 	function cancelEdit() {
 		isEditing = false;
 		isValid = true;
-		editingTitle = documentTitle;
+		editingTitle = title;
 	}
 
 	function handleKeydown(event: KeyboardEvent) {
@@ -126,15 +127,15 @@
 				onkeydown={handleKeydown}
 				onblur={saveTitle}
 			/>
-		{:else if documentTitle}
+		{:else if title}
 			<span
 				class={styles.documentTitle}
-				onclick={startEditing}
-				onkeydown={(e) => (e.key === 'Enter' || e.key === ' ') && startEditing()}
-				role="button"
-				tabindex="0"
+				onclick={titleEditable ? startEditing : undefined}
+				onkeydown={titleEditable ? (e) => (e.key === 'Enter' || e.key === ' ') && startEditing() : undefined}
+				role={titleEditable ? "button" : undefined}
+				tabindex={titleEditable ? 0 : undefined}
 			>
-				{documentTitle}
+				{title}
 			</span>
 		{/if}
 	</div>

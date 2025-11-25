@@ -149,7 +149,7 @@
 	}
 </script>
 
-<MenuBar />
+<MenuBar title="Explorer" />
 
 <div class="explorer-container">
 	<Explorer

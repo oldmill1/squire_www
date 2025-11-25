@@ -141,7 +141,7 @@
 	}
 </script>
 
-<MenuBar {documentTitle} documentId={data.id} {dbService} />
+<MenuBar title={documentTitle} titleEditable={true} documentId={data.id} {dbService} />
 <Editor content={documentContent} documentId={data.id} {dbService} />
 
 {#snippet leftContent()}
