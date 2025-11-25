@@ -230,22 +230,14 @@
 {/if}
 
 <Modal 
-	bind:isOpen={isDeleteModalOpen}
+	isOpen={isDeleteModalOpen}
 	dark={true}
 	buttons={[
 		{ text: 'Cancel', callback: handleCancelDelete },
 		{ text: 'Confirm', callback: handleConfirmDelete, primary: true }
 	]}
-	content={modalContent}
-/>
-
-{#snippet modalContent()}
-	<div style="text-align: center;">
-		<h2 style="margin-bottom: 16px;">Confirm Deletion</h2>
-		<p style="opacity: 0.8; margin-bottom: 8px;">Are you sure you want to delete the selected items?</p>
-		<p style="opacity: 0.6; font-size: 14px;">{selectedCount} item{selectedCount !== 1 ? 's' : ''} will be permanently deleted.</p>
-		{#if isDeleting}
-			<p style="opacity: 0.8; font-size: 14px; margin-top: 16px;">Deleting...</p>
-		{/if}
-	</div>
-{/snippet}
+>
+	{#snippet content()}
+		<h2 style="margin: 0; font-size: 28px; font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">Confirm Deletion</h2>
+	{/snippet}
+</Modal>
