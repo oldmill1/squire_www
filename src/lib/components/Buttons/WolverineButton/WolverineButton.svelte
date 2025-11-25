@@ -2,7 +2,7 @@
 	import { Motion, M } from 'svelte-motion';
 	import styles from './WolverineButton.module.scss';
 	
-	export let text: string = 'Get Offer';
+	export let text: string = 'Create your first document';
 	export let onclick: () => void = () => {};
 	export let width: string = '190px';
 	export let topDrawerText: string = 'expires in...';

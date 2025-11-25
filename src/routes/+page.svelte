@@ -16,9 +16,13 @@
 	let selectedCategory = 'Recents';
 	let hasLoaded = false;
 	let isSelectionMode = false;
+	let greeting = '';
 
 	onMount(async () => {
 		isBrowser = true;
+		
+		// Set time-based greeting
+		greeting = getTimeBasedGreeting();
 
 		try {
 			const { DatabaseService } = await import('$lib/services/DatabaseService');
@@ -31,6 +35,20 @@
 			console.error('Failed to initialize database:', error);
 		}
 	});
+
+	function getTimeBasedGreeting(): string {
+		const hour = new Date().getHours();
+		
+		if (hour >= 5 && hour < 12) {
+			return 'Good Morning';
+		} else if (hour >= 12 && hour < 17) {
+			return 'Good Afternoon';
+		} else if (hour >= 17 && hour < 21) {
+			return 'Good Evening';
+		} else {
+			return 'Good Night';
+		}
+	}
 
 	async function loadRecentDocs() {
 		try {
@@ -122,7 +140,7 @@
 	<main>
 		<div class={styles['content-wrapper']}>
 			<div class={styles['content-header']}>
-				<h1 class={styles['recents-title']}>Recents</h1>
+				<h1 class={styles['recents-title']}>{greeting}</h1>
 			</div>
 
 			{#snippet documentContentSnippet(doc: Document)}
@@ -139,7 +157,6 @@
 				{hasLoaded}
 				{isSelectionMode}
 				emptyMessage=""
-				emptyButtonText="Create your first"
 				onEmptyButtonClick={handleNewDocument}
 				onItemClick={handleDocumentClick}
 				onToggleSelection={toggleDocumentSelection}

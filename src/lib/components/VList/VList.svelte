@@ -8,7 +8,7 @@
 	export let hasLoaded: boolean = false;
 	export let isSelectionMode: boolean = false;
 	export let emptyMessage: string = 'No items found';
-	export let emptyButtonText: string = 'Create your first';
+	export let buttonText: string = 'Create new document';
 	export let emptyButtonTopDrawerText: string = 'get started...';
 	export let emptyButtonBottomDrawerText: string = '...it\'s easy!';
 	export let onEmptyButtonClick: () => void = () => {};
@@ -70,7 +70,7 @@
 		<div class={styles['empty-state']} transition:fade={{ duration: 300 }}>
 			<p>{emptyMessage}</p>
 			<WolverineButton 
-				text={emptyButtonText} 
+				text={buttonText}
 				topDrawerText={emptyButtonTopDrawerText}
 				bottomDrawerText={emptyButtonBottomDrawerText}
 				onclick={onEmptyButtonClick} 

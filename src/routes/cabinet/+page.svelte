@@ -132,7 +132,7 @@
 					items={lists}
 					{hasLoaded}
 					emptyMessage="No lists found"
-					emptyButtonText="Create your first list"
+					buttonText="Create your first list"
 					onEmptyButtonClick={handleNewList}
 					onItemClick={handleListClick}
 					getItemId={(list) => list.id}
