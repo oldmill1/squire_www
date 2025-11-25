@@ -1,0 +1,14 @@
+export interface ExplorerItem {
+	id: string;
+	name: string;
+	icon: string;
+	onClick?: (item: ExplorerItem, event: MouseEvent) => void;
+}
+
+export type ExplorerItemType = 'list' | 'document';
+
+export interface ExplorerData {
+	items: ExplorerItem[];
+	type: ExplorerItemType;
+	hasLoaded: boolean;
+}

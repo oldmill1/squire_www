@@ -7,57 +7,70 @@
 	import StatusBar from '$lib/components/StatusBar.svelte';
 	import MenuBar from '$lib/components/MenuBar/MenuBar.svelte';
 	import type { PageProps } from './$types';
+	import { convertListsToExplorerItems, createExplorerData } from '$lib/components/Explorer/utils';
 
 	let { data }: PageProps = $props();
 
 	let listService: ListService;
-	let isBrowser = false;
 	let lists = $state<List[]>([]);
 	let hasLoaded = $state(false);
 
 	onMount(async () => {
-		isBrowser = true;
-
 		try {
 			const { ListService } = await import('$lib/services/ListService');
 			listService = new ListService();
-			console.log('ListService initialized successfully');
 
-			// Load lists only
-			await loadLists();
-		} catch (error) {
-			console.error('Failed to initialize services in Explorer:', error);
-		}
-	});
-
-	async function loadLists() {
-		try {
-			if (!listService) return;
-
+			// Load lists
 			const allLists = await listService.list();
 			console.log('Lists loaded:', allLists);
 
-			// Sort by updatedAt to get the most recently updated lists
-			lists = allLists.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
+			if (allLists.length === 0) {
+				// Create sample data if no lists exist
+				console.log('No lists found, creating sample data...');
+				const sampleLists = [
+					new List('custom', 'Privateer Story'),
+					new List('custom', 'Jamaica'),
+					new List('custom', 'Boo'),
+					new List('custom', 'Yo yo'),
+					new List('custom', 'Heloo world')
+				];
+				
+				for (const sampleList of sampleLists) {
+					await listService.create(sampleList);
+				}
+				
+				const reloadLists = await listService.list();
+				lists = reloadLists.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
+			} else {
+				lists = allLists.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
+			}
 		} catch (error) {
 			console.error('Failed to load lists:', error);
 		} finally {
 			hasLoaded = true;
 		}
-	}
+	});
 
 	function handleListClick(list: List, event: MouseEvent) {
-		// TODO: Handle list click - for now just log it
 		console.log('List clicked:', list.id, list.name);
+		// TODO: Navigate to /explorer/[list-id]
 	}
 
+	// Create standardized data for Explorer
+	const explorerData = $derived.by(() => {
+		if (!hasLoaded) return createExplorerData([], 'list', false);
+		return createExplorerData(
+			convertListsToExplorerItems(lists, handleListClick),
+			'list',
+			true
+		);
+	});
+
 	function handleNewDocument() {
-		// TODO: Implement new document creation
 		console.log('New document clicked');
 	}
 
 	function handleFavorites() {
-		// TODO: Implement favorites functionality
 		console.log('Favorites clicked');
 	}
 </script>
@@ -65,11 +78,8 @@
 <MenuBar title="Explorer" />
 
 <div class="explorer-container">
-	<Explorer
-		lists={lists}
-		{hasLoaded}
-		onListClick={handleListClick}
-	/>
+	<!-- Using the new standardized data interface -->
+	<Explorer data={explorerData} />
 
 	{#if lists.length > 0}
 		<Dock
