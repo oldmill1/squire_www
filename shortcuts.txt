@@ -8,13 +8,13 @@ The application uses a global shortcuts system that allows users to trigger acti
 ### Font Size Controls
 - **Option + =** (Option + Plus key): Increase editor font size
   - Physical key code: `Equal`
-  - Action: Increases font size by 2px (max: 48px)
-  - Default size: 18px
+  - Action: Increases font size by 0.25rem (max: 3rem)
+  - Default size: 1rem
 
 - **Option + -** (Option + Minus key): Decrease editor font size  
   - Physical key code: `Minus`
-  - Action: Decreases font size by 2px (min: 10px)
-  - Default size: 18px
+  - Action: Decreases font size by 0.25rem (min: 0.625rem)
+  - Default size: 1rem
 
 ### Widget Area Controls
 - **Option + L**: Toggle widget area visibility
@@ -60,10 +60,10 @@ shortcutsService.register({
 - `Meta` - Command key (⌘)
 
 ## Font Size Range
-- Minimum: 10px
-- Maximum: 48px
-- Default: 18px
-- Step increment: 2px
+- Minimum: 0.625rem (10px)
+- Maximum: 3rem (48px)
+- Default: 1rem (16px)
+- Step increment: 0.25rem
 
 ## Widget Area
 - Located on the right side of document pages

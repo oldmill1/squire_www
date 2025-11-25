@@ -25,7 +25,7 @@
 	$effect(() => {
 		const unsubscribe = editorFontSize.subscribe((size) => {
 			if (editableDiv) {
-				editableDiv.style.fontSize = `${size}px`;
+				editableDiv.style.fontSize = `${size}rem`;
 			}
 		});
 		return unsubscribe;
@@ -48,7 +48,7 @@
 			previousContent = contentToSet;
 			// Set initial font size from store
 			const currentSize = editorFontSize.get();
-			editableDiv.style.fontSize = `${currentSize}px`;
+			editableDiv.style.fontSize = `${currentSize}rem`;
 		}
 	});
 

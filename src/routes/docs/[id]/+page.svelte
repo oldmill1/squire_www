@@ -5,12 +5,23 @@
 	import WidgetArea from '$lib/components/widgetsarea/WidgetArea.svelte';
 	import { onMount } from 'svelte';
 	import type { PageProps } from './$types';
+	import { editorFontSize } from '$lib/stores/editorFontSize';
 
 	let { data }: PageProps = $props();
 	let documentContent = $state<string | undefined>(undefined);
 	let documentTitle = $state<string>('');
 	let dbService = $state<any>();
 	let isLoading = $state(true);
+
+	// Font size state for status bar
+	let fontSize = $state(editorFontSize.get());
+
+	$effect(() => {
+		const unsubscribe = editorFontSize.subscribe((size) => {
+			fontSize = size;
+		});
+		return unsubscribe;
+	});
 
 	// Function to update document content from widgets
 	function updateDocumentContent(docId: string, newContent: string) {
@@ -60,5 +71,10 @@
 
 <MenuBar {documentTitle} documentId={data.id} {dbService} />
 <Editor content={documentContent} documentId={data.id} {dbService} />
-<StatusBar />
+
+{#snippet leftContent()}
+	<span>{fontSize}rem</span>
+{/snippet}
+
+<StatusBar {leftContent} />
 <WidgetArea title="Widgets" documentId={data.id} {dbService} />
