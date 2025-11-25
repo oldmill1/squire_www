@@ -156,6 +156,9 @@
 				{hasLoaded}
 				{isSelectionMode}
 				emptyMessage=""
+				buttonText="Create new document"
+				emptyButtonTopDrawerText="get started..."
+				emptyButtonBottomDrawerText="...it's easy!"
 				onEmptyButtonClick={handleNewDocument}
 				onItemClick={handleDocumentClick}
 				onToggleSelection={toggleDocumentSelection}
@@ -189,12 +192,6 @@
 				icon: '/icons/folder.png',
 				title: 'Explorer',
 				onClick: handleExplorer
-			},
-			{
-				id: 'cabinet',
-				icon: '/icons/cabinet.png',
-				title: 'Cabinet',
-				onClick: handleCabinet
 			}
 		]}
 	/>

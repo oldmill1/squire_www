@@ -34,19 +34,19 @@
 {#if isOpen}
 	<div
 		class={`${styles['modal-backdrop']} ${dark ? styles['dark'] : ''}`}
-		role="dialog"
-		aria-modal="true"
-		aria-labelledby="modal-title"
+		role="button"
+		tabindex="-1"
 		on:click={handleBackdropClick}
 		on:keydown={handleBackdropKeydown}
-		tabindex="-1"
 	>
 		<div
 			class={`${styles['modal-content']} ${dark ? styles['dark'] : ''}`}
-			role="document"
+			role="dialog"
+			aria-modal="true"
+			aria-labelledby="modal-title"
+			tabindex="0"
 			on:click={handleModalClick}
 			on:keydown={handleModalKeydown}
-			tabindex="0"
 		>
 			{@render content?.()}
 			
