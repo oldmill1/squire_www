@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import Dock from '$lib/components/Dock.svelte';
-	import Button from '$lib/components/global/Button.svelte';
 	import VList from '$lib/components/VList/VList.svelte';
 		import { Document } from '$lib/models/Document';
 	import { DatabaseService } from '$lib/services/DatabaseService';
@@ -160,21 +159,11 @@
 				onEmptyButtonClick={handleNewDocument}
 				onItemClick={handleDocumentClick}
 				onToggleSelection={toggleDocumentSelection}
+				onToggleSelectionMode={toggleSelectionMode}
 				getItemId={(doc) => doc.id}
 				isItemSelected={(doc) => selectedDocuments.isSelected(doc.id)}
 				renderItemContent={documentContentSnippet}
 			/>
-
-			{#if recentDocs.length > 0}
-				<div class={styles['selection-controls']}>
-					<Button
-						onclick={toggleSelectionMode}
-						text={isSelectionMode ? 'Cancel' : 'Select'}
-						icon="/icons/select-all.png"
-						alt="Select"
-					/>
-				</div>
-			{/if}
 		</div>
 	</main>
 
