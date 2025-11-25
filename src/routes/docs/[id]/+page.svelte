@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Editor from '$lib/components/Editor.svelte';
 	import StatusBar from '$lib/components/StatusBar.svelte';
-	import MenuBar from '$lib/components/MenuBar.svelte';
+	import MenuBar from '$lib/components/MenuBar/MenuBar.svelte';
 	import WidgetArea from '$lib/components/widgetsarea/WidgetArea.svelte';
 	import Dock from '$lib/components/Dock.svelte';
 	import RangeSlider from '$lib/components/RangeSlider/RangeSlider.svelte';
