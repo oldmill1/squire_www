@@ -27,9 +27,9 @@
 
 {#snippet defaultItemContent(item: T)}
 	<div class={styles['item-info']}>
-		<h3 class={styles['item-title']}>{item.title || 'Untitled'}</h3>
+		<h3 class={styles['item-title']}>{(item as any).title || 'Untitled'}</h3>
 		<p class={styles['item-preview']}>
-			{item.content ? item.content.slice(0, 100) : ''}
+			{(item as any).content ? ((item as any).content as string).slice(0, 100) : ''}
 		</p>
 	</div>
 {/snippet}

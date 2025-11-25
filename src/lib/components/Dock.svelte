@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	export interface DockItem {
 		id: string;
 		icon: string;
@@ -10,12 +10,85 @@
 </script>
 
 <script lang="ts">
+	import { onMount, onDestroy } from 'svelte';
+	import { fade, fly } from 'svelte/transition';
+	import { cubicInOut } from 'svelte/easing';
 	import styles from './Dock.module.scss';
 
-	export let items: DockItem[] = [];
+	let { items = [] }: { items: DockItem[] } = $props();
+
+	let isVisible = $state(true);
+	let isShowing = $state(false);
+	let hideTimeout: number;
+
+	function handleMouseMove() {
+		// Clear existing timeout
+		if (hideTimeout) {
+			clearTimeout(hideTimeout);
+		}
+
+		// Show dock immediately if it was hidden
+		if (!isVisible) {
+			isShowing = true;
+			isVisible = true;
+			// Reset isShowing after animation completes
+			setTimeout(() => {
+				isShowing = false;
+			}, 400);
+		}
+
+		// Set new timeout to hide after 3 seconds
+		hideTimeout = setTimeout(() => {
+			isVisible = false;
+		}, 3000) as unknown as number;
+	}
+
+	function handleMouseEnter() {
+		// When mouse enters dock area, keep it visible
+		if (hideTimeout) {
+			clearTimeout(hideTimeout);
+		}
+		isVisible = true;
+	}
+
+	function handleMouseLeave() {
+		// When mouse leaves dock area, start the 3 second countdown
+		handleMouseMove();
+	}
+
+	onMount(() => {
+		// Add global mouse move listener only in browser
+		if (typeof document !== 'undefined') {
+			document.addEventListener('mousemove', handleMouseMove);
+		}
+		
+		// Initial timeout to hide after 3 seconds
+		hideTimeout = setTimeout(() => {
+			isVisible = false;
+		}, 3000) as unknown as number;
+	});
+
+	onDestroy(() => {
+		// Clean up event listeners and timeouts only in browser
+		if (typeof document !== 'undefined') {
+			document.removeEventListener('mousemove', handleMouseMove);
+		}
+		if (hideTimeout) {
+			clearTimeout(hideTimeout);
+		}
+	});
 </script>
 
-<div class={styles['dock']}>
+{#if isVisible}
+<div 
+	class={styles['dock']}
+	role="toolbar"
+	tabindex="0"
+	onmouseenter={handleMouseEnter}
+	onmouseleave={handleMouseLeave}
+	in:fly={{ y: 0, x: isShowing ? 100 : -100, duration: 400, easing: cubicInOut }}
+	out:fly={{ y: 0, x: 100, duration: 400, easing: cubicInOut }}
+>
 	{#each items as item (item.id)}
 		<button
 			class={`${styles['dock-item']} ${item.active ? styles['active'] : ''}`}
@@ -29,3 +102,4 @@
 		</button>
 	{/each}
 </div>
+{/if}
