@@ -10,6 +10,7 @@
 	import MenuBar from '$lib/components/MenuBar/MenuBar.svelte';
 	import type { PageProps } from './$types';
 	import { convertListsToExplorerItems, convertDocumentsToExplorerItems, createExplorerData } from '$lib/components/Explorer/utils';
+	import type { ExplorerItem } from '$lib/components/Explorer/types';
 	import styles from './+page.module.scss';
 
 	let { data }: PageProps = $props();
@@ -18,6 +19,7 @@
 	let documentService: DocumentService;
 	let lists = $state<List[]>([]);
 	let documents = $state<Document[]>([]);
+	let temporaryFolders = $state<ExplorerItem[]>([]);
 	let hasLoaded = $state(false);
 	let isSelectionMode = $state(false);
 
@@ -61,9 +63,9 @@
 		const listItems = convertListsToExplorerItems(lists, handleListClick);
 		const documentItems = convertDocumentsToExplorerItems(documents, handleDocumentClick);
 		
-		// Show lists first, then unlisted documents
+		// Show lists first, then temporary folders, then unlisted documents
 		return createExplorerData(
-			[...listItems, ...documentItems],
+			[...listItems, ...temporaryFolders, ...documentItems],
 			'list', // Keep as 'list' type for compatibility
 			true
 		);
@@ -71,6 +73,22 @@
 
 	function handleNewDocument() {
 		console.log('New document clicked');
+	}
+
+	function handleNewFolder() {
+		// Create a temporary folder with a unique ID and "New List" name
+		const tempFolder: ExplorerItem = {
+			id: `temp-${Date.now()}`, // Unique ID using timestamp
+			name: 'New List',
+			icon: '/icons/folder.png',
+			onClick: (item: ExplorerItem, event: MouseEvent) => {
+				// Handle click on temporary folder (optional - could open rename dialog)
+				console.log('Temporary folder clicked:', item);
+			}
+		};
+		
+		// Add to temporary folders array
+		temporaryFolders = [...temporaryFolders, tempFolder];
 	}
 
 	function handleFavorites() {
@@ -129,6 +147,7 @@
 		showSelectionSwitch={true}
 		onSelectionToggle={handleSelectionToggle}
 		onDeleteSelected={handleDeleteSelected}
+		onNewFolder={handleNewFolder}
 	/>
 
 	<Dock

@@ -17,6 +17,7 @@
 		onDeleteSelected?: (selectedDocuments: any[]) => void;
 		showSelectionSwitch?: boolean;
 		onSelectionToggle?: (enabled: boolean) => void;
+		onNewFolder?: () => void;
 	}
 
 	let {
@@ -26,7 +27,8 @@
 		onSelectionChange,
 		onDeleteSelected,
 		showSelectionSwitch = false,
-		onSelectionToggle
+		onSelectionToggle,
+		onNewFolder
 	}: Props = $props();
 
 	// Track selected documents from the store
@@ -114,6 +116,8 @@
 
 	async function handleNewFolder() {
 		console.log('New folder clicked');
+		// Call the parent's new folder handler
+		onNewFolder?.();
 	}
 </script>
 
