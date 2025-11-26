@@ -110,140 +110,64 @@
 		</button>
 
 		<!-- Corner SVGs -->
-		<Motion 
-			let:motion
-			isSVG={true}
-			animate={isHovered ? {
-				x: -36,
-				y: -36,
-				rotate: 180
-			} : {
-				x: -24,
-				y: -24,
-				rotate: 180
-			}}
-			whileTap={{ 
-				x: -12,
-				y: -12,
-				rotate: 180
-			}}
-			transition={{ 
-				duration: 0.25,
-				ease: [0, 0, 0, 2.5]
-			}}
+		<div
+			class={styles['btn-corner']}
+			style="position: absolute; top: -24px; left: -24px; transform: rotate(180deg); transition: all 0.25s ease;"
+			class:isHovered
 		>
 			<svg
-				class={styles['btn-corner']}
 				xmlns="http://www.w3.org/2000/svg"
 				viewBox="-1 1 32 32"
-				use:applyMotion={motion}
 			>
 				<path
 					d="M0,32C17.645,32,32,17.645,32,0h-0.985c0,17.102-13.913,31.015-31.015,31.015v0.985Z"
 				></path>
 			</svg>
-		</Motion>
+		</div>
 
-		<Motion 
-			let:motion
-			isSVG={true}
-			animate={isHovered ? {
-				x: 36,
-				y: -36,
-				rotate: 270
-			} : {
-				x: 24,
-				y: -24,
-				rotate: 270
-			}}
-			whileTap={{ 
-				x: 12,
-				y: -12,
-				rotate: 270
-			}}
-			transition={{ 
-				duration: 0.25,
-				ease: [0, 0, 0, 2.5]
-			}}
+		<div
+			class={styles['btn-corner']}
+			style="position: absolute; top: -24px; right: -24px; transform: rotate(270deg); transition: all 0.25s ease;"
+			class:isHovered
 		>
 			<svg
-				class={styles['btn-corner']}
 				xmlns="http://www.w3.org/2000/svg"
 				viewBox="-1 1 32 32"
-				use:applyMotion={motion}
 			>
 				<path
 					d="M0,32C17.645,32,32,17.645,32,0h-0.985c0,17.102-13.913,31.015-31.015,31.015v0.985Z"
 				></path>
 			</svg>
-		</Motion>
+		</div>
 
-		<Motion 
-			let:motion
-			isSVG={true}
-			animate={isHovered ? {
-				x: 36,
-				y: 36,
-				rotate: 0
-			} : {
-				x: 24,
-				y: 24,
-				rotate: 0
-			}}
-			whileTap={{ 
-				x: 12,
-				y: 12,
-				rotate: 0
-			}}
-			transition={{ 
-				duration: 0.25,
-				ease: [0, 0, 0, 2.5]
-			}}
+		<div
+			class={styles['btn-corner']}
+			style="position: absolute; bottom: -24px; right: -24px; transform: rotate(0deg); transition: all 0.25s ease;"
+			class:isHovered
 		>
 			<svg
-				class={styles['btn-corner']}
 				xmlns="http://www.w3.org/2000/svg"
 				viewBox="-1 1 32 32"
-				use:applyMotion={motion}
 			>
 				<path
 					d="M0,32C17.645,32,32,17.645,32,0h-0.985c0,17.102-13.913,31.015-31.015,31.015v0.985Z"
 				></path>
 			</svg>
-		</Motion>
+		</div>
 
-		<Motion 
-			let:motion
-			isSVG={true}
-			animate={isHovered ? {
-				x: -36,
-				y: 36,
-				rotate: 90
-			} : {
-				x: -24,
-				y: 24,
-				rotate: 90
-			}}
-			whileTap={{ 
-				x: -12,
-				y: 12,
-				rotate: 90
-			}}
-			transition={{ 
-				duration: 0.25,
-				ease: [0, 0, 0, 2.5]
-			}}
+		<div
+			class={styles['btn-corner']}
+			style="position: absolute; bottom: -24px; left: -24px; transform: rotate(90deg); transition: all 0.25s ease;"
+			class:isHovered
 		>
 			<svg
-				class={styles['btn-corner']}
 				xmlns="http://www.w3.org/2000/svg"
 				viewBox="-1 1 32 32"
-				use:applyMotion={motion}
 			>
 				<path
 					d="M0,32C17.645,32,32,17.645,32,0h-0.985c0,17.102-13.913,31.015-31.015,31.015v0.985Z"
 				></path>
 			</svg>
-		</Motion>
+		</div>
 	</div>
 </Motion>
