@@ -10,6 +10,7 @@
 	import { selectedDocuments } from '$lib/stores/selectedDocuments';
 	import type { ExplorerData } from './types';
 	import { ExplorerNav } from '../ExplorerNav';
+	import FileItem from './FileItem/FileItem.svelte';
 
 	interface Props {
 		children?: Snippet;
@@ -165,36 +166,13 @@
 			<div class={styles.desktop}>
 			{#if data.hasLoaded}
 				{#each data.items as item (item.id)}
-					<Motion 
-						let:motion
-						whileHover={{ 
-							scale: 1.03,
-							y: -2,
-							transition: { type: "spring", stiffness: 400 }
-						}}
-						whileTap={{ scale: 0.98 }}
-						transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-					>
-						<div 
-							class={`${styles.fileItem} ${isSelectionMode ? styles.selectionMode : ''} ${checkIfSelected(item) ? styles.selected : ''}`}
-							use:motion
-						>
-						{#if isSelectionMode}
-							<div class={styles.selectionCheckbox}>
-								<SwitchMini
-									checked={checkIfSelected(item)}
-									onchange={() => toggleItemSelection(item)}
-									onclick={(e: MouseEvent) => e.stopPropagation()}
-								/>
-							</div>
-						{/if}
-						<IconItem 
-							name={item.name} 
-							icon={item.icon} 
-							onClick={() => handleItemClick(item, new MouseEvent('click') as any)}
-						/>
-					</div>
-					</Motion>
+					<FileItem
+						item={item}
+						isSelectionMode={isSelectionMode}
+						isSelected={checkIfSelected(item)}
+						onItemClick={handleItemClick}
+						onToggleSelection={toggleItemSelection}
+					/>
 				{/each}
 			{/if}
 		</div>
