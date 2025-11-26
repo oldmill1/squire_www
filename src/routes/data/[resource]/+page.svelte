@@ -68,8 +68,6 @@
   async function confirmDeleteDocuments() {
     showDeleteModal = false;
     try {
-      console.log('Deleting selected documents:', Array.from(selectedItems));
-      
       // Initialize DocumentService
       const { DocumentService } = await import('$lib/services/DocumentService');
       const documentService = new DocumentService('squiredb');
@@ -77,7 +75,6 @@
       // Delete all selected documents
       for (const docId of selectedItems) {
         await documentService.delete(docId);
-        console.log(`Deleted document: ${docId}`);
       }
       
       // Clear selection
@@ -90,8 +87,6 @@
           .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
           .slice(0, 10);
       }
-      
-      console.log('Successfully deleted selected documents and refreshed table');
     } catch (error) {
       console.error('Failed to delete documents:', error);
       error = 'Failed to delete documents from database';
@@ -104,7 +99,6 @@
   
   function handleSelectionChange(selectedIds: Set<string>) {
     selectedItems = selectedIds;
-    console.log('Parent component received selection change:', Array.from(selectedIds));
   }
   
   async function handleBulkAddDocuments() {
@@ -135,8 +129,6 @@
       items = allDocs
         .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
         .slice(0, 10);
-      
-      console.log('Successfully added 10 random documents to database');
     } catch (error) {
       console.error('Failed to bulk add documents:', error);
       error = 'Failed to add documents to database';
