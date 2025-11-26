@@ -36,9 +36,9 @@
 				
 				// Fetch all documents when no lists exist
 				const allDocuments = await documentService.list();
-				documents = allDocuments.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
+				documents = allDocuments.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 			} else {
-				lists = allLists.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
+				lists = allLists.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 				documents = [];
 			}
 		} catch (error) {
@@ -107,7 +107,7 @@
 			// Refresh the documents list if we're showing documents
 			if (lists.length === 0) {
 				const allDocuments = await documentService.list();
-				documents = allDocuments.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
+				documents = allDocuments.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 			}
 		} catch (error) {
 			console.error('Failed to delete documents:', error);
