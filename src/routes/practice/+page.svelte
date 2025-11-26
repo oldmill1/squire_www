@@ -4,10 +4,12 @@
 	import WolverineButton from '$lib/components/Buttons/WolverineButton/WolverineButton.svelte';
 	import Switch from '$lib/components/Buttons/Switch/Switch.svelte';
 	import Modal from '$lib/components/Modal/Modal.svelte';
+	import Checkbox from '$lib/components/Checkbox/Checkbox.svelte';
 
 	console.log('Motion component:', Motion);
 	
 	let showModal = false;
+	let inputValue = '';
 	
 	function openModal() {
 		showModal = true;
@@ -24,6 +26,10 @@
 </svelte:head>
 
 <div class={styles['practice-page']}>
+    <div class={styles['input-section']}>
+        <Checkbox label="Checkbox" />
+    </div>
+    
     <div class={styles['button-stack']}>
         <Motion 
             let:motion
