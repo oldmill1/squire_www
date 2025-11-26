@@ -126,11 +126,11 @@
 	}
 
 	&.selected {
-		background-color: rgba(34, 204, 63, 0.2);
-		border: 2px solid #22cc3f;
+		background-color: rgba(76, 175, 80, 0.15);
+		border: 2px solid rgba(76, 175, 80, 0.6);
 		
 		&:hover {
-			background-color: rgba(34, 204, 63, 0.3);
+			background-color: rgba(76, 175, 80, 0.25);
 		}
 	}
 }
@@ -144,7 +144,7 @@
 	input[type="checkbox"] {
 		width: 16px;
 		height: 16px;
-		accent-color: #22cc3f;
+		accent-color: rgba(76, 175, 80, 0.8);
 		cursor: pointer;
 	}
 }
