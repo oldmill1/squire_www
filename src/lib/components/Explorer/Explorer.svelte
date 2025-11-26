@@ -129,7 +129,21 @@
 			<div class={styles.desktop}>
 			{#if data.hasLoaded}
 				{#each data.items as item (item.id)}
-					<div class={`${styles.fileItem} ${isSelectionMode ? styles.selectionMode : ''} ${checkIfSelected(item) ? styles.selected : ''}`}>
+					<Motion 
+						let:motion
+						whileHover={{ 
+							scale: 1.02,
+							background: "linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04))",
+							boxShadow: "0 8px 30px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(0, 0, 0, 0.15)",
+							borderColor: "rgba(255, 255, 255, 0.15)"
+						}}
+						whileTap={{ scale: 0.98 }}
+						transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+					>
+						<div 
+							class={`${styles.fileItem} ${isSelectionMode ? styles.selectionMode : ''} ${checkIfSelected(item) ? styles.selected : ''}`}
+							use:motion
+						>
 						{#if isSelectionMode}
 							<div class={styles.selectionCheckbox}>
 								<SwitchMini
@@ -145,6 +159,7 @@
 							onClick={() => handleItemClick(item, new MouseEvent('click') as any)}
 						/>
 					</div>
+					</Motion>
 				{/each}
 			{/if}
 		</div>
