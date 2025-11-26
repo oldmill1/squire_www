@@ -1,6 +1,5 @@
 <script lang="ts">
 	import styles from './Modal.module.scss';
-	import NeumorphicButton from './NeumorphicButton.svelte';
 
 	export let content: any = null;
 	export let isOpen: boolean = false;
@@ -37,8 +36,8 @@
 		class={`${styles['modal-backdrop']} ${dark ? styles['dark'] : ''}`}
 		role="button"
 		tabindex="-1"
-		on:click={handleBackdropClick}
-		on:keydown={handleBackdropKeydown}
+		onclick={handleBackdropClick}
+		onkeydown={handleBackdropKeydown}
 	>
 		<div
 			class={`${styles['modal-content']} ${dark ? styles['dark'] : ''}`}
@@ -46,19 +45,20 @@
 			aria-modal="true"
 			aria-labelledby="modal-title"
 			tabindex="0"
-			on:click={handleModalClick}
-			on:keydown={handleModalKeydown}
+			onclick={handleModalClick}
+			onkeydown={handleModalKeydown}
 		>
 			{@render content?.()}
 			
 			{#if buttons.length > 0}
 				<div class={styles['modal-buttons']}>
 					{#each buttons as button}
-						<NeumorphicButton 
-							text={button.text}
-							onClick={() => handleButtonClick(button.callback)}
-							primary={button.primary || false}
-						/>
+						<button 
+							class={`${styles['modal-button']} ${button.primary ? styles['primary'] : ''} ${dark ? styles['dark'] : ''}`}
+							onclick={() => handleButtonClick(button.callback)}
+						>
+							{button.text}
+						</button>
 					{/each}
 				</div>
 			{/if}

@@ -5,6 +5,7 @@
 	export let text: string = '';
 	export let onClick: () => void = () => {};
 	export let primary: boolean = false;
+	export let dark: boolean = false;
 	export let isHovered: boolean = false;
 
 	// SVG compatibility wrapper
@@ -27,14 +28,14 @@
 	transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
 >
 	<button 
-		class={`${styles['neumorphic-button']} ${primary ? styles['primary'] : ''}`}
+		class={`${styles['neumorphic-button']} ${primary ? styles['primary'] : ''} ${dark ? styles['dark'] : ''}`}
 		use:motion
 		on:click={onClick}
 		on:mouseenter={() => isHovered = true}
 		on:mouseleave={() => isHovered = false}
 	>
 		<!-- Inner content area with grid layout -->
-		<div class={styles['neumorphic-content']}>
+		<div class={`${styles['neumorphic-content']} ${dark ? styles['dark'] : ''}`}>
 			<!-- Text area (centered) -->
 			<Motion 
 				let:motion
@@ -45,7 +46,7 @@
 				}}
 				transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
 			>
-				<div class={styles['neumorphic-text']} use:motion>
+				<div class={`${styles['neumorphic-text']} ${dark ? styles['dark'] : ''}`} use:motion>
 					{text}
 				</div>
 			</Motion>

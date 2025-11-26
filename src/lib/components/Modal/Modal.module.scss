@@ -27,8 +27,8 @@
 }
 
 .modal-content.dark {
-	background: #f4f5f6;
-	color: #333333;
+	background: #2d2d2d;
+	color: #ffffff;
 }
 
 .modal-buttons {
@@ -42,45 +42,117 @@
 
 
 .modal-button {
-	padding: 10px 20px;
-	border-radius: 6px;
-	border: none;
-	font-size: 14px;
-	font-weight: 500;
+	padding: 8px 16px;
+	border-radius: 20px;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	font-size: 13px;
+	font-weight: 600;
 	cursor: pointer;
-	transition: all 0.2s ease;
+	transition: all 0.15s ease;
+	background: linear-gradient(to bottom, 
+		rgba(255, 255, 255, 0.9) 0%,
+		rgba(240, 240, 240, 0.8) 50%,
+		rgba(220, 220, 220, 0.7) 100%
+	);
+	color: #333;
+	box-shadow: 
+		0 2px 4px rgba(0, 0, 0, 0.1),
+		inset 0 1px 0 rgba(255, 255, 255, 0.8),
+		inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+	text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 .modal-button:hover {
+	background: linear-gradient(to bottom, 
+		rgba(255, 255, 255, 0.95) 0%,
+		rgba(245, 245, 245, 0.85) 50%,
+		rgba(230, 230, 230, 0.75) 100%
+	);
+	box-shadow: 
+		0 3px 6px rgba(0, 0, 0, 0.15),
+		inset 0 1px 0 rgba(255, 255, 255, 0.9),
+		inset 0 -1px 0 rgba(0, 0, 0, 0.1);
 	transform: translateY(-1px);
+}
+
+.modal-button:active {
+	background: linear-gradient(to bottom, 
+		rgba(230, 230, 230, 0.9) 0%,
+		rgba(220, 220, 220, 0.8) 50%,
+		rgba(200, 200, 200, 0.7) 100%
+	);
+	box-shadow: 
+		0 1px 2px rgba(0, 0, 0, 0.1),
+		inset 0 1px 2px rgba(0, 0, 0, 0.1);
+	transform: translateY(0);
 }
 
 .modal-button.primary {
-	background: #8b5cf6;
+	background: linear-gradient(to bottom, 
+		rgba(100, 150, 255, 0.9) 0%,
+		rgba(60, 120, 255, 0.8) 50%,
+		rgba(40, 100, 255, 0.7) 100%
+	);
 	color: white;
+	border-color: rgba(0, 50, 200, 0.3);
+	text-shadow: 0 -1px 1px rgba(0, 50, 200, 0.5);
 }
 
 .modal-button.primary:hover {
-	background: #7c3aed;
+	background: linear-gradient(to bottom, 
+		rgba(120, 170, 255, 0.95) 0%,
+		rgba(80, 140, 255, 0.85) 50%,
+		rgba(60, 120, 255, 0.75) 100%
+	);
+}
+
+.modal-button.primary:active {
+	background: linear-gradient(to bottom, 
+		rgba(60, 120, 255, 0.9) 0%,
+		rgba(40, 100, 255, 0.8) 50%,
+		rgba(20, 80, 255, 0.7) 100%
+	);
 }
 
 .modal-button.dark {
-	background: #4a4a4a;
-	color: white;
+	background: linear-gradient(to bottom, 
+		rgba(60, 60, 60, 0.9) 0%,
+		rgba(50, 50, 50, 0.8) 50%,
+		rgba(40, 40, 40, 0.7) 100%
+	);
+	color: #fff;
+	border-color: rgba(255, 255, 255, 0.2);
+	text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.5);
 }
 
 .modal-button.dark:hover {
-	background: #5a5a5a;
-	transform: translateY(-1px);
+	background: linear-gradient(to bottom, 
+		rgba(80, 80, 80, 0.95) 0%,
+		rgba(70, 70, 70, 0.85) 50%,
+		rgba(60, 60, 60, 0.75) 100%
+	);
+}
+
+.modal-button.dark:active {
+	background: linear-gradient(to bottom, 
+		rgba(50, 50, 50, 0.9) 0%,
+		rgba(40, 40, 40, 0.8) 50%,
+		rgba(30, 30, 30, 0.7) 100%
+	);
 }
 
 .modal-button.primary.dark {
-	background: #8b5cf6;
+	background: linear-gradient(to bottom, 
+		rgba(100, 150, 255, 0.9) 0%,
+		rgba(60, 120, 255, 0.8) 50%,
+		rgba(40, 100, 255, 0.7) 100%
+	);
 	color: white;
-}
-
-.modal-button.primary.dark:hover {
-	background: #7c3aed;
+	border-color: rgba(150, 200, 255, 0.3);
+	text-shadow: 0 -1px 1px rgba(0, 50, 200, 0.5);
 }
 
 @keyframes modalFadeIn {
@@ -92,77 +164,4 @@
 		opacity: 1;
 		transform: scale(1) translateY(0);
 	}
-}
-
-/* Neumorphic Button Styles */
-.neumorphic-button {
-	position: relative;
-	padding: 0;
-	width: 80px;
-	height: 80px;
-	border: 2px solid #888888;
-	outline: none;
-	background: #f4f5f6;
-	border-radius: 8px;
-	box-shadow:
-		-2px -5px 8px #ffffff,
-		-2px -3px 5px #ffffff,
-		-5px 0px 8px #ffffff,
-		2px 5px 6px rgba(0, 0, 0, 0.1);
-	cursor: pointer;
-}
-
-.neumorphic-button.primary {
-	border-color: #888888;
-	background: #f4f5f6;
-}
-
-.neumorphic-content {
-	position: relative;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	padding: 8px;
-	width: 100%;
-	height: 100%;
-	box-shadow:
-		inset 0px -2px 0px #dddddd,
-		0px -2px 0px #f4f5f6;
-	border-radius: 8px;
-	z-index: 1;
-}
-
-.neumorphic-button.primary .neumorphic-content {
-	box-shadow:
-		inset 0px -2px 0px #dddddd,
-		0px -2px 0px #f4f5f6;
-}
-
-.neumorphic-icon {
-	position: relative;
-	display: flex;
-	transform: translate3d(0px, -2px, 0px);
-	grid-column: 4;
-	align-self: start;
-	justify-self: end;
-	width: 16px;
-	height: 16px;
-}
-
-.neumorphic-text {
-	position: relative;
-	transform: translate3d(0px, -2px, 0px);
-	margin: 0;
-	text-align: center;
-	font-size: 16px;
-	background-color: #888888;
-	color: transparent;
-	text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
-	-webkit-background-clip: text;
-	background-clip: text;
-	transition: 0.3s ease-in-out;
-}
-
-.neumorphic-button.primary .neumorphic-text {
-	background-color: #888888;
 }
