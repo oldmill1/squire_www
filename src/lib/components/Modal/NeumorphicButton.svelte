@@ -22,7 +22,7 @@
 	}}
 	whileTap={{ 
 		scale: 0.95,
-		boxShadow: "none"
+		boxShadow: "0 0 0px transparent"
 	}}
 	transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
 >

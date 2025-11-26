@@ -47,13 +47,13 @@
                     let:motion
                     animate={checked ? {
                         x: 22,
-                        backgroundColor: "white"
+                        backgroundColor: "#ffffff"
                     } : {
                         x: 0,
                         backgroundColor: "#e3e3e3"
                     }}
                     whileHover={{
-                        backgroundColor: checked ? "white" : "#f0f0f0"
+                        backgroundColor: checked ? "#ffffff" : "#f0f0f0"
                     }}
                     transition={{ 
                         duration: 0.3, 

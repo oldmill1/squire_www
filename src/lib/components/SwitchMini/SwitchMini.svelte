@@ -36,7 +36,7 @@
 			whileHover={{ scale: disabled ? 1 : 1.05 }}
 			whileTap={{ scale: disabled ? 1 : 0.95 }}
 			animate={{
-				boxShadow: checked ? "0 0 1px #59d102" : "none"
+				boxShadow: checked ? "0 0 1px #59d102" : "0 0 0px transparent"
 			}}
 			transition={{ duration: 0.4, ease: [0.215, 0.610, 0.355, 1] }}
 		>
