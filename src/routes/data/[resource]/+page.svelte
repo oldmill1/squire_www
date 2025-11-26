@@ -6,6 +6,7 @@
   import { List } from '$lib/models/List';
   import { DTable } from '$lib/components/data/DTable';
   import { AquaButton } from '$lib/components/Buttons/AquaButton';
+  import Modal from '$lib/components/Modal/Modal.svelte';
   import styles from './+page.module.scss';
   import type { PageData } from './$types';
 
@@ -17,9 +18,10 @@
 
   let dbService: DatabaseService;
   let listService: ListService;
-  let items: (Document | List)[] = [];
+  let items: (Document | List)[] = $state([]);
   let loading = $state(true);
   let error = $state<string | null>(null);
+  let showBulkAddModal = $state(false);
 
   onMount(async () => {
     try {
@@ -60,9 +62,40 @@
     // TODO: Implement empty table functionality
   }
   
-  function handleBulkAddDocuments() {
-    console.log('Bulk Add Documents clicked');
-    // TODO: Implement bulk add documents functionality
+  async function handleBulkAddDocuments() {
+    showBulkAddModal = true;
+  }
+  
+  async function confirmBulkAddDocuments() {
+    showBulkAddModal = false;
+    try {
+      // Generate random documents
+      const newDocuments = generateRandomDocuments(10);
+      
+      // Initialize DocumentService
+      const { DocumentService } = await import('$lib/services/DocumentService');
+      const documentService = new DocumentService('squiredb');
+      
+      // Save all documents to database
+      for (const doc of newDocuments) {
+        await documentService.create(doc);
+      }
+      
+      // Refresh the items list
+      const allDocs = await documentService.list();
+      items = allDocs
+        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+        .slice(0, 10);
+      
+      console.log('Successfully added 10 random documents to database');
+    } catch (error) {
+      console.error('Failed to bulk add documents:', error);
+      error = 'Failed to add documents to database';
+    }
+  }
+  
+  function cancelBulkAddDocuments() {
+    showBulkAddModal = false;
   }
   
   function generateRandomDocuments(count: number = 10): Document[] {
@@ -157,4 +190,18 @@
   {loading}
   {error}
   empty={items.length === 0 && !loading}
+/>
+
+<Modal
+  isOpen={showBulkAddModal}
+  dark={true}
+  content={() => `
+    <h2 style="color: #e0e0e0; margin-bottom: 1rem;">Confirm Bulk Add</h2>
+    <p style="color: #b0b0b0; margin-bottom: 0.5rem;">Are you sure you want to add 10 random Hitchhiker's Guide themed documents?</p>
+    <p style="color: #b0b0b0; font-size: 0.9rem;">These documents will be saved to the database and appear in your documents list.</p>
+  `}
+  buttons={[
+    { text: 'Cancel', callback: cancelBulkAddDocuments, primary: false },
+    { text: 'Add Documents', callback: confirmBulkAddDocuments, primary: true }
+  ]}
 />
