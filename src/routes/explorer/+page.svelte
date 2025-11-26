@@ -87,25 +87,25 @@
 		}
 
 		try {
-			// Delete each selected item (could be document or list)
-			const deletePromises = selectedDocs.map(async (doc) => {
-				// Check if it's a document by trying to delete with document service
-				if (documentService) {
-					try {
-						await documentService.delete(doc.id);
-						return;
-					} catch (error) {
-						// Not a document, try list service
-					}
-				}
-				
-				// Try deleting as list
-				if (listService) {
-					await listService.delete(doc.id);
-				}
-			});
-
-			await Promise.all(deletePromises);
+			// Separate documents and lists by their icon/type
+			const documentsToDelete = selectedDocs.filter(doc => doc.icon === '/icons/new.png');
+			const listsToDelete = selectedDocs.filter(doc => doc.icon === '/icons/folder.png');
+			
+			// Delete documents
+			if (documentsToDelete.length > 0 && documentService) {
+				const documentDeletePromises = documentsToDelete.map(async (doc) => {
+					await documentService.delete(doc.id);
+				});
+				await Promise.all(documentDeletePromises);
+			}
+			
+			// Delete lists
+			if (listsToDelete.length > 0 && listService) {
+				const listDeletePromises = listsToDelete.map(async (list) => {
+					await listService.delete(list.id);
+				});
+				await Promise.all(listDeletePromises);
+			}
 			
 			// Refresh both lists and documents
 			const allLists = await listService.list();
