@@ -22,6 +22,7 @@
   let loading = $state(true);
   let error = $state<string | null>(null);
   let showBulkAddModal = $state(false);
+  let selectedItems = $state(new Set<string>());
 
   onMount(async () => {
     try {
@@ -58,8 +59,13 @@
   });
   
   function handleEmptyTable() {
-    console.log('Empty Table clicked');
-    // TODO: Implement empty table functionality
+    console.log('Delete clicked for selected items:', Array.from(selectedItems));
+    // TODO: Implement delete functionality for selected documents
+  }
+  
+  function handleSelectionChange(selectedIds: Set<string>) {
+    selectedItems = selectedIds;
+    console.log('Parent component received selection change:', Array.from(selectedIds));
   }
   
   async function handleBulkAddDocuments() {
@@ -168,11 +174,11 @@
 {#if data.resource === 'documents'}
 <div class={styles['button-row']}>
   <AquaButton 
-    text="Empty Table" 
+    text="Delete" 
     onClick={handleEmptyTable} 
     primary={false}
     dark={true}
-    disabled={false}
+    disabled={selectedItems.size === 0}
     type="button"
   />
   <button 
@@ -190,6 +196,7 @@
   {loading}
   {error}
   empty={items.length === 0 && !loading}
+  onSelectionChange={handleSelectionChange}
 />
 
 <Modal

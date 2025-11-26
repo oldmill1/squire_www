@@ -11,9 +11,10 @@
 		loading?: boolean;
 		error?: string | null;
 		empty?: boolean;
+		onSelectionChange?: (selectedIds: Set<string>) => void;
 	}
 
-	let { items, resourceType, loading = false, error = null, empty = false }: Props = $props();
+	let { items, resourceType, loading = false, error = null, empty = false, onSelectionChange }: Props = $props();
 
 	// Track selected items
 	let selectedItems = $state(new Set<string>());
@@ -21,11 +22,20 @@
 	function toggleItemSelection(itemId: string) {
 		if (selectedItems.has(itemId)) {
 			selectedItems.delete(itemId);
+			console.log(`Deselected item: ${itemId}`);
 		} else {
 			selectedItems.add(itemId);
+			console.log(`Selected item: ${itemId}`);
 		}
 		// Trigger reactivity
 		selectedItems = new Set(selectedItems);
+		console.log('Current selected items:', Array.from(selectedItems));
+		console.log('Total selected count:', selectedItems.size);
+		
+		// Notify parent of selection change
+		if (onSelectionChange) {
+			onSelectionChange(new Set(selectedItems));
+		}
 	}
 
 	function toggleSelectAll() {
@@ -33,6 +43,12 @@
 			selectedItems.clear();
 		} else {
 			selectedItems = new Set(items.map(item => item.id));
+		}
+		console.log('Current selected items after select all:', Array.from(selectedItems));
+		
+		// Notify parent of selection change
+		if (onSelectionChange) {
+			onSelectionChange(new Set(selectedItems));
 		}
 	}
 
