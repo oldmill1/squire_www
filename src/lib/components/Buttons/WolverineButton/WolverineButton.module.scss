@@ -10,6 +10,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: visible;
+  margin: 40px;
 }
 
 .btn {
@@ -89,8 +91,9 @@
 
   fill: none;
   stroke: var(--corner-color);
+  stroke-width: 1;
   transition: filter var(--duration) var(--timing-function);
-  z-index: 0;
+  z-index: 1;
   pointer-events: none;
 }
 
