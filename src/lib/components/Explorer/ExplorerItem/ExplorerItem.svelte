@@ -1,10 +1,9 @@
 <script lang="ts">
-	import styles from './ExplorerItem.module.scss';
-	import SwitchMini from '../../SwitchMini/SwitchMini.svelte';
-	import { Motion } from 'svelte-motion';
+	import { selectedDocuments } from '$lib/stores/selectedDocuments';
 	import { onDestroy } from 'svelte';
-	import { selectedDocuments, type Document } from '$lib/stores/selectedDocuments';
-	import { selectedListItems, type ListItem } from '$lib/stores/selectedListItems';
+	import { Motion } from 'svelte-motion';
+	import SwitchMini from '../../SwitchMini/SwitchMini.svelte';
+	import styles from './ExplorerItem.module.scss';
 
 	interface Props {
 		item: any;
@@ -20,10 +19,23 @@
 
 	// Track global selection state for documents
 	let globallySelected = $state(false);
+	
+	// Track editing state for folders
+	let isEditing = $state(false);
+	let editingValue = $state('');
 
 	// Subscribe to store updates and check if this item is selected
 	const unsubscribeSelection = selectedDocuments.subscribe(state => {
 		globallySelected = state.documents.some(doc => doc.id === item.id);
+		
+		// Enable editing for folders when selected
+		if (globallySelected && item.icon === '/icons/folder.png') {
+			isEditing = true;
+			editingValue = item.name;
+		} else {
+			isEditing = false;
+			editingValue = '';
+		}
 	});
 
 	function handleClick(event: MouseEvent) {
@@ -66,6 +78,23 @@
 			handleClick(syntheticEvent);
 		}
 	}
+	
+	function handleInputKeydown(event: KeyboardEvent) {
+		if (event.key === 'Enter') {
+			event.preventDefault();
+			// TODO: Save the edited name
+			console.log('Folder name edited to:', editingValue);
+		} else if (event.key === 'Escape') {
+			event.preventDefault();
+			// Reset to original name
+			editingValue = item.name;
+		}
+	}
+	
+	function handleInputBlur() {
+		// TODO: Save the edited name
+		console.log('Folder name edited to:', editingValue);
+	}
 
 	// Cleanup on component destroy
 	onDestroy(() => {
@@ -101,6 +130,17 @@
 			</div>
 		{/if}
 		<img src={item.icon} alt={item.name} class={styles.icon} />
-		<span class={styles.label}>{item.name}</span>
+		{#if isEditing && item.icon === '/icons/folder.png'}
+			<input 
+				type="text" 
+				bind:value={editingValue}
+				class={styles.label}
+				onkeydown={handleInputKeydown}
+				onblur={handleInputBlur}
+				onclick={(e: MouseEvent) => e.stopPropagation()}
+			/>
+		{:else}
+			<span class={styles.label}>{item.name}</span>
+		{/if}
 	</div>
 </Motion>
