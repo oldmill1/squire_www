@@ -346,3 +346,189 @@ function applyMotion(node: any, motionAction: any) {
 ```
 
 This guide covers all practical patterns learned from implementing the WolverineButton and Switch components with svelte-motion, including state-driven animations, CSS-to-Motion conversion techniques, and complex nested motion patterns.
+
+## Latest Learnings: WolverineButton Deep Dive (Nov 2025)
+
+### Critical Issue: Initial Load Animation Problem
+
+**Problem**: Corner arcs were animating from origin to their default positions on page load, creating a jarring visual effect.
+
+**Root Cause**: Motion components with `animate` props automatically animate from initial state (0,0) to the specified values.
+
+**Solution**: Use `initial={false}` prop to prevent initial animation:
+```svelte
+<Motion 
+    let:motion
+    initial={false}  // Prevents initial load animation
+    animate={isHovered ? {
+        x: -80,
+        y: -40,
+        rotate: 180
+    } : {
+        x: -70,  // Start position (no animation)
+        y: -30,
+        rotate: 180
+    }}
+>
+    <svg use:applyMotion={motion}>
+        <!-- SVG content appears immediately at position -->
+    </svg>
+</Motion>
+```
+
+### Positioning Strategy: Rectangle vs Square
+
+**Challenge**: Default positioning created square-like corner arrangement, but button needed rectangular frame.
+
+**Solution**: Asymmetric x/y values for rectangular proportions:
+```svelte
+// Default state: Wider rectangle
+animate={isHovered ? {
+    x: -80,  // Wider horizontal
+    y: -40,  // Shorter vertical
+} : {
+    x: -70,  // Default wider
+    y: -30,  // Default shorter
+}}
+
+// This creates: 140px × 60px rectangle instead of 96px × 96px square
+```
+
+### Animation State Coordination
+
+**Three-State Pattern**: Default → Hover → Active
+```svelte
+animate={isHovered ? {
+    x: -80,   // Hover: furthest out
+    y: -40
+} : {
+    x: -70,   // Default: medium distance
+    y: -30
+}}
+whileTap={{ 
+    x: -40,   // Active: closest in
+    y: -20
+}}
+```
+
+### CSS vs Motion Hybrid Approach
+
+**Learning**: Sometimes pure CSS is better for certain effects:
+- **Motion**: Best for complex coordinate animations, state-driven movements
+- **CSS**: Better for simple hover effects, filters, color changes
+
+**Hybrid Pattern**:
+```svelte
+<!-- Motion for complex positioning -->
+<Motion let:motion initial={false} animate={{ x: -70, y: -30 }}>
+    <svg use:applyMotion={motion}>
+        <!-- SVG positioned by Motion -->
+    </svg>
+</Motion>
+
+<!-- CSS for simple visual effects -->
+<style>
+.btn-container:hover {
+    --corner-color: #475569;  /* Color change via CSS */
+    .btn-corner {
+        filter: none;          /* Filter effect via CSS */
+    }
+}
+</style>
+```
+
+### Debugging Invisible Elements
+
+**Problem**: Corner arcs not displaying despite correct code.
+
+**Debugging Steps**:
+1. **Check z-index**: Ensure elements aren't behind others
+2. **Check overflow**: Add `overflow: visible` to container
+3. **Check stroke properties**: Ensure `stroke-width` is set
+4. **Check positioning**: Verify coordinates aren't positioning off-screen
+
+**Solution Pattern**:
+```scss
+.btn-corner {
+  z-index: 1;           // Bring to front
+  stroke-width: 1;      // Make visible
+}
+
+.btn-container {
+  overflow: visible;    // Don't clip corners
+  margin: 40px;         // Ensure space
+}
+```
+
+### Performance Optimization
+
+**Learning**: Motion vs CSS performance trade-offs:
+- **Motion**: Better for complex, coordinated animations
+- **CSS**: Better for simple, frequent micro-interactions
+- **Hybrid**: Use Motion for positioning, CSS for visual effects
+
+**Optimized Pattern**:
+```svelte
+<!-- Motion handles expensive coordinate calculations -->
+<Motion let:motion initial={false} animate={{ x: -70, y: -30 }}>
+    <svg use:applyMotion={motion} class="btn-corner">
+        <!-- SVG -->
+    </svg>
+</Motion>
+
+<!-- CSS handles cheap visual changes -->
+<style>
+.btn-corner {
+    transition: filter 0.25s ease;  /* CSS for simple effects */
+}
+</style>
+```
+
+### Key Takeaways
+
+1. **Always use `initial={false}`** when you want elements to appear at their final position immediately
+2. **Asymmetric positioning** creates better visual proportions for rectangular layouts
+3. **Hybrid CSS/Motion approach** often performs better than Motion-only
+4. **Debug systematically**: z-index → overflow → stroke properties → positioning
+5. **Coordinate systems**: Motion uses relative positioning from element center, CSS uses absolute positioning from container edges
+
+### Final Recommended Pattern
+
+```svelte
+<script>
+import { Motion } from 'svelte-motion';
+
+function applyMotion(node: any, motionAction: any) {
+    return motionAction(node);
+}
+
+let isHovered = false;
+</script>
+
+<!-- Optimized corner animation -->
+<Motion 
+    let:motion
+    isSVG={true}
+    initial={false}
+    animate={isHovered ? {
+        x: -80, y: -40, rotate: 180  // Hover state
+    } : {
+        x: -70, y: -30, rotate: 180  // Default (no animation)
+    }}
+    whileTap={{ 
+        x: -40, y: -20, rotate: 180  // Active state
+    }}
+    transition={{ duration: 0.25, ease: [0, 0, 0, 2.5] }}
+>
+    <svg use:applyMotion={motion}>
+        <!-- SVG content -->
+    </svg>
+</Motion>
+```
+
+This pattern provides:
+- ✅ No initial load animation
+- ✅ Rectangular proportions
+- ✅ Smooth state transitions
+- ✅ Optimal performance
+- ✅ Maintainable code structure
