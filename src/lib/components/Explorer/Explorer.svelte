@@ -1,16 +1,13 @@
 <script lang="ts">
-	import styles from './Explorer.module.scss';
-	import IconItem from '../global/IconItem.svelte';
-	import Button from '../global/Button.svelte';
-	import Switch from '../Buttons/Switch/Switch.svelte';
-	import SwitchMini from '../SwitchMini/SwitchMini.svelte';
-	import { Motion } from 'svelte-motion';
-	import Modal from '../Modal/Modal.svelte';
-	import type { Snippet } from 'svelte';
 	import { selectedDocuments } from '$lib/stores/selectedDocuments';
-	import type { ExplorerData } from './types';
+	import type { Snippet } from 'svelte';
+	import { Motion } from 'svelte-motion';
+	import Switch from '../Buttons/Switch/Switch.svelte';
 	import { ExplorerNav } from '../ExplorerNav';
+	import Modal from '../Modal/Modal.svelte';
+	import styles from './Explorer.module.scss';
 	import FileItem from './FileItem/FileItem.svelte';
+	import type { ExplorerData } from './types';
 
 	interface Props {
 		children?: Snippet;

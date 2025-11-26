@@ -1,6 +1,6 @@
 <script lang="ts">
 	import styles from '../Explorer.module.scss';
-	import IconItem from '../../global/IconItem.svelte';
+	import IconItem from '../IconItem/IconItem.svelte';
 	import SwitchMini from '../../SwitchMini/SwitchMini.svelte';
 	import { Motion } from 'svelte-motion';
 

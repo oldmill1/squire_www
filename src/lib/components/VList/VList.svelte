@@ -1,12 +1,10 @@
 <script lang="ts" generics="T">
-	import { fade } from 'svelte/transition';
-	import { selectedDocuments } from '$lib/stores/selectedDocuments';
-	import WolverineButton from '$lib/components/Buttons/WolverineButton/WolverineButton.svelte';
-	import Button from '$lib/components/global/Button.svelte';
 	import Switch from '$lib/components/Buttons/Switch/Switch.svelte';
 	import Modal from '$lib/components/Modal/Modal.svelte';
-	import { Motion } from 'svelte-motion';
 	import { DocumentService } from '$lib/services/DocumentService';
+	import { selectedDocuments } from '$lib/stores/selectedDocuments';
+	import { Motion } from 'svelte-motion';
+	import { fade } from 'svelte/transition';
 	import styles from './VList.module.scss';
 
 	interface Props {
