@@ -156,3 +156,30 @@
 		text-align: center;
 	}
 }
+
+.selectionSwitch {
+	position: absolute;
+	bottom: 20px;
+	left: 50%;
+	transform: translateX(-50%);
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	background: rgba(0, 0, 0, 0.3);
+	padding: 8px 16px;
+	border-radius: 20px;
+	backdrop-filter: blur(10px);
+	z-index: 10;
+}
+
+.switchLabel {
+	color: #ffffff;
+	font-size: 14px;
+	font-weight: 500;
+	opacity: 0.9;
+	transition: opacity 0.2s ease;
+
+	&:hover {
+		opacity: 1;
+	}
+}

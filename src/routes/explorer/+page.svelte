@@ -18,6 +18,7 @@
 	let lists = $state<List[]>([]);
 	let documents = $state<Document[]>([]);
 	let hasLoaded = $state(false);
+	let isSelectionMode = $state(false);
 
 	onMount(async () => {
 		try {
@@ -89,13 +90,23 @@
 	function handleFavorites() {
 		console.log('Favorites clicked');
 	}
+
+	function handleSelectionToggle(enabled: boolean) {
+		console.log('Selection mode:', enabled);
+		isSelectionMode = enabled;
+	}
 </script>
 
 <MenuBar title="Explorer" />
 
 <div class="explorer-container">
 	<!-- Using the new standardized data interface -->
-	<Explorer data={explorerData} />
+	<Explorer 
+		data={explorerData} 
+		{isSelectionMode}
+		showSelectionSwitch={true}
+		onSelectionToggle={handleSelectionToggle}
+	/>
 
 	{#if lists.length > 0 || documents.length > 0}
 		<Dock
