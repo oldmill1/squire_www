@@ -10,8 +10,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: visible;
-  margin: 40px;
 }
 
 .btn {
@@ -91,89 +89,41 @@
 
   fill: none;
   stroke: var(--corner-color);
-  stroke-width: 1;
   transition: filter var(--duration) var(--timing-function);
-  z-index: 1;
+  z-index: 0;
   pointer-events: none;
 }
 
 /* CSS Hover states for effects svelte-motion can't handle */
-.btn-container:hover .btn {
-  filter: drop-shadow(0 8px 8px #0002);
+.btn-container:has(.btn:hover) {
+  .btn {
+    filter: drop-shadow(0 8px 8px #0002);
+  }
+  .btn-drawer {
+    filter: blur(0px);
+  }
+  .btn-text {
+    filter: drop-shadow(0 1px 0 #fff6) drop-shadow(0 -1px 0 #0006);
+    color: #0008;
+  }
+  --corner-color: #475569;
+  .btn-corner {
+    filter: none;
+  }
 }
 
-.btn-container:hover .btn-drawer {
-  filter: blur(0px);
-}
-
-.btn-container:hover .btn-text {
-  filter: drop-shadow(0 1px 0 #fff6) drop-shadow(0 -1px 0 #0006);
-  color: #0008;
-}
-
-.btn-container:hover {
-  --corner-color: #456569;
-}
-
-.btn-container:hover .btn-corner {
-  filter: none;
-}
-
-.btn-container:hover .btn-corner:nth-of-type(1) {
-  top: -36px !important;
-  left: -36px !important;
-}
-
-.btn-container:hover .btn-corner:nth-of-type(2) {
-  top: -36px !important;
-  right: -36px !important;
-}
-
-.btn-container:hover .btn-corner:nth-of-type(3) {
-  bottom: -36px !important;
-  right: -36px !important;
-}
-
-.btn-container:hover .btn-corner:nth-of-type(4) {
-  bottom: -36px !important;
-  left: -36px !important;
-}
-
-.btn-container:active .btn {
-  filter: drop-shadow(0 6px 4px #0002);
-}
-
-.btn-container:active .btn-text {
-  filter: drop-shadow(0 1px 0 #fff6) drop-shadow(0 -1px 0 #0006);
-  color: #000a;
-}
-
-.btn-container:active {
+.btn-container:has(.btn:active) {
+  .btn {
+    filter: drop-shadow(0 6px 4px #0002);
+  }
+  .btn-text {
+    filter: drop-shadow(0 1px 0 #fff6) drop-shadow(0 -1px 0 #0006);
+    color: #000a;
+  }
   --corner-color: #334155;
-}
-
-.btn-container:active .btn-corner {
-  filter: none;
-}
-
-.btn-container:active .btn-corner:nth-of-type(1) {
-  top: -12px !important;
-  left: -12px !important;
-}
-
-.btn-container:active .btn-corner:nth-of-type(2) {
-  top: -12px !important;
-  right: -12px !important;
-}
-
-.btn-container:active .btn-corner:nth-of-type(3) {
-  bottom: -12px !important;
-  right: -12px !important;
-}
-
-.btn-container:active .btn-corner:nth-of-type(4) {
-  bottom: -12px !important;
-  left: -12px !important;
+  .btn-corner {
+    filter: none;
+  }
 }
 
 @keyframes hue-anim {
