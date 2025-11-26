@@ -6,7 +6,7 @@
 	import { DocumentService } from '$lib/services/DocumentService';
 	import Explorer from '$lib/components/Explorer/Explorer.svelte';
 	import Dock, { type DockItem } from '$lib/components/Dock/Dock.svelte';
-	import StatusBar from '$lib/components/StatusBar.svelte';
+	import StatusBar from '$lib/components/Editor/StatusBar.svelte';
 	import MenuBar from '$lib/components/MenuBar/MenuBar.svelte';
 	import type { PageProps } from './$types';
 	import { convertListsToExplorerItems, convertDocumentsToExplorerItems, createExplorerData } from '$lib/components/Explorer/utils';

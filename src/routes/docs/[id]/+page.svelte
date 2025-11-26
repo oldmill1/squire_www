@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Editor from '$lib/components/Editor.svelte';
-	import StatusBar from '$lib/components/StatusBar.svelte';
+	import Editor from '$lib/components/Editor/Editor.svelte';
+	import StatusBar from '$lib/components/Editor/StatusBar.svelte';
 	import MenuBar from '$lib/components/MenuBar/MenuBar.svelte';
 	import WidgetArea from '$lib/components/widgetsarea/WidgetArea.svelte';
 	import Dock from '$lib/components/Dock/Dock.svelte';
