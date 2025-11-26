@@ -135,7 +135,7 @@
 								<SwitchMini
 									checked={checkIfSelected(item)}
 									onchange={() => toggleItemSelection(item)}
-									onclick={(e) => e.stopPropagation()}
+									onclick={(e: MouseEvent) => e.stopPropagation()}
 								/>
 							</div>
 						{/if}

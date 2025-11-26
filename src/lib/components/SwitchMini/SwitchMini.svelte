@@ -5,11 +5,18 @@
 	export let checked = false;
 	export let disabled = false;
 	export let label = '';
+	export let onchange: () => void = () => {};
+	export let onclick: (e: MouseEvent) => void = () => {};
 	
 	function handleChange() {
 		if (!disabled) {
 			checked = !checked;
+			onchange();
 		}
+	}
+	
+	function handleClick(e: MouseEvent) {
+		onclick(e);
 	}
 </script>
 
@@ -20,6 +27,7 @@
 			{checked} 
 			{disabled}
 			onchange={handleChange}
+			onclick={handleClick}
 			class={styles.switchInput}
 		/>
 		<!-- Animated slider background -->
