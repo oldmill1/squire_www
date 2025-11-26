@@ -5,6 +5,8 @@
   import { Document } from '$lib/models/Document';
   import { List } from '$lib/models/List';
   import { DTable } from '$lib/components/data/DTable';
+  import { AquaButton } from '$lib/components/Buttons/AquaButton';
+  import styles from './+page.module.scss';
   import type { PageData } from './$types';
 
   interface Props {
@@ -52,12 +54,102 @@
       loading = false;
     }
   });
+  
+  function handleEmptyTable() {
+    console.log('Empty Table clicked');
+    // TODO: Implement empty table functionality
+  }
+  
+  function handleBulkAddDocuments() {
+    console.log('Bulk Add Documents clicked');
+    // TODO: Implement bulk add documents functionality
+  }
+  
+  function generateRandomDocuments(count: number = 10): Document[] {
+    const documents: Document[] = [];
+    const now = new Date();
+    const twentyFourHoursAgo = new Date(now.getTime() - (24 * 60 * 60 * 1000));
+    
+    const titles = [
+      'The Answer to Life',
+      'Vogon Poetry Analysis',
+      'Babel Fish Translation Guide',
+      'Pan Galactic Gargle Blaster Recipe',
+      'Earth Destruction Notice',
+      'Infinite Improbability Drive Manual',
+      'Restaurant at the End of Universe Review',
+      'So Long and Thanks for All the Fish',
+      'Mostly Harmless Planet Survey',
+      'Hitchhiker Emergency Protocols',
+      'Towel Usage Guidelines',
+      'Zaphod Beeblebrox Presidency Notes',
+      'Marvin the Paranoid Android Diagnostics',
+      'Deep Thought Computing Requirements',
+      'Magrathean Construction Plans'
+    ];
+    
+    const contents = [
+      'Don\'t panic. The answer is 42, but what is the question?',
+      'Oh freddled gruntbuggly, thy micturations are to me as plurdled gabbleblotchits.',
+      'The Babel fish is small, yellow, and leechlike, and probably the oddest thing in the universe.',
+      'The Pan Galactic Gargle Blaster is like having your brains smashed out with a slice of lemon.',
+      'Hyperspace bypass construction notice: Earth scheduled for demolition to make way for.',
+      'The Infinite Improbability Drive is a wonderful new method of crossing interstellar space.',
+      'The Restaurant at the End of the Universe is one of the most extraordinary ventures.',
+      'So long, and thanks for all the fish. The dolphins knew what was coming.',
+      'Mostly harmless. A rather optimistic but largely accurate description of Earth.',
+      'Always know where your towel is. A towel has immense psychological value.',
+      'Time is an illusion. Lunchtime doubly so.',
+      'Here I am, brain the size of a planet, and they ask me to take you to the bridge.',
+      'I think you ought to know I\'m feeling very depressed.',
+      'The ships hung in the sky in much the same way that bricks don\'t.',
+      'Forty-two. It was the answer to the ultimate question of life, the universe, and everything.'
+    ];
+    
+    for (let i = 0; i < count; i++) {
+      const randomTitle = titles[Math.floor(Math.random() * titles.length)];
+      const randomContent = contents[Math.floor(Math.random() * contents.length)];
+      const randomDate = new Date(
+        twentyFourHoursAgo.getTime() + Math.random() * (now.getTime() - twentyFourHoursAgo.getTime())
+      );
+      
+      // Create document with title and content
+      const doc = new Document(randomTitle, randomContent + ` Additional content for document ${i + 1}.`);
+      
+      // Override the timestamps with random dates from the past 24 hours
+      (doc as any)._createdAt = randomDate;
+      (doc as any)._updatedAt = randomDate;
+      
+      documents.push(doc);
+    }
+    
+    return documents;
+  }
 </script>
 
 <svelte:head>
   <title>{data.resource} - Data - Squire</title>
   <meta name="description" content="Data management page" />
 </svelte:head>
+
+{#if data.resource === 'documents'}
+<div class={styles['button-row']}>
+  <AquaButton 
+    text="Empty Table" 
+    onClick={handleEmptyTable} 
+    primary={false}
+    dark={true}
+    disabled={false}
+    type="button"
+  />
+  <button 
+    class={styles['pastel-blue-button']}
+    onclick={handleBulkAddDocuments}
+  >
+    Bulk Add Documents
+  </button>
+</div>
+{/if}
 
 <DTable 
   {items}
