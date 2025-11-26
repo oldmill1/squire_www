@@ -3,68 +3,55 @@
 	import SwitchMini from '../../SwitchMini/SwitchMini.svelte';
 	import { Motion } from 'svelte-motion';
 	import { onDestroy } from 'svelte';
+	import { selectedDocuments, type Document } from '$lib/stores/selectedDocuments';
 	import { selectedListItems, type ListItem } from '$lib/stores/selectedListItems';
 
 	interface Props {
 		item: any;
 		isSelectionMode?: boolean;
-		isSelected?: boolean;
 		onItemClick?: (item: any, event: MouseEvent) => void;
-		onToggleSelection?: (item: any) => void;
 	}
 
 	let {
 		item,
 		isSelectionMode = false,
-		isSelected = false,
-		onItemClick,
-		onToggleSelection
+		onItemClick
 	}: Props = $props();
 
-	let pressTimer: number | null = null;
-	let isLongPress = false;
+	// Track global selection state for documents
+	let globallySelected = $state(false);
+
+	// Subscribe to store updates and check if this item is selected
+	const unsubscribeSelection = selectedDocuments.subscribe(state => {
+		globallySelected = state.documents.some(doc => doc.id === item.id);
+	});
 
 	function handleClick(event: MouseEvent) {
-		// Don't trigger regular click if it was a long press
-		if (isLongPress) {
-			isLongPress = false;
-			return;
-		}
-		onItemClick?.(item, event);
-	}
-
-	function handleMouseDown(event: MouseEvent) {
-		// Only start long press timer for left click
-		if (event.button === 0) {
-			isLongPress = false;
-			pressTimer = setTimeout(() => {
-				isLongPress = true;
-				// Add item to global selection
-				selectedListItems.toggleItem(item as ListItem);
-			}, 1000); // 1 second long press
+		// Only allow document selection, ignore folders
+		if (isSelectionMode && item.icon !== '/icons/folder.png') {
+			event.preventDefault();
+			toggleItemSelection(item);
+		} else if (!isSelectionMode) {
+			onItemClick?.(item, event);
 		}
 	}
 
-	function handleMouseUp() {
-		if (pressTimer) {
-			clearTimeout(pressTimer);
-			pressTimer = null;
+	function toggleItemSelection(item: any) {
+		console.log('Toggling selection for:', item.name);
+		if (selectedDocuments.isSelected(item.id)) {
+			console.log('Removing document from selection');
+			selectedDocuments.removeDocument(item.id);
+		} else {
+			console.log('Adding document to selection');
+			selectedDocuments.addDocument(item);
 		}
-	}
-
-	function handleMouseLeave() {
-		if (pressTimer) {
-			clearTimeout(pressTimer);
-			pressTimer = null;
-		}
-	}
-
-	function handleToggleSelection() {
-		onToggleSelection?.(item);
 	}
 
 	function handleSwitchChange() {
-		onToggleSelection?.(item);
+		// Only allow document selection
+		if (item.icon !== '/icons/folder.png') {
+			toggleItemSelection(item);
+		}
 	}
 
 	function handleKeydown(event: KeyboardEvent) {
@@ -80,19 +67,8 @@
 		}
 	}
 
-	// Track global selection state
-	let globallySelected = $state(false);
-
-	// Subscribe to store updates and check if this item is selected
-	const unsubscribeSelection = selectedListItems.subscribe(state => {
-		globallySelected = state.items.some(listItem => listItem.id === item.id);
-	});
-
-	// Cleanup timer on component destroy
+	// Cleanup on component destroy
 	onDestroy(() => {
-		if (pressTimer) {
-			clearTimeout(pressTimer);
-		}
 		unsubscribeSelection();
 	});
 </script>
@@ -108,20 +84,17 @@
 	transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
 >
 	<div 
-		class={`${styles.explorerItem} ${isSelectionMode ? styles.selectionMode : ''} ${isSelected || globallySelected ? styles.selected : ''}`}
+		class={`${styles.explorerItem} ${isSelectionMode ? styles.selectionMode : ''} ${globallySelected ? styles.selected : ''}`}
 		use:motion
 		role="button"
 		tabindex="0"
 		onclick={handleClick}
-		onmousedown={handleMouseDown}
-		onmouseup={handleMouseUp}
-		onmouseleave={handleMouseLeave}
 		onkeydown={handleKeydown}
 	>
-		{#if isSelectionMode}
+		{#if isSelectionMode && item.icon !== '/icons/folder.png'}
 			<div class={styles.selectionCheckbox}>
 				<SwitchMini
-					checked={isSelected}
+					checked={globallySelected}
 					onchange={handleSwitchChange}
 					onclick={(e: MouseEvent) => e.stopPropagation()}
 				/>

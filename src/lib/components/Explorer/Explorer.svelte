@@ -106,13 +106,6 @@
 			selectedDocuments.addDocument(item);
 		}
 		onSelectionChange?.();
-		
-		// Log currently selected documents
-		const currentSelection = selectedDocuments.getDocuments();
-		console.log('Currently selected documents:', currentSelection.map(doc => ({
-			id: doc.id,
-			name: (doc as any).name || doc.title || 'Untitled'
-		})));
 	}
 
 	function checkIfSelected(item: any): boolean {
@@ -166,9 +159,7 @@
 					<ExplorerItem
 						item={item}
 						isSelectionMode={isSelectionMode}
-						isSelected={checkIfSelected(item)}
 						onItemClick={handleItemClick}
-						onToggleSelection={toggleItemSelection}
 					/>
 				{/each}
 			{/if}

@@ -30,17 +30,12 @@
 
 			// Load lists
 			const allLists = await listService.list();
+			lists = allLists.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 
-			if (allLists.length === 0) {
-				lists = [];
-				
-				// Fetch all documents when no lists exist
-				const allDocuments = await documentService.list();
-				documents = allDocuments.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-			} else {
-				lists = allLists.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-				documents = [];
-			}
+			// Always load unlisted documents (recent ones not in any list)
+			const allDocuments = await documentService.list();
+			// TODO: Filter out documents that are already in lists when you have that data
+			documents = allDocuments.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 		} catch (error) {
 			console.error('Failed to load lists or documents:', error);
 		} finally {
@@ -62,21 +57,16 @@
 	const explorerData = $derived.by(() => {
 		if (!hasLoaded) return createExplorerData([], 'list', false);
 		
-		if (lists.length === 0) {
-			// Show un-listed documents
-			return createExplorerData(
-				convertDocumentsToExplorerItems(documents, handleDocumentClick),
-				'document',
-				true
-			);
-		} else {
-			// Show lists
-			return createExplorerData(
-				convertListsToExplorerItems(lists, handleListClick),
-				'list',
-				true
-			);
-		}
+		// Combine both lists and documents
+		const listItems = convertListsToExplorerItems(lists, handleListClick);
+		const documentItems = convertDocumentsToExplorerItems(documents, handleDocumentClick);
+		
+		// Show lists first, then unlisted documents
+		return createExplorerData(
+			[...listItems, ...documentItems],
+			'list', // Keep as 'list' type for compatibility
+			true
+		);
 	});
 
 	function handleNewDocument() {
@@ -92,25 +82,39 @@
 	}
 
 	async function handleDeleteSelected(selectedDocs: any[]) {
-		if (!documentService) {
+		if (!documentService && !listService) {
 			return;
 		}
 
 		try {
-			// Delete each selected document
+			// Delete each selected item (could be document or list)
 			const deletePromises = selectedDocs.map(async (doc) => {
-				await documentService.delete(doc.id);
+				// Check if it's a document by trying to delete with document service
+				if (documentService) {
+					try {
+						await documentService.delete(doc.id);
+						return;
+					} catch (error) {
+						// Not a document, try list service
+					}
+				}
+				
+				// Try deleting as list
+				if (listService) {
+					await listService.delete(doc.id);
+				}
 			});
 
 			await Promise.all(deletePromises);
 			
-			// Refresh the documents list if we're showing documents
-			if (lists.length === 0) {
-				const allDocuments = await documentService.list();
-				documents = allDocuments.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-			}
+			// Refresh both lists and documents
+			const allLists = await listService.list();
+			lists = allLists.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+			
+			const allDocuments = await documentService.list();
+			documents = allDocuments.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 		} catch (error) {
-			console.error('Failed to delete documents:', error);
+			console.error('Failed to delete items:', error);
 		}
 	}
 </script>
