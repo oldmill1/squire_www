@@ -28,6 +28,7 @@
 		"vitest": "^4.0.14"
 	},
 	"dependencies": {
+		"micromodal": "^0.6.1",
 		"openai": "^6.9.1"
 	}
 }

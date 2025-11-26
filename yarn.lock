@@ -393,6 +393,11 @@ magic-string@^0.30.11, magic-string@^0.30.17, magic-string@^0.30.21, magic-strin
   dependencies:
     "@jridgewell/sourcemap-codec" "^1.5.5"
 
+micromodal@^0.6.1:
+  version "0.6.1"
+  resolved "https://registry.npmjs.org/micromodal/-/micromodal-0.6.1.tgz"
+  integrity sha512-rw1fOptxQe3XGDm9xil9hBC2ylPb1kKZyYv4FlK54R/7L+KG+D8SQxPL5L8OlEXAhBDHckeoULYxWSYU9rg/RA==
+
 mri@^1.1.0:
   version "1.2.0"
   resolved "https://registry.npmjs.org/mri/-/mri-1.2.0.tgz"

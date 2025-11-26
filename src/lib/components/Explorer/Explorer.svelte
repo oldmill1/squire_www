@@ -120,6 +120,10 @@
 	function checkIfSelected(item: any): boolean {
 		return selectedDocs.some((doc) => doc.id === item.id);
 	}
+
+	async function handleNewFolder() {
+		console.log('New folder clicked');
+	}
 </script>
 
 <div class={styles.container}>
@@ -154,7 +158,7 @@
 						id: 'folder',
 						label: 'New Folder',
 						icon: '📁',
-						onClick: () => console.log('New folder clicked')
+						onClick: handleNewFolder
 					}
 				]}
 			/>
