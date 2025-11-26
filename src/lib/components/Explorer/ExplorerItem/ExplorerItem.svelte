@@ -134,7 +134,7 @@
 			<input 
 				type="text" 
 				bind:value={editingValue}
-				class={styles.label}
+				class={styles.input}
 				onkeydown={handleInputKeydown}
 				onblur={handleInputBlur}
 				onclick={(e: MouseEvent) => e.stopPropagation()}
