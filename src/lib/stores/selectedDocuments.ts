@@ -83,6 +83,15 @@ function createSelectedDocumentsStore() {
 			return count;
 		},
 
+		// Get the currently selected documents
+		getDocuments: () => {
+			let docs: Document[] = [];
+			subscribe((state) => {
+				docs = state.documents;
+			})();
+			return docs;
+		},
+
 		// Set the entire selection
 		setSelection: (documents: Document[]) => {
 			set({

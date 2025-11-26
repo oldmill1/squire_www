@@ -29,7 +29,6 @@
 
 	// Track selected documents from the store
 	let selectedDocs = $state<any[]>([]);
-	let isSelectionEnabled = $state(false);
 
 	// Subscribe to selected documents store
 	$effect(() => {
@@ -41,8 +40,38 @@
 	});
 
 	function handleSelectionToggle() {
-		isSelectionEnabled = !isSelectionEnabled;
-		onSelectionToggle?.(isSelectionEnabled);
+		const newMode = !isSelectionMode;
+		console.log('Selection mode toggled:', newMode ? 'ON' : 'OFF');
+		onSelectionToggle?.(newMode);
+	}
+
+	function handleItemClick(item: any, event: MouseEvent) {
+		if (isSelectionMode) {
+			event.preventDefault();
+			toggleItemSelection(item);
+		} else {
+			item.onClick?.(item, event);
+		}
+	}
+
+	function toggleItemSelection(item: any) {
+		if (selectedDocuments.isSelected(item.id)) {
+			selectedDocuments.removeDocument(item.id);
+		} else {
+			selectedDocuments.addDocument(item);
+		}
+		onSelectionChange?.();
+		
+		// Log currently selected documents
+		const currentSelection = selectedDocuments.getDocuments();
+		console.log('Currently selected documents:', currentSelection.map(doc => ({
+			id: doc.id,
+			name: (doc as any).name || doc.title || 'Untitled'
+		})));
+	}
+
+	function checkIfSelected(item: any): boolean {
+		return selectedDocs.some((doc) => doc.id === item.id);
 	}
 </script>
 
@@ -54,11 +83,21 @@
 			<div class={styles.desktop}>
 			{#if data.hasLoaded}
 				{#each data.items as item (item.id)}
-					<div class={styles.fileItem}>
+					<div class={`${styles.fileItem} ${isSelectionMode ? styles.selectionMode : ''} ${checkIfSelected(item) ? styles.selected : ''}`}>
+						{#if isSelectionMode}
+							<div class={styles.selectionCheckbox}>
+								<input
+									type="checkbox"
+									checked={checkIfSelected(item)}
+									onchange={() => toggleItemSelection(item)}
+									onclick={(e) => e.stopPropagation()}
+								/>
+							</div>
+						{/if}
 						<IconItem 
 							name={item.name} 
 							icon={item.icon} 
-							onClick={() => item.onClick?.(item, new MouseEvent('click') as any)}
+							onClick={() => handleItemClick(item, new MouseEvent('click') as any)}
 						/>
 					</div>
 				{/each}
@@ -69,11 +108,11 @@
 			{#if showSelectionSwitch && data.hasLoaded && data.items.length > 0}
 				<div class={styles.selectionSwitch}>
 					<Switch 
-						bind:checked={isSelectionEnabled} 
+						checked={isSelectionMode} 
 						onchange={handleSelectionToggle}
 					/>
 					<span class={styles.switchLabel}>
-						{isSelectionEnabled ? 'Selection Mode' : 'File Mode'}
+						{isSelectionMode ? 'Selection Mode' : 'File Mode'}
 					</span>
 				</div>
 			{/if}
