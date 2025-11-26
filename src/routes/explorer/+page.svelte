@@ -64,9 +64,9 @@
 		const listItems = convertListsToExplorerItems(lists, handleListClick);
 		const documentItems = convertDocumentsToExplorerItems(documents, handleDocumentClick);
 		
-		// Show lists first, then temporary folders, then unlisted documents
+		// Show temporary folders FIRST, then lists, then unlisted documents
 		return createExplorerData(
-			[...listItems, ...temporaryFolders, ...documentItems],
+			[...temporaryFolders, ...listItems, ...documentItems],
 			'list', // Keep as 'list' type for compatibility
 			true
 		);
@@ -85,7 +85,6 @@
 			icon: '/icons/folder.png',
 			onClick: (item: ExplorerItem, event: MouseEvent) => {
 				// Handle click on temporary folder (optional - could open rename dialog)
-				console.log('Temporary folder clicked:', item);
 			}
 		};
 		
@@ -110,8 +109,6 @@
 			
 			// Clear selection
 			selectedDocuments.removeDocument(tempId);
-			
-			console.log('Folder created successfully:', savedFolder.name);
 		} catch (error) {
 			console.error('Failed to create folder:', error);
 		}
