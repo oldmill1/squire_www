@@ -4,6 +4,7 @@
 	import { ListService } from '$lib/services/ListService';
 	import { Document } from '$lib/models/Document';
 	import { DocumentService } from '$lib/services/DocumentService';
+	import { selectedDocuments } from '$lib/stores/selectedDocuments';
 	import Explorer from '$lib/components/Explorer/Explorer.svelte';
 	import Dock, { type DockItem } from '$lib/components/Dock/Dock.svelte';
 	import StatusBar from '$lib/components/Editor/StatusBar.svelte';
@@ -77,6 +78,7 @@
 
 	function handleNewFolder() {
 		// Create a temporary folder with a unique ID and "New List" name
+		
 		const tempFolder: ExplorerItem = {
 			id: `temp-${Date.now()}`, // Unique ID using timestamp
 			name: 'New List',
@@ -89,6 +91,9 @@
 		
 		// Add to temporary folders array
 		temporaryFolders = [...temporaryFolders, tempFolder];
+		
+		// Auto-select the new folder for editing
+		selectedDocuments.addDocument(tempFolder);
 	}
 
 	function handleFavorites() {
