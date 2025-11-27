@@ -6,7 +6,6 @@
 	import { DocumentService } from '$lib/services/DocumentService';
 	import { selectedDocuments } from '$lib/stores/selectedDocuments';
 	import Explorer from '$lib/components/Explorer/Explorer.svelte';
-	import Dock, { type DockItem } from '$lib/components/Dock/Dock.svelte';
 	import StatusBar from '$lib/components/Editor/StatusBar.svelte';
 	import MenuBar from '$lib/components/MenuBar/MenuBar.svelte';
 	import type { PageProps } from './$types';
@@ -355,20 +354,4 @@
 		folderIds={[]}
 	/>
 
-	<Dock
-		items={[
-			{
-				id: 'new-document',
-				icon: '/icons/new.png',
-				title: 'New Document',
-				onClick: handleNewDocument
-			},
-			{
-				id: 'favorites',
-				icon: '/icons/heart.png',
-				title: 'Favorites',
-				onClick: handleFavorites
-			}
-		]}
-	/>
 </div>

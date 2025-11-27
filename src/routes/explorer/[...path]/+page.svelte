@@ -6,7 +6,6 @@
 	import { DocumentService } from '$lib/services/DocumentService';
 	import Explorer from '$lib/components/Explorer/Explorer.svelte';
 	import MenuBar from '$lib/components/MenuBar/MenuBar.svelte';
-	import Dock, { type DockItem } from '$lib/components/Dock/Dock.svelte';
 	import type { ExplorerItem } from '$lib/components/Explorer/types';
 	import { convertDocumentsToExplorerItems, convertListsToExplorerItems, createExplorerData } from '$lib/components/Explorer/utils';
 	import type { PageProps } from './$types';
@@ -401,18 +400,37 @@
 	{/if}
 </div>
 
-<Dock
-	items={[
-		{
-			id: 'new-document',
-			icon: '/icons/new.png',
-			title: 'New Document',
-			onClick: handleNewDocument
-		}
-	]}
-/>
 
 <style>
+	.explorer-container {
+		width: 100vw;
+		height: 100vh;
+		display: flex;
+		flex-direction: column;
+		background-color: rgb(16, 20, 23);
+		color: #ffffff;
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+		overflow: hidden;
+		position: relative;
+	}
+
+	/* Ensure no scrollbars on the page itself */
+	:global(body) {
+		margin: 0;
+		padding: 0;
+		overflow: hidden;
+	}
+
+	:global(html) {
+		margin: 0;
+		padding: 0;
+		:root {
+			overflow: hidden;
+		}
+	}
+
 	.error-message {
 		display: flex;
 		align-items: center;
