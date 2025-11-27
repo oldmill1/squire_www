@@ -32,8 +32,8 @@
 			listService = new ListService();
 			documentService = new DocumentService();
 
-			// Load lists
-			const allLists = await listService.list();
+			// Load lists - only root level (parentId: undefined)
+			const allLists = await listService.getByParentId(undefined);
 			lists = allLists.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 
 			// Always load unlisted documents (recentones not in any list)
