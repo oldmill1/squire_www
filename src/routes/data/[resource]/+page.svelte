@@ -29,7 +29,7 @@
     try {
       if (data.resource === 'documents') {
         const { DatabaseService } = await import('$lib/services/DatabaseService');
-        dbService = new DatabaseService('squiredb');
+        dbService = new DatabaseService('manuscriptOS_DB');
         
         // Load documents from database
         const allDocs = await dbService.list();
@@ -40,7 +40,7 @@
           .slice(0, 10);
       } else if (data.resource === 'lists') {
         const { ListService } = await import('$lib/services/ListService');
-        listService = new ListService('squiredb');
+        listService = new ListService('manuscriptOS_DB');
         
         // Load lists from database
         const allLists = await listService.list();
@@ -70,7 +70,7 @@
     try {
       // Initialize DocumentService
       const { DocumentService } = await import('$lib/services/DocumentService');
-      const documentService = new DocumentService('squiredb');
+      const documentService = new DocumentService('manuscriptOS_DB');
       
       // Delete all selected documents
       for (const docId of selectedItems) {
@@ -117,7 +117,7 @@
       
       // Initialize DocumentService
       const { DocumentService } = await import('$lib/services/DocumentService');
-      const documentService = new DocumentService('squiredb');
+      const documentService = new DocumentService('manuscriptOS_DB');
       
       // Save all documents to database
       for (const doc of newDocuments) {

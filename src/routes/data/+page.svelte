@@ -42,7 +42,7 @@
   onMount(async () => {
     try {
       const { DatabaseService } = await import('$lib/services/DatabaseService');
-      dbService = new DatabaseService('squiredb');
+      dbService = new DatabaseService('manuscriptOS_DB');
       
       // Load documents from database
       const allDocs = await dbService.list();

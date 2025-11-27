@@ -37,44 +37,8 @@
 			// Load all documents and filter by this list
 			const allDocuments = await documentService.list();
 			
-			// If no documents exist, create some sample documents for testing
-			if (allDocuments.length === 0) {
-				console.log('No documents found, creating sample documents...');
-				const sampleDocuments = [
-					new Document('Chapter 1', 'Once upon a time...'),
-					new Document('Chapter 2', 'The adventure continues...'),
-					new Document('Notes', 'Some important notes here...'),
-					new Document('Ideas', 'Brainstorming ideas...')
-				];
-				
-				for (const sampleDoc of sampleDocuments) {
-					const createdDoc = await documentService.create(sampleDoc);
-					// Add the created document to this list
-					list.addItem(createdDoc.id);
-				}
-				
-				// Update the list with the new document IDs
-				await listService.update(list);
-				
-				// Reload documents
-				const reloadDocuments = await documentService.list();
-				documents = reloadDocuments.filter(doc => list!.hasItem(doc.id));
-			} else {
-				// Filter documents that belong to this list
-				documents = allDocuments.filter(doc => list!.hasItem(doc.id));
-				
-				// If this list has no documents, add some existing ones for testing
-				if (documents.length === 0 && allDocuments.length > 0) {
-					console.log('List has no documents, adding some for testing...');
-					// Add first 3 documents to this list
-					const docsToAdd = allDocuments.slice(0, 3);
-					for (const doc of docsToAdd) {
-						list.addItem(doc.id);
-					}
-					await listService.update(list);
-					documents = docsToAdd;
-				}
-			}
+			// Filter documents that belong to this list
+			documents = allDocuments.filter(doc => list!.hasItem(doc.id));
 
 		} catch (err) {
 			console.error('Failed to load list documents:', err);

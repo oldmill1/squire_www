@@ -13,7 +13,7 @@ interface DatabaseDocument {
 export class DatabaseService {
 	private db: any;
 
-	constructor(dbName: string = 'squiredb') {
+	constructor(dbName: string = 'manuscriptOS_DB') {
 		this.db = new PouchDB(dbName);
 	}
 

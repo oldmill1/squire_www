@@ -26,7 +26,7 @@
 
 		try {
 			const { DatabaseService } = await import('$lib/services/DatabaseService');
-			dbService = new DatabaseService('squiredb');
+			dbService = new DatabaseService('manuscriptOS_DB');
 
 			// Load recent documents
 			await loadRecentDocs();
@@ -102,7 +102,13 @@
 	}
 
 	function toggleDocumentSelection(doc: Document) {
-		selectedDocuments.toggleDocument(doc);
+		// Convert Document to SelectableItem format
+		const selectableItem = {
+			id: doc.id,
+			name: doc.title,
+			icon: '/icons/new.png'
+		};
+		selectedDocuments.toggleDocument(selectableItem);
 	}
 
 	function toggleSelectionMode() {
