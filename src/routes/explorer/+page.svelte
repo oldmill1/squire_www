@@ -352,6 +352,7 @@
 		onDocumentCreate={handleDocumentCreate}
 		editingTempFolderId={editingTempFolderId}
 		editingTempDocumentId={editingTempDocumentId}
+		folderIds={[]}
 	/>
 
 	<Dock

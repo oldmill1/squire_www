@@ -396,6 +396,7 @@
 			onDocumentCreate={handleDocumentCreate}
 			editingTempFolderId={editingTempFolderId}
 			editingTempDocumentId={editingTempDocumentId}
+			folderIds={pathArray}
 		/>
 	{/if}
 </div>

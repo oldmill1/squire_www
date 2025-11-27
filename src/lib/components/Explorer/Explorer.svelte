@@ -7,6 +7,7 @@
 	import Modal from '../Modal/Modal.svelte';
 	import styles from './Explorer.module.scss';
 	import ExplorerItem from './ExplorerItem/ExplorerItem.svelte';
+	import BreadcrumbTrail from './BreadcrumbTrail/BreadcrumbTrail.svelte';
 	import type { ExplorerData } from './types';
 
 	interface Props {
@@ -24,6 +25,7 @@
 		onDocumentCreate?: (documentName: string, tempId: string) => void;
 		editingTempFolderId?: string | null;
 		editingTempDocumentId?: string | null;
+		folderIds?: string[]; // For breadcrumb trail
 	}
 
 	let {
@@ -40,7 +42,8 @@
 		onFolderRename,
 		onDocumentCreate,
 		editingTempFolderId,
-		editingTempDocumentId
+		editingTempDocumentId,
+		folderIds = []
 	}: Props = $props();
 
 	// Track selected documents from the store
@@ -183,6 +186,7 @@
 					}
 				]}
 			/>
+			<BreadcrumbTrail {folderIds} />
 			<div class={styles.desktop}>
 			{#if data.hasLoaded}
 				{#each data.items as item (item.id)}
