@@ -11,9 +11,10 @@
 		dbService?: any;
 		backButton?: boolean;
 		onBackClick?: () => void;
+		hideLeftButton?: boolean;
 	}
 
-	let { title = '', logo, titleEditable = false, documentId, dbService, backButton = false, onBackClick }: Props = $props();
+	let { title = '', logo, titleEditable = false, documentId, dbService, backButton = false, onBackClick, hideLeftButton = false }: Props = $props();
 
 	let isEditing = $state(false);
 	let editingTitle = $state('');
@@ -117,42 +118,44 @@
 
 <div class={styles.menubar}>
 	<div class={styles.leftSection}>
-		{#if backButton}
-			<Motion 
-				let:motion
-				whileHover={{ scale: 1.1, y: -2 }}
-				whileTap={{ scale: 0.95, y: 0 }}
-				transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
-			>
-				<button
-					type="button"
-					class={styles.backButton}
-					onclick={onBackClick}
-					onkeydown={(e) => (e.key === 'Enter' || e.key === ' ') && onBackClick?.()}
-					aria-label="Go back"
-					use:motion
+		{#if !hideLeftButton}
+			{#if backButton}
+				<Motion 
+					let:motion
+					whileHover={{ scale: 1.1, y: -2 }}
+					whileTap={{ scale: 0.95, y: 0 }}
+					transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
 				>
-					<img src="/icons/logo.png" alt="Back" class={styles.backIcon} />
-				</button>
-			</Motion>
-		{:else}
-			<Motion 
-				let:motion
-				whileHover={{ scale: 1.1, y: -2 }}
-				whileTap={{ scale: 0.95, y: 0 }}
-				transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
-			>
-				<button
-					type="button"
-					class={styles.homeButton}
-					onclick={goHome}
-					onkeydown={(e) => (e.key === 'Enter' || e.key === ' ') && goHome()}
-					aria-label="Go home"
-					use:motion
+					<button
+						type="button"
+						class={styles.backButton}
+						onclick={onBackClick}
+						onkeydown={(e) => (e.key === 'Enter' || e.key === ' ') && onBackClick?.()}
+						aria-label="Go back"
+						use:motion
+					>
+						<img src="/icons/logo.png" alt="Back" class={styles.backIcon} />
+					</button>
+				</Motion>
+			{:else}
+				<Motion 
+					let:motion
+					whileHover={{ scale: 1.1, y: -2 }}
+					whileTap={{ scale: 0.95, y: 0 }}
+					transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
 				>
-					<img src="/icons/logo.png" alt="Home" class={styles.homeIcon} />
-				</button>
-			</Motion>
+					<button
+						type="button"
+						class={styles.homeButton}
+						onclick={goHome}
+						onkeydown={(e) => (e.key === 'Enter' || e.key === ' ') && goHome()}
+						aria-label="Go home"
+						use:motion
+					>
+						<img src="/icons/logo.png" alt="Home" class={styles.homeIcon} />
+					</button>
+				</Motion>
+			{/if}
 		{/if}
 	</div>
 	<div class={styles.centerSection}>
