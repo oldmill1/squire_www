@@ -113,9 +113,9 @@
 
 	async function loadDocument() {
 		try {
-			// Initialize database service
-			const { DatabaseService } = await import('$lib/services/DatabaseService');
-			dbService = new DatabaseService('manuscriptOS_DB');
+			// Initialize document service
+			const { DocumentService } = await import('$lib/services/DocumentService');
+			dbService = new DocumentService();
 
 			// Load the document
 			const document = await dbService.read(data.id);
