@@ -2,7 +2,6 @@
 	import styles from './WidgetArea.module.scss';
 	import type { Snippet } from 'svelte';
 	import { widgetVisibility, hideWidget } from '$lib/stores/widgetVisibility';
-	import AddToListWidget from './AddToListWidget.svelte';
 	import RewriterWidget from './RewriterWidget.svelte';
 	import type { TransitionConfig } from 'svelte/transition';
 
@@ -91,7 +90,6 @@
 		<div class={`${styles.contentContainer} ${isAnimating ? styles.animating : ''}`}>
 			<div class={`${styles.content} ${isAnimating ? styles.animating : ''}`}>
 				{#if documentId}
-					<AddToListWidget {documentId} {dbService} />
 					<RewriterWidget {documentId} {dbService} />
 				{/if}
 
