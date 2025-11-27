@@ -26,8 +26,28 @@
 			listService = new ListService();
 			documentService = new DocumentService();
 
-			// Load the list
-			list = await listService.read(data.listId);
+			// Load the list - first path segment is the list ID
+			console.log('Raw path data:', data.path);
+			console.log('Path type:', typeof data.path);
+			
+			// Handle both string and array cases for SvelteKit routing
+			let pathArray: string[];
+			if (typeof data.path === 'string') {
+				pathArray = [data.path];
+			} else {
+				pathArray = data.path || [];
+			}
+			
+			console.log('Processed path array:', pathArray);
+			const listId = pathArray[0];
+			console.log('Extracted listId:', listId);
+			if (!listId) {
+				error = 'No list specified';
+				hasLoaded = true;
+				return;
+			}
+			
+			list = await listService.read(listId);
 			if (!list) {
 				error = 'List not found';
 				hasLoaded = true;

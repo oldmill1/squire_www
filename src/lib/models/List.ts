@@ -5,6 +5,7 @@ export interface ListContent {
 	type: ListType;
 	name: string;
 	itemIds: string[];
+	parentId?: string;  // Parent folder ID for nesting
 	createdAt: Date;
 	updatedAt: Date;
 }
@@ -14,14 +15,16 @@ export class List {
 	private _type: ListType;
 	private _name: string;
 	private _itemIds: string[];
+	private _parentId?: string;
 	private _createdAt: Date;
 	private _updatedAt: Date;
 
-	constructor(type: ListType, customName?: string) {
+	constructor(type: ListType, customName?: string, parentId?: string) {
 		this._id = crypto.randomUUID();
 		this._type = type;
 		this._name = type === 'favorites' ? 'favorites' : customName || '';
 		this._itemIds = [];
+		this._parentId = parentId;
 		this._createdAt = new Date();
 		this._updatedAt = new Date();
 	}
@@ -49,6 +52,10 @@ export class List {
 
 	get updatedAt(): Date {
 		return this._updatedAt;
+	}
+
+	get parentId(): string | undefined {
+		return this._parentId;
 	}
 
 	// Setters with automatic timestamp update
@@ -91,6 +98,7 @@ export class List {
 			type: this._type,
 			name: this._name,
 			itemIds: [...this._itemIds],
+			parentId: this._parentId,
 			createdAt: this._createdAt,
 			updatedAt: this._updatedAt
 		};
@@ -98,7 +106,7 @@ export class List {
 
 	// Create from JSON
 	static fromJSON(data: ListContent): List {
-		const list = new List(data.type, data.name);
+		const list = new List(data.type, data.name, data.parentId);
 		list._id = data.id;
 		list._itemIds = [...data.itemIds];
 		list._createdAt = new Date(data.createdAt);

@@ -3,6 +3,7 @@ export interface ExplorerItem {
 	name: string;
 	icon: string;
 	onClick?: (item: ExplorerItem, event: MouseEvent) => void;
+	isFolder?: boolean;
 }
 
 export type ExplorerItemType = 'list' | 'document';

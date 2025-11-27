@@ -7,6 +7,7 @@ interface DatabaseList {
 	type: ListType;
 	name: string;
 	itemIds: string[];
+	parentId?: string;
 	createdAt: string;
 	updatedAt: string;
 }
@@ -27,6 +28,7 @@ export class ListService {
 				type: listData.type,
 				name: listData.name,
 				itemIds: listData.itemIds,
+				parentId: listData.parentId,
 				createdAt: listData.createdAt.toISOString(),
 				updatedAt: listData.updatedAt.toISOString()
 			};
@@ -39,6 +41,7 @@ export class ListService {
 				type: listData.type,
 				name: listData.name,
 				itemIds: listData.itemIds,
+				parentId: listData.parentId,
 				createdAt: listData.createdAt,
 				updatedAt: listData.updatedAt
 			});
@@ -50,17 +53,22 @@ export class ListService {
 	// Read a list by ID
 	async read(id: string): Promise<List | null> {
 		try {
+			console.log('Attempting to read list with ID:', id);
 			const pouchList = await this.db.get(`list:${id}`);
+			console.log('Found pouch list:', pouchList);
 			return List.fromJSON({
 				id: pouchList._id.replace('list:', ''),
 				type: pouchList.type,
 				name: pouchList.name,
 				itemIds: pouchList.itemIds,
+				parentId: pouchList.parentId,
 				createdAt: new Date(pouchList.createdAt),
 				updatedAt: new Date(pouchList.updatedAt)
 			});
 		} catch (error) {
+			console.log('Error reading list:', error);
 			if ((error as any).status === 404) {
+				console.log('List not found (404)');
 				return null;
 			}
 			throw new Error(`Failed to read list: ${error}`);
