@@ -71,6 +71,8 @@
 
 			// Load child folders
 			childFolders = await listService.getByParentId(currentFolderId);
+			// Sort by creation date, newest first
+			childFolders.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 			console.log('Loaded child folders:', childFolders.map(f => ({ id: f.id, name: f.name, parentId: f.parentId })));
 
 		} catch (err) {
@@ -100,7 +102,14 @@
 				editingTempFolderId = null;
 			}
 			
-			console.log('Folder creation completed - no page reload');
+			// Add the new folder to childFolders to show it immediately
+			const updatedChildFolders = [...childFolders, savedFolder];
+			// Sort by creation date, newest first
+			updatedChildFolders.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+			childFolders = updatedChildFolders;
+			console.log('Added new folder to childFolders:', savedFolder.name);
+			
+			console.log('Folder creation completed - folder added to view');
 			
 		} catch (error) {
 			console.error('Failed to create folder:', error);
