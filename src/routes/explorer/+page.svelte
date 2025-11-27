@@ -23,6 +23,7 @@
 	let temporaryFolders = $state<ExplorerItem[]>([]);
 	let hasLoaded = $state(false);
 	let isSelectionMode = $state(false);
+	let editingTempFolderId = $state<string | null>(null);
 
 	onMount(async () => {
 		try {
@@ -77,6 +78,8 @@
 	}
 
 	function handleNewFolder() {
+		console.log('Creating new folder...');
+		
 		// Create a temporary folder with a unique ID and "New List" name
 		
 		const tempFolder: ExplorerItem = {
@@ -88,27 +91,38 @@
 			}
 		};
 		
+		console.log('Created temp folder:', tempFolder.id);
+		
 		// Add to temporary folders array
 		temporaryFolders = [...temporaryFolders, tempFolder];
 		
-		// Auto-select the new folder for editing
-		selectedDocuments.addDocument(tempFolder);
+		// Set this folder as the one being edited
+		editingTempFolderId = tempFolder.id;
 	}
 	
 	async function handleFolderCreate(folderName: string, tempId: string) {
 		try {
+			console.log('Creating folder:', folderName, 'from temp:', tempId);
+			
 			// Create the real folder using ListService
 			const newFolder = new List('custom', folderName);
 			const savedFolder = await listService.create(newFolder);
 			
+			console.log('Folder created successfully, removing temp folder');
+			
 			// Remove the temporary folder
 			temporaryFolders = temporaryFolders.filter(f => f.id !== tempId);
+			
+			// Clear editing state
+			if (editingTempFolderId === tempId) {
+				editingTempFolderId = null;
+			}
 			
 			// Add the real folder to the lists array (it will appear first due to sorting)
 			lists = [savedFolder, ...lists];
 			
-			// Clear selection
-			selectedDocuments.removeDocument(tempId);
+			console.log('Temporary folders after removal:', temporaryFolders.map(f => ({ id: f.id, name: f.name })));
+			
 		} catch (error) {
 			console.error('Failed to create folder:', error);
 		}
@@ -209,6 +223,7 @@
 		onNewFolder={handleNewFolder}
 		onFolderCreate={handleFolderCreate}
 		onFolderRename={handleFolderRename}
+		editingTempFolderId={editingTempFolderId}
 	/>
 
 	<Dock

@@ -12,6 +12,7 @@
 		onItemClick?: (item: any, event: MouseEvent) => void;
 		onFolderCreate?: (folderName: string, tempId: string) => void;
 		onFolderRename?: (folderId: string, newName: string) => void;
+		forceEditing?: boolean;
 	}
 
 	let {
@@ -19,7 +20,8 @@
 		isSelectionMode = false,
 		onItemClick,
 		onFolderCreate,
-		onFolderRename
+		onFolderRename,
+		forceEditing = false
 	}: Props = $props();
 
 	// Track global selection state for documents
@@ -33,6 +35,9 @@
 	// Track long press for editing
 	let pressTimer = $state<number | null>(null);
 	let isPressed = $state(false);
+	
+	// Flag to prevent blur after Enter key
+	let isExitingByEnter = $state(false);
 
 	// Subscribe to store updates and check if this item is selected
 	const unsubscribeSelection = selectedDocuments.subscribe(state => {
@@ -40,6 +45,14 @@
 		
 		// Note: Don't automatically enable editing for folders when selected
 		// Editing should be a separate action from selection
+	});
+	
+	// Handle force editing for new folders
+	$effect(() => {
+		if (forceEditing && item.icon === '/icons/folder.png' && !isEditing) {
+			isEditing = true;
+			editingValue = item.name;
+		}
 	});
 	
 	// Auto-focus input when editing starts
@@ -129,25 +142,39 @@
 		if (event.key === 'Enter') {
 			event.preventDefault();
 			event.stopPropagation();
-			// Save the folder with new name
-			if (editingValue.trim() && onFolderRename) {
-				onFolderRename(item.id, editingValue.trim());
+			// Check if this is a temporary folder (starts with 'temp-')
+			const isTempFolder = item.id.startsWith('temp-');
+			
+			// Set flag to prevent blur from running
+			isExitingByEnter = true;
+			
+			if (editingValue.trim()) {
+				if (isTempFolder && onFolderCreate) {
+					// Create new folder
+					onFolderCreate(editingValue.trim(), item.id);
+				} else if (!isTempFolder && onFolderRename) {
+					// Rename existing folder
+					onFolderRename(item.id, editingValue.trim());
+				}
 			}
 			isEditing = false;
+			// Remove focus to prevent blur event from firing
+			(event.target as HTMLInputElement)?.blur();
 		} else if (event.key === 'Escape') {
 			event.preventDefault();
 			event.stopPropagation();
 			// Cancel editing
+			isExitingByEnter = true;
 			isEditing = false;
+			// Remove focus to prevent blur event from firing
+			(event.target as HTMLInputElement)?.blur();
 		}
 	}
 	
 	function handleInputBlur() {
-		// Save the folder when input loses focus
-		if (editingValue.trim() && onFolderRename) {
-			onFolderRename(item.id, editingValue.trim());
-		}
-		isEditing = false;
+		// Completely disable blur handling to prevent duplicates
+		// Only Enter key should save the folder
+		return;
 	}
 
 	// Cleanup on component destroy

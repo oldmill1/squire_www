@@ -20,6 +20,7 @@
 		onNewFolder?: () => void;
 		onFolderCreate?: (folderName: string, tempId: string) => void;
 		onFolderRename?: (folderId: string, newName: string) => void;
+		editingTempFolderId?: string | null;
 	}
 
 	let {
@@ -32,7 +33,8 @@
 		onSelectionToggle,
 		onNewFolder,
 		onFolderCreate,
-		onFolderRename
+		onFolderRename,
+		editingTempFolderId
 	}: Props = $props();
 
 	// Track selected documents from the store
@@ -170,6 +172,7 @@
 						onItemClick={handleItemClick}
 						onFolderCreate={onFolderCreate}
 						onFolderRename={onFolderRename}
+						forceEditing={editingTempFolderId === item.id}
 					/>
 				{/each}
 			{/if}
