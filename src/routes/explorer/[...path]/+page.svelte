@@ -35,16 +35,23 @@
 			// Load the list - first path segment is the list ID
 			console.log('Raw path data:', data.path);
 			console.log('Path type:', typeof data.path);
+			console.log('Path constructor:', data.path.constructor.name);
 			
 			// Handle both string and array cases for SvelteKit routing
 			if (typeof data.path === 'string') {
-				pathArray = [data.path];
+				console.log('Path is string, splitting by /');
+				pathArray = (data.path as string).split('/').filter((segment: string) => segment.length > 0);
+			} else if (Array.isArray(data.path)) {
+				console.log('Path is array, using directly');
+				pathArray = data.path;
 			} else {
-				pathArray = data.path || [];
+				console.log('Path is unexpected type, using empty array');
+				pathArray = [];
 			}
 			
 			console.log('Processed path array:', pathArray);
-			const listId = pathArray[0];
+			// Take the LAST folder in the path as the current folder to load
+			const listId = pathArray.length > 0 ? pathArray[pathArray.length - 1] : undefined;
 			console.log('Extracted listId:', listId);
 			
 			// Set current folder ID for nested folder creation
@@ -124,8 +131,14 @@
 
 	function handleFolderClick(folder: List, event: MouseEvent) {
 		console.log('Folder clicked:', folder.id, folder.name);
-		// Navigate to the folder
-		window.location.href = `/explorer/${folder.id}`;
+		
+		// Build the full path by appending current folder to existing path
+		const fullPath = [...pathArray, folder.id];
+		const navigationPath = fullPath.join('/');
+		console.log('Navigating to full path:', navigationPath);
+		
+		// Navigate to the folder with full path
+		window.location.href = `/explorer/${navigationPath}`;
 	}
 
 	function handleBack() {
