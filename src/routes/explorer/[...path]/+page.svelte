@@ -235,8 +235,32 @@
 	}
 
 	async function handleDeleteSelected(selectedDocs: any[]) {
-		// Basic delete functionality - can be expanded later
-		console.log('Delete selected:', selectedDocs);
+		if (!documentService) {
+			return;
+		}
+
+		try {
+			// Filter for documents only (not folders)
+			const documentsToDelete = selectedDocs.filter(doc => !doc.isFolder);
+			
+			console.log('Deleting documents in folder:', currentFolderId, documentsToDelete.map(d => ({ id: d.id, title: d.title })));
+			
+			// Delete documents
+			if (documentsToDelete.length > 0) {
+				const documentDeletePromises = documentsToDelete.map(async (doc) => {
+					await documentService.delete(doc.id);
+					console.log('Deleted document:', doc.id);
+				});
+				await Promise.all(documentDeletePromises);
+				
+				// Remove from local state
+				documents = documents.filter(doc => !documentsToDelete.some(deleted => deleted.id === doc.id));
+				console.log('Documents after deletion in folder:', documents.map(d => ({ id: d.id, title: d.title })));
+			}
+			
+		} catch (error) {
+			console.error('Failed to delete documents:', error);
+		}
 	}
 
 	async function handleFolderRename(folderId: string, newName: string) {

@@ -224,39 +224,31 @@
 	}
 
 	async function handleDeleteSelected(selectedDocs: any[]) {
-		if (!documentService && !listService) {
+		if (!documentService) {
 			return;
 		}
 
 		try {
-			// Separate documents and lists by their icon/type
-			const documentsToDelete = selectedDocs.filter(doc => doc.icon === '/icons/new.png');
-			const listsToDelete = selectedDocs.filter(doc => doc.icon === '/icons/folder.png');
+			// Filter for documents only (not folders)
+			const documentsToDelete = selectedDocs.filter(doc => !doc.isFolder);
+			
+			console.log('Deleting documents:', documentsToDelete.map(d => ({ id: d.id, title: d.title })));
 			
 			// Delete documents
-			if (documentsToDelete.length > 0 && documentService) {
+			if (documentsToDelete.length > 0) {
 				const documentDeletePromises = documentsToDelete.map(async (doc) => {
 					await documentService.delete(doc.id);
+					console.log('Deleted document:', doc.id);
 				});
 				await Promise.all(documentDeletePromises);
+				
+				// Remove from local state
+				documents = documents.filter(doc => !documentsToDelete.some(deleted => deleted.id === doc.id));
+				console.log('Documents after deletion:', documents.map(d => ({ id: d.id, title: d.title })));
 			}
 			
-			// Delete lists
-			if (listsToDelete.length > 0 && listService) {
-				const listDeletePromises = listsToDelete.map(async (list) => {
-					await listService.delete(list.id);
-				});
-				await Promise.all(listDeletePromises);
-			}
-			
-			// Refresh both lists and documents
-			const allLists = await listService.list();
-			lists = allLists.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-			
-			const allDocuments = await documentService.list();
-			documents = allDocuments.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 		} catch (error) {
-			console.error('Failed to delete items:', error);
+			console.error('Failed to delete documents:', error);
 		}
 	}
 </script>
