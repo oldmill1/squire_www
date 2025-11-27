@@ -1,6 +1,7 @@
 /* Homepage styles */
 .app-container {
 	display: flex;
+	flex-direction: column;
 	height: 100vh;
 	background: rgb(16, 20, 23);
 	color: #e0e0e0;

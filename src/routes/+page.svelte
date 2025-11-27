@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import WolverineButton from '$lib/components/Buttons/WolverineButton/WolverineButton.svelte';
 	import Dock from '$lib/components/Dock/Dock.svelte';
+	import MenuBar from '$lib/components/MenuBar/MenuBar.svelte';
 	import VList from '$lib/components/VList/VList.svelte';
 	import { Document } from '$lib/models/Document';
 	import { DatabaseService } from '$lib/services/DatabaseService';
@@ -131,11 +132,14 @@
 </script>
 
 <svelte:head>
-	<title>Squire</title>
-	<meta name="description" content="Welcome to Squire - Your personal writing companion" />
+	<title>transcriptOS</title>
+	<meta name="description" content="Welcome to transcriptOS - Your personal writing companion" />
 </svelte:head>
 
 <div class={styles['app-container']}>
+	<!-- MenuBar -->
+	<MenuBar title="transcriptOS" />
+	
 	<!-- Main Content -->
 	<main>
 		<div class={styles['content-wrapper']}>

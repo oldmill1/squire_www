@@ -53,4 +53,8 @@
 </script>
 
 
+<svelte:head>
+	<title>transcriptOS</title>
+</svelte:head>
+
 {@render children()}
