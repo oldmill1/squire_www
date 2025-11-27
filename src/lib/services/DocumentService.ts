@@ -6,6 +6,7 @@ interface DatabaseDocument {
 	_rev?: string;
 	title: string;
 	content: string;
+	parentId?: string;
 	createdAt: string;
 	updatedAt: string;
 }
@@ -25,6 +26,7 @@ export class DocumentService {
 				_id: docData.id,
 				title: docData.title,
 				content: docData.content,
+				parentId: docData.parentId,
 				createdAt: docData.createdAt.toISOString(),
 				updatedAt: docData.updatedAt.toISOString()
 			};
@@ -36,6 +38,7 @@ export class DocumentService {
 				id: result.id,
 				title: docData.title,
 				content: docData.content,
+				parentId: docData.parentId,
 				createdAt: docData.createdAt,
 				updatedAt: docData.updatedAt
 			});
@@ -52,6 +55,7 @@ export class DocumentService {
 				id: pouchDoc._id,
 				title: pouchDoc.title,
 				content: pouchDoc.content,
+				parentId: pouchDoc.parentId,
 				createdAt: new Date(pouchDoc.createdAt),
 				updatedAt: new Date(pouchDoc.updatedAt)
 			});
@@ -75,6 +79,7 @@ export class DocumentService {
 				_rev: existingDoc._rev,
 				title: docData.title,
 				content: docData.content,
+				parentId: docData.parentId,
 				createdAt: docData.createdAt.toISOString(),
 				updatedAt: docData.updatedAt.toISOString()
 			};
@@ -85,6 +90,7 @@ export class DocumentService {
 				id: result.id,
 				title: docData.title,
 				content: docData.content,
+				parentId: docData.parentId,
 				createdAt: docData.createdAt,
 				updatedAt: docData.updatedAt
 			});
@@ -122,12 +128,50 @@ export class DocumentService {
 						id: doc._id,
 						title: doc.title,
 						content: doc.content,
+						parentId: doc.parentId,
 						createdAt: new Date(doc.createdAt),
 						updatedAt: new Date(doc.updatedAt)
 					});
 				});
 		} catch (error) {
 			throw new Error(`Failed to list documents: ${error}`);
+		}
+	}
+
+	// Get documents by parent ID (for nested folders)
+	async getByParentId(parentId?: string): Promise<Document[]> {
+		try {
+			console.log('Looking for documents with parentId:', parentId);
+			const result = await this.db.allDocs({
+				include_docs: true
+			});
+			
+			console.log('All documents in database:', result.rows.map((row: any) => ({
+				id: row.doc._id,
+				title: row.doc.title,
+				parentId: row.doc.parentId
+			})));
+			
+			const documents = result.rows
+				.filter((row: any) => row.doc && !row.doc._id.startsWith('list:')) // Filter out list entries
+				.map((row: any) => {
+					const doc = row.doc as DatabaseDocument;
+					return Document.fromJSON({
+						id: doc._id,
+						title: doc.title,
+						content: doc.content,
+						parentId: doc.parentId,
+						createdAt: new Date(doc.createdAt),
+						updatedAt: new Date(doc.updatedAt)
+					});
+				})
+				.filter((doc: Document) => doc.parentId === parentId);
+			
+			console.log('Filtered documents:', documents.map((d: Document) => ({ id: d.id, title: d.title, parentId: d.parentId })));
+			return documents;
+		} catch (error) {
+			console.error('Failed to get documents by parent ID:', error);
+			return [];
 		}
 	}
 

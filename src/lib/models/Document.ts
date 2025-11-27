@@ -4,6 +4,7 @@ export interface DocumentContent {
 	id: string;
 	title: string;
 	content: string;
+	parentId?: string;  // Parent folder ID for hierarchy
 	createdAt: Date;
 	updatedAt: Date;
 }
@@ -12,13 +13,15 @@ export class Document {
 	private _id: string;
 	private _title: string;
 	private _content: string;
+	private _parentId?: string;
 	private _createdAt: Date;
 	private _updatedAt: Date;
 
-	constructor(title: string = '', content: string = '') {
+	constructor(title: string = '', content: string = '', parentId?: string) {
 		this._id = crypto.randomUUID();
 		this._title = title || generateTimeBasedTitle();
 		this._content = content;
+		this._parentId = parentId;
 		this._createdAt = new Date();
 		this._updatedAt = new Date();
 	}
@@ -42,6 +45,10 @@ export class Document {
 
 	get updatedAt(): Date {
 		return this._updatedAt;
+	}
+
+	get parentId(): string | undefined {
+		return this._parentId;
 	}
 
 	// Setters with automatic timestamp update
@@ -72,6 +79,7 @@ export class Document {
 			id: this._id,
 			title: this._title,
 			content: this._content,
+			parentId: this._parentId,
 			createdAt: this._createdAt,
 			updatedAt: this._updatedAt
 		};
@@ -79,7 +87,7 @@ export class Document {
 
 	// Create from JSON
 	static fromJSON(data: DocumentContent): Document {
-		const doc = new Document(data.title, data.content);
+		const doc = new Document(data.title, data.content, data.parentId);
 		doc._id = data.id;
 		doc._createdAt = new Date(data.createdAt);
 		doc._updatedAt = new Date(data.updatedAt);

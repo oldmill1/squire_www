@@ -6,6 +6,8 @@
 	import { DocumentService } from '$lib/services/DocumentService';
 	import Explorer from '$lib/components/Explorer/Explorer.svelte';
 	import MenuBar from '$lib/components/MenuBar/MenuBar.svelte';
+	import Dock, { type DockItem } from '$lib/components/Dock/Dock.svelte';
+	import type { ExplorerItem } from '$lib/components/Explorer/types';
 	import { convertDocumentsToExplorerItems, convertListsToExplorerItems, createExplorerData } from '$lib/components/Explorer/utils';
 	import type { PageProps } from './$types';
 
@@ -22,7 +24,9 @@
 	let currentFolderId = $state<string | undefined>(undefined);
 	let isSelectionMode = $state(false);
 	let editingTempFolderId = $state<string | null>(null);
+	let editingTempDocumentId = $state<string | null>(null);
 	let temporaryFolders = $state<any[]>([]);
+	let temporaryDocuments = $state<ExplorerItem[]>([]);
 
 	onMount(async () => {
 		try {
@@ -70,17 +74,17 @@
 				return;
 			}
 
-			// Load all documents and filter by this list
-			const allDocuments = await documentService.list();
-			
-			// Filter documents that belong to this list
-			documents = allDocuments.filter(doc => list!.hasItem(doc.id));
-
 			// Load child folders
 			childFolders = await listService.getByParentId(currentFolderId);
 			// Sort by creation date, newest first
 			childFolders.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 			console.log('Loaded child folders:', childFolders.map(f => ({ id: f.id, name: f.name, parentId: f.parentId })));
+
+			// Load documents in this folder using parentId
+			documents = await documentService.getByParentId(currentFolderId);
+			// Sort by creation date, newest first
+			documents.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+			console.log('Loaded documents in folder:', documents.map(d => ({ id: d.id, title: d.title, parentId: d.parentId })));
 
 		} catch (err) {
 			console.error('Failed to load list documents:', err);
@@ -123,8 +127,42 @@
 		}
 	}
 
+	async function handleDocumentCreate(documentName: string, tempId: string) {
+		try {
+			console.log('Creating document:', documentName, 'from temp:', tempId);
+			console.log('Using currentFolderId:', currentFolderId);
+			
+			// Create the real document using DocumentService with parentId
+			const newDocument = new Document(documentName, '', currentFolderId);
+			const savedDocument = await documentService.create(newDocument);
+			
+			console.log('Document created successfully with parentId:', currentFolderId);
+			
+			// Remove the temporary document
+			temporaryDocuments = temporaryDocuments.filter(d => d.id !== tempId);
+			
+			// Clear editing state
+			if (editingTempDocumentId === tempId) {
+				editingTempDocumentId = null;
+			}
+			
+			// Add the new document to documents to show it immediately
+			const updatedDocuments = [...documents, savedDocument];
+			// Sort by creation date, newest first
+			updatedDocuments.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+			documents = updatedDocuments;
+			console.log('Added new document to documents:', savedDocument.title);
+			
+			console.log('Document creation completed - document added to view');
+			
+		} catch (error) {
+			console.error('Failed to create document:', error);
+		}
+	}
+
 	function handleDocumentClick(doc: Document, event: MouseEvent) {
 		console.log('Document clicked:', doc.id, doc.title);
+		console.log('Document parentId:', doc.parentId); // Add this log
 		// Navigate to the document in the Editor
 		window.location.href = `/docs/${doc.id}`;
 	}
@@ -139,6 +177,31 @@
 		
 		// Navigate to the folder with full path
 		window.location.href = `/explorer/${navigationPath}`;
+	}
+
+	function handleNewDocument() {
+		console.log('New document clicked in folder:', currentFolderId);
+		
+		// Create a temporary document with a unique ID and "Untitled Document" name
+		const tempDocument = {
+			id: `temp-doc-${Date.now()}`, // Unique ID using timestamp
+			name: 'Untitled Document',
+			icon: '/icons/new.png',
+			onClick: (item: any, event: MouseEvent) => {
+				// Handle click on temporary document (optional - could open rename dialog)
+			}
+		};
+		
+		console.log('Created temp document:', tempDocument.id);
+		console.log('Temp document object:', tempDocument);
+		
+		// Add to temporary documents array
+		temporaryDocuments = [...temporaryDocuments, tempDocument];
+		console.log('Temporary documents array:', temporaryDocuments);
+		
+		// Set this document as the one being edited
+		editingTempDocumentId = tempDocument.id;
+		console.log('Set editingTempDocumentId to:', editingTempDocumentId);
 	}
 
 	function handleBack() {
@@ -199,14 +262,15 @@
 	const explorerData = $derived.by(() => {
 		if (!hasLoaded) return createExplorerData([], 'document', false);
 		
-		// Combine temporary folders, child folders, and documents
+		// Combine temporary folders, temporary documents, child folders, and documents
 		const temporaryFolderItems = temporaryFolders.map(f => ({ ...f, isFolder: true }));
+		const temporaryDocumentItems = temporaryDocuments.map(d => ({ ...d, isFolder: false }));
 		const childFolderItems = convertListsToExplorerItems(childFolders, handleFolderClick);
 		const documentItems = convertDocumentsToExplorerItems(documents, handleDocumentClick);
 		
-		// Show temporary folders FIRST, then child folders, then documents
+		// Show temporary items FIRST, then child folders, then documents
 		return createExplorerData(
-			[...temporaryFolderItems, ...childFolderItems, ...documentItems],
+			[...temporaryFolderItems, ...temporaryDocumentItems, ...childFolderItems, ...documentItems],
 			'document',
 			true
 		);
@@ -228,12 +292,26 @@
 			onSelectionToggle={handleSelectionToggle}
 			onDeleteSelected={handleDeleteSelected}
 			onNewFolder={handleNewFolder}
+			onNewDocument={handleNewDocument}
 			onFolderCreate={handleFolderCreate}
 			onFolderRename={handleFolderRename}
+			onDocumentCreate={handleDocumentCreate}
 			editingTempFolderId={editingTempFolderId}
+			editingTempDocumentId={editingTempDocumentId}
 		/>
 	{/if}
 </div>
+
+<Dock
+	items={[
+		{
+			id: 'new-document',
+			icon: '/icons/new.png',
+			title: 'New Document',
+			onClick: handleNewDocument
+		}
+	]}
+/>
 
 <style>
 	.error-message {

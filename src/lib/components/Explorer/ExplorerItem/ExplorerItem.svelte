@@ -12,6 +12,7 @@
 		onItemClick?: (item: any, event: MouseEvent) => void;
 		onFolderCreate?: (folderName: string, tempId: string) => void;
 		onFolderRename?: (folderId: string, newName: string) => void;
+		onDocumentCreate?: (documentName: string, tempId: string) => void;
 		forceEditing?: boolean;
 	}
 
@@ -21,6 +22,7 @@
 		onItemClick,
 		onFolderCreate,
 		onFolderRename,
+		onDocumentCreate,
 		forceEditing = false
 	}: Props = $props();
 
@@ -47,9 +49,17 @@
 		// Editing should be a separate action from selection
 	});
 	
-	// Handle force editing for new folders
+	// Handle force editing for new folders and documents
 	$effect(() => {
-		if (forceEditing && item.icon === '/icons/folder.png' && !isEditing) {
+		console.log('ExplorerItem force editing check:', {
+			forceEditing,
+			itemIcon: item.icon,
+			itemId: item.id,
+			isEditing,
+			condition: forceEditing && (item.icon === '/icons/folder.png' || item.icon === '/icons/new.png') && !isEditing
+		});
+		if (forceEditing && (item.icon === '/icons/folder.png' || item.icon === '/icons/new.png') && !isEditing) {
+			console.log('Setting isEditing to true for item:', item.id);
 			isEditing = true;
 			editingValue = item.name;
 		}
@@ -142,8 +152,12 @@
 		if (event.key === 'Enter') {
 			event.preventDefault();
 			event.stopPropagation();
-			// Check if this is a temporary folder (starts with 'temp-')
-			const isTempFolder = item.id.startsWith('temp-');
+			// Check if this is a temporary folder (starts with 'temp-' but NOT 'temp-doc-')
+			const isTempFolder = item.id.startsWith('temp-') && !item.id.startsWith('temp-doc-');
+			// Check if this is a temporary document (starts with 'temp-doc-')
+			const isTempDocument = item.id.startsWith('temp-doc-');
+			
+			console.log('handleInputKeydown:', { itemId: item.id, isTempFolder, isTempDocument });
 			
 			// Set flag to prevent blur from running
 			isExitingByEnter = true;
@@ -151,8 +165,13 @@
 			if (editingValue.trim()) {
 				if (isTempFolder && onFolderCreate) {
 					// Create new folder
+					console.log('Creating folder:', editingValue.trim());
 					onFolderCreate(editingValue.trim(), item.id);
-				} else if (!isTempFolder && onFolderRename) {
+				} else if (isTempDocument && onDocumentCreate) {
+					// Create new document
+					console.log('Creating document:', editingValue.trim());
+					onDocumentCreate(editingValue.trim(), item.id);
+				} else if (!isTempFolder && !isTempDocument && onFolderRename) {
 					// Rename existing folder
 					onFolderRename(item.id, editingValue.trim());
 				}
@@ -214,7 +233,7 @@
 			</div>
 		{/if}
 		<img src={item.icon} alt={item.name} class={styles.icon} />
-		{#if isEditing && item.icon === '/icons/folder.png'}
+		{#if isEditing && (item.icon === '/icons/folder.png' || item.icon === '/icons/new.png')}
 			<input 
 				type="text" 
 				bind:this={inputElement}

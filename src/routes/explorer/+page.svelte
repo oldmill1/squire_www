@@ -21,9 +21,11 @@
 	let lists = $state<List[]>([]);
 	let documents = $state<Document[]>([]);
 	let temporaryFolders = $state<ExplorerItem[]>([]);
+	let temporaryDocuments = $state<ExplorerItem[]>([]);
 	let hasLoaded = $state(false);
 	let isSelectionMode = $state(false);
 	let editingTempFolderId = $state<string | null>(null);
+	let editingTempDocumentId = $state<string | null>(null);
 
 	onMount(async () => {
 		try {
@@ -65,16 +67,66 @@
 		const listItems = convertListsToExplorerItems(lists, handleListClick);
 		const documentItems = convertDocumentsToExplorerItems(documents, handleDocumentClick);
 		
-		// Show temporary folders FIRST, then lists, then unlisted documents
+		// Show temporary folders and documents FIRST, then lists, then unlisted documents
+		const temporaryFolderItems = temporaryFolders.map(f => ({ ...f, isFolder: true }));
+		const temporaryDocumentItems = temporaryDocuments.map(d => ({ ...d, isFolder: false }));
 		return createExplorerData(
-			[...temporaryFolders, ...listItems, ...documentItems],
+			[...temporaryFolderItems, ...temporaryDocumentItems, ...listItems, ...documentItems],
 			'list', // Keep as 'list' type for compatibility
 			true
 		);
 	});
 
 	function handleNewDocument() {
-		console.log('New document clicked');
+		console.log('New document clicked in root explorer');
+		
+		// Create a temporary document with a unique ID and "Untitled Document" name
+		const tempDocument = {
+			id: `temp-doc-${Date.now()}`, // Unique ID using timestamp
+			name: 'Untitled Document',
+			icon: '/icons/new.png',
+			onClick: (item: any, event: MouseEvent) => {
+				// Handle click on temporary document (optional - could open rename dialog)
+			}
+		};
+		
+		console.log('Created temp document in root:', tempDocument.id);
+		
+		// Add to temporary documents array
+		temporaryDocuments = [...temporaryDocuments, tempDocument];
+		
+		// Set this document as the one being edited
+		editingTempDocumentId = tempDocument.id;
+	}
+
+	async function handleDocumentCreate(documentName: string, tempId: string) {
+		try {
+			console.log('Creating document in root:', documentName, 'from temp:', tempId);
+			
+			// Create the real document using DocumentService with parentId: undefined for root
+			const newDocument = new Document(documentName, '', undefined);
+			const savedDocument = await documentService.create(newDocument);
+			
+			console.log('Document created successfully in root');
+			
+			// Remove the temporary document
+			temporaryDocuments = temporaryDocuments.filter(d => d.id !== tempId);
+			
+			// Clear editing state
+			if (editingTempDocumentId === tempId) {
+				editingTempDocumentId = null;
+			}
+			
+			// Add the new document to documents to show it immediately
+			const updatedDocuments = [...documents, savedDocument];
+			// Sort by creation date, newest first
+			updatedDocuments.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+			documents = updatedDocuments;
+			console.log('Added new document to documents:', savedDocument.title);
+			
+		} catch (error) {
+			console.error('Failed to create document:', error);
+		}
 	}
 
 	function handleNewFolder() {
@@ -221,9 +273,12 @@
 		onSelectionToggle={handleSelectionToggle}
 		onDeleteSelected={handleDeleteSelected}
 		onNewFolder={handleNewFolder}
+		onNewDocument={handleNewDocument}
 		onFolderCreate={handleFolderCreate}
 		onFolderRename={handleFolderRename}
+		onDocumentCreate={handleDocumentCreate}
 		editingTempFolderId={editingTempFolderId}
+		editingTempDocumentId={editingTempDocumentId}
 	/>
 
 	<Dock

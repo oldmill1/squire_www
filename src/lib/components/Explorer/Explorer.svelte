@@ -18,9 +18,12 @@
 		showSelectionSwitch?: boolean;
 		onSelectionToggle?: (enabled: boolean) => void;
 		onNewFolder?: () => void;
+		onNewDocument?: () => void;
 		onFolderCreate?: (folderName: string, tempId: string) => void;
 		onFolderRename?: (folderId: string, newName: string) => void;
+		onDocumentCreate?: (documentName: string, tempId: string) => void;
 		editingTempFolderId?: string | null;
+		editingTempDocumentId?: string | null;
 	}
 
 	let {
@@ -32,9 +35,12 @@
 		showSelectionSwitch = false,
 		onSelectionToggle,
 		onNewFolder,
+		onNewDocument,
 		onFolderCreate,
 		onFolderRename,
-		editingTempFolderId
+		onDocumentCreate,
+		editingTempFolderId,
+		editingTempDocumentId
 	}: Props = $props();
 
 	// Track selected documents from the store
@@ -125,6 +131,14 @@
 		// Call the parent's new folder handler
 		onNewFolder?.();
 	}
+
+	async function handleNewDocument() {
+		console.log('New document button clicked in Explorer component');
+		console.log('onNewDocument function:', onNewDocument);
+		console.log('onNewDocument type:', typeof onNewDocument);
+		// Call the parent's new document handler
+		onNewDocument?.();
+	}
 </script>
 
 <div class={styles.container}>
@@ -160,6 +174,12 @@
 						label: 'New Folder',
 						icon: '📁',
 						onClick: handleNewFolder
+					},
+					{
+						id: 'document',
+						label: 'New Document',
+						icon: '📄',
+						onClick: handleNewDocument
 					}
 				]}
 			/>
@@ -172,7 +192,8 @@
 						onItemClick={handleItemClick}
 						onFolderCreate={onFolderCreate}
 						onFolderRename={onFolderRename}
-						forceEditing={editingTempFolderId === item.id}
+						onDocumentCreate={onDocumentCreate}
+						forceEditing={editingTempFolderId === item.id || editingTempDocumentId === item.id}
 					/>
 				{/each}
 			{/if}
